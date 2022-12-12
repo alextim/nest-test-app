@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 import { ApiModule } from './api/api.module';
 import { getEnvPath } from './config/helpers/getEnvPath';
 import { TypeOrmConfigService } from './config/typeorm/ormconfig.service';
-
+import { validate } from './config/env.validation';
 const envFilePath = getEnvPath();
 const staticPath =
   process.env.NODE_ENV === 'production'
@@ -19,7 +19,12 @@ const staticPath =
 //     load: [configuration],
 @Module({
   imports: [
-    ConfigModule.forRoot({ cache: true, envFilePath, isGlobal: true }),
+    ConfigModule.forRoot({
+      cache: true,
+      envFilePath,
+      validate,
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     ServeStaticModule.forRoot({
       rootPath: staticPath,
