@@ -1,4 +1,6 @@
 /**
+ * catches any unique constraint violation exceptions during database create/update operations
+ * 
  * https://stackoverflow.com/questions/48851140/how-to-handle-typeorm-entity-field-unique-validation-error-in-nestjs
  *
  * https://stackoverflow.com/a/73548291

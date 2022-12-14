@@ -8,6 +8,7 @@ import {
   IsString,
   validateSync,
   IsUrl,
+  IsPositive,
 } from 'class-validator';
 
 enum EnvironmentType {
@@ -24,18 +25,29 @@ class EnvironmentVariables {
   @IsNotEmpty()
   APP_NAME: string;
 
-  @IsUrl({ protocols: ['http', 'https'], require_protocol: true, require_tld: false, require_host: true, require_port: false })
+  @IsUrl({
+    protocols: ['http', 'https'],
+    require_protocol: true,
+    require_tld: false,
+    require_host: true,
+    require_port: false,
+  })
   @IsNotEmpty()
   BASE_URL: string;
 
   // Server
   @IsString()
   @IsNotEmpty()
-  HOSTNAME: string;
+  HOST: string;
 
   @IsInt()
   @IsNotEmpty()
   PORT: number;
+
+  // Auth
+  @IsString()
+  @IsNotEmpty()
+  SESSION_SECRET: string;
 
   // DB
   @IsString()
@@ -82,6 +94,16 @@ class EnvironmentVariables {
   @IsEmail()
   @IsNotEmpty()
   MAIL_FROM_EMAIL: string;
+
+  @IsPositive()
+  @IsInt()
+  @IsNotEmpty()
+  PASSWORD_RESET_TOKEN_TTL: number;
+
+  @IsPositive()
+  @IsInt()
+  @IsNotEmpty()
+  EMAIL_VERIFICATION_TOKEN_TTL: number;
 }
 
 export function validate(configuration: Record<string, unknown>) {

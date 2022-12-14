@@ -1,4 +1,9 @@
 # NestJS + Mongoose + MongoDB Starter Template
+
+https://github.com/mwanago/nestjs-server-sessions
+https://dev.to/nestjs/setting-up-sessions-with-nestjs-passport-and-redis-210
+
+
 https://betterprogramming.pub/nest-js-project-with-typeorm-and-postgres-ce6b5afac3be
 This is a template for a simple To Do List web app that consists of a REST API and a simple front end UI.
 

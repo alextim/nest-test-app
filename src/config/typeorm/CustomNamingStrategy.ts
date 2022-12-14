@@ -11,18 +11,7 @@ export class CustomNamingStrategy
 
     return `PK_${table}_${columnsSnakeCase}`;
   }
-  /*
-      relationConstraintName(tableOrName, columnNames, where) {
-        // sort incoming column names to avoid issue when ["id", "name"] and ["name", "id"] arrays
-        const clonedColumnNames = [...columnNames];
-        clonedColumnNames.sort();
-        const tableName = this.getTableName(tableOrName);
-        const replacedTableName = tableName.replace(".", "_");
-        let key = `${replacedTableName}_${clonedColumnNames.join("_")}`;
-        if (where)
-            key += `_${where}`;
-        return "REL_" + RandomGenerator_1.RandomGenerator.sha1(key).substr(0, 26);
-
+  
   foreignKeyName(
     tableOrName: string | Table,
     columnNames: string[],
@@ -48,7 +37,7 @@ export class CustomNamingStrategy
     const referenced = a.length
       ? a.join('_')
       : crypto.createHash('md5').update(name).digest('hex');
+    
     return `FK_${table}_${columnsSnakeCase}__${referenced}`;
   }
-  */
 }

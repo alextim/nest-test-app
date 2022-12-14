@@ -7,9 +7,12 @@ import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApiModule } from './api/api.module';
+import { AuthModule } from './api/auth/auth.module';
+
 import { getEnvPath } from './config/helpers/getEnvPath';
 import { TypeOrmConfigService } from './config/typeorm/ormconfig.service';
 import { validate } from './config/env.validation';
+
 const envFilePath = getEnvPath();
 const staticPath =
   process.env.NODE_ENV === 'production'
@@ -29,6 +32,7 @@ const staticPath =
     ServeStaticModule.forRoot({
       rootPath: staticPath,
     }),
+    AuthModule,
     ApiModule,
   ],
   controllers: [AppController],

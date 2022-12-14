@@ -6,13 +6,13 @@ import {
   registerDecorator,
   ValidationOptions,
 } from 'class-validator';
-import { UserService } from '../user.service';
+import { UsersService } from '../../users/users.service';
 
 @ValidatorConstraint({ name: 'IsEmailUnique', async: true })
 @Injectable()
 export class IsEmailUniqueConstraint implements ValidatorConstraintInterface {
   constructor(
-    @Inject(forwardRef(() => UserService)) private userService: UserService,
+    @Inject(forwardRef(() => UsersService)) private userService: UsersService,
   ) {}
 
   async validate(email: string, args: ValidationArguments) {
