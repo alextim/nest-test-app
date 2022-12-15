@@ -1,3 +1,6 @@
-import { User } from "../entities/user.entity";
+import { User } from '../entities/user.entity';
 
-export type UserDto = Pick<User, 'id' | 'username' | 'email' | 'roles' | 'firstName' | 'lastName'>;
+export type UserDto = Pick<
+  User,
+  'id' | 'username' | 'email' | 'roles' | 'firstName' | 'lastName'
+>;

@@ -1,5 +1,5 @@
-import { UserDto } from "./dto/UserDto";
-import { User } from "./entities/user.entity";
+import { UserDto } from './dto/UserDto';
+import { User } from './entities/user.entity';
 
 export class Mapper {
   static toDto(user: User) {
@@ -11,6 +11,6 @@ export class Mapper {
       firstName: user.firstName,
       lastName: user.lastName,
     };
-    return dto;    
+    return dto;
   }
 }

@@ -1,20 +1,19 @@
-import nodemailer, { Transporter } from 'nodemailer';
-import { ConfigService } from '@nestjs/config';
-import { Inject, Injectable } from '@nestjs/common';
+import path from 'node:path';
+import fs from 'node:fs/promises';
 
-import IMailProvider from '../IMailProvider';
-import IMailTemplateProvider from '../IMailTemplateProvider';
-import SendMailDto from '../dto/SendMail.dto';
-import HandlebarsMailTemplateProvider from './HandlebarsMailTemplateProvider';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
+import nodemailer from 'nodemailer';
+import type { Transporter } from 'nodemailer';
+import handlebars from 'handlebars';
+
+import SendMailDto from './providers/dto/SendMail.dto';
 
 @Injectable()
-export default class MailProvider implements IMailProvider {
+export class MailService {
   private readonly client: Transporter;
-  private readonly mailTemplateProvider: IMailTemplateProvider;
-
   constructor(private readonly config: ConfigService) {
-    this.mailTemplateProvider = new HandlebarsMailTemplateProvider();
-
     const mailConfig = {
       host: this.config.get<string>('MAIL_HOST'),
       port: this.config.get<number>('MAIL_POST'),
@@ -31,9 +30,11 @@ export default class MailProvider implements IMailProvider {
     to,
     from,
     subject,
-    templateData,
+    template: { filename, params },
   }: SendMailDto): Promise<void> {
-    const html = await this.mailTemplateProvider.parse(templateData);
+    const file = path.join(__dirname, 'templates', `${filename}.hbs`);
+    const templateFileContent = await fs.readFile(file, { encoding: 'utf-8' });
+    const html = await handlebars.compile(templateFileContent)(params);
 
     const mailOptions = {
       from: {

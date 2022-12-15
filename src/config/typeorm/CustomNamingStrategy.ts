@@ -11,7 +11,7 @@ export class CustomNamingStrategy
 
     return `PK_${table}_${columnsSnakeCase}`;
   }
-  
+
   foreignKeyName(
     tableOrName: string | Table,
     columnNames: string[],
@@ -37,7 +37,7 @@ export class CustomNamingStrategy
     const referenced = a.length
       ? a.join('_')
       : crypto.createHash('md5').update(name).digest('hex');
-    
+
     return `FK_${table}_${columnsSnakeCase}__${referenced}`;
   }
 }

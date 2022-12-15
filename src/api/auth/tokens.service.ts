@@ -59,6 +59,9 @@ export class TokensService {
   }
 
   async expire(tokenId: number) {
-    await this.repo.update({ id: tokenId }, { expiresAt: new Date(0) });
+    await this.repo.update(
+      { id: tokenId },
+      { expiresAt: new Date('1970-01-01') },
+    );
   }
 }

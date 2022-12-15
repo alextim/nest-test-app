@@ -7,8 +7,9 @@ import {
   Injectable,
   BadRequestException,
 } from '@nestjs/common';
-import { DeepPartial } from 'typeorm';
-import { UserDto } from '../users/dto/UserDto';
+
+import humanizeDuration from 'humanize-duration';
+
 import { User } from '../users/entities/user.entity';
 
 import { UsersService } from '../users/users.service';
@@ -16,28 +17,81 @@ import { UsersService } from '../users/users.service';
 import { SignupDto } from './dto/signup.dto';
 import { Mapper } from '../users/mapper';
 import { TokensService } from './tokens.service';
-import MailService from './mail/mail.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { MailService } from '../../mail/mail.service';
+import { TokenType } from './entities/token.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   @Inject(UsersService) private readonly usersService: UsersService;
 
-  constructor(private readonly tokensService: TokensService, private readonly mailService: MailService) {}
+  constructor(
+    private readonly config: ConfigService,
+    private readonly tokensService: TokensService,
+    private readonly mailService: MailService,
+  ) {}
 
   public async signup(signupDto: SignupDto) {
     const user = await this.usersService.create(signupDto);
-    try {
-      const token = await this.tokensService.createEmailVerificationToken(
-        user.id,
-      );
+    await this.sendEmailVerificationLink(user);
+  }
 
-      this.mailService.sendVerificationToken(user, token);      
+  private async sendEmailVerificationLink(user: User) {
+    const token = await this.tokensService.createEmailVerificationToken(
+      user.id,
+    );
 
-      await this.usersService.setVerificationCodeSentAt(user);
-    } catch (error) {
-      throw new InternalServerErrorException('Something went wrong');
-    }
+    await this.send(
+      user,
+      TokenType.EmailVerification,
+      {
+        verifyEmailLink: this.getLink('verify_email', token),
+        sendNewVerificationLink: this.getLink(
+          'send_new_verification_link',
+          token,
+        ),
+      },
+      `Your account verification code (valid for only ${this.getHumanizedTTL(
+        'EMAIL_VERIFICATION_TOKEN_TTL',
+      )}) `,
+    );
+
+    await this.usersService.setVerificationCodeSentAt(user);
+  }
+
+  private getHumanizedTTL(key: string) {
+    return humanizeDuration(this.config.get<number>(key));
+  }
+
+  private getLink(path: string, token: string) {
+    const baseUrl = this.config.get<string>('BASE_URL');
+    const link = `${baseUrl}/api/v1/auth/${path}?token=${token}`;
+    return link;
+  }
+
+  private async send(
+    user: User,
+    template: string,
+    params: Record<string, string | number>,
+    subject: string,
+  ) {
+    const appName = this.config.get<string>('APP_NAME');
+
+    const name = user.getFullName();
+    const email = user.email;
+
+    await this.mailService.sendEmail({
+      to: {
+        name,
+        email,
+      },
+      subject: `[${appName}] ${subject}`,
+      template: {
+        filename: template,
+        params: { ...params, appName },
+      },
+    });
   }
 
   async verifyEmailByToken(tokenValue: string) {
@@ -60,6 +114,25 @@ export class AuthService {
     }
 
     await this.usersService.setVerifiedAt(user);
+    await this.tokensService.expire(token.id);
+  }
+
+  async sendNewVerificationLink(oldToken: string) {
+    const token = await this.tokensService.findEmailVerificationToken(oldToken);
+    if (!token) {
+      throw new NotFoundException('Token not found');
+    }
+
+    const user = await this.usersService.findById(token.userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (user.verifiedAt) {
+      throw new ForbiddenException('User already verified');
+    }
+
+    await this.sendEmailVerificationLink(user);
+    await this.tokensService.expire(token.id);
   }
 
   async sendPasswordResetToken(email: string) {
@@ -67,21 +140,27 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const token = await this.tokensService.createPasswordResetToken(
-      user.id,
-    );
-    
+    const token = await this.tokensService.createPasswordResetToken(user.id);
+
     try {
-      this.mailService.sendPasswordResetToken(user, token);      
+      await this.send(
+        user,
+        TokenType.PasswordReset,
+        { link: this.getLink('reset_password', token) },
+        `Your one-time password reset code (valid for only ${this.getHumanizedTTL(
+          'PASSWORD_RESET_TOKEN_TTL',
+        )})`,
+      );
     } catch (error) {
       throw new InternalServerErrorException('Something went wrong');
-    }    
+    }
   }
 
-  async resetPasswordByToken({ token: tokenValue, password: plainPassword }: ResetPasswordDto) {
-    const token = await this.tokensService.findPasswordResetToken(
-      tokenValue,
-    );
+  async resetPasswordByToken({
+    token: tokenValue,
+    password: plainPassword,
+  }: ResetPasswordDto) {
+    const token = await this.tokensService.findPasswordResetToken(tokenValue);
     if (!token) {
       throw new NotFoundException('Token not found');
     }
@@ -115,6 +194,6 @@ export class AuthService {
       throw new ForbiddenException('Verification is not completed');
     }
 
-    return Mapper.toDto(user); 
+    return Mapper.toDto(user);
   }
 }

@@ -1,14 +1,10 @@
 import { HttpAdapterHost } from '@nestjs/core';
-import {
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { useContainer } from 'class-validator';
 
 import passport from 'passport';
-// import cookieParser from 'cookie-parser';
 import session from 'express-session';
 
 import { AppModule } from './app.module';

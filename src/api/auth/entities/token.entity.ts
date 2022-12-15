@@ -66,7 +66,7 @@ export class Token extends BaseEntity {
   @Column({
     name: 'user_id',
   })
-  userId: number
+  userId: number;
 
   constructor(token?: Partial<Token>) {
     super();

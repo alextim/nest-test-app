@@ -38,7 +38,15 @@ export class AuthController {
     return 'Email address is verified';
   }
 
-  @Get('send_password_reset')
+  @Get('send_new_verification_link')
+  async sendNewVerificationLink(
+    @Query() { token: oldToken }: EmailVerificationDto,
+  ) {
+    await this.authService.sendNewVerificationLink(oldToken);
+    return 'New verification token sent';
+  }
+
+  @Get('send_password_reset_token')
   async sendPasswordResetToken(@Query() { email }: SendPasswordResetDto) {
     await this.authService.sendPasswordResetToken(email);
     return `Password reset token sent to ${email}. Check your email`;
@@ -78,5 +86,5 @@ export class AuthController {
   async test(@Req() request: RequestWithUser) {
     // request.logOut();
     return request.user;
-  }  
+  }
 }

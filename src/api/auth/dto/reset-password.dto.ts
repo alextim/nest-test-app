@@ -13,10 +13,10 @@ export class ResetPasswordDto {
   @ApiProperty({ required: true })
   token: string;
 
-  @Matches(User.PASSWORD_PATTERN)
+  @Matches(User.PASSWORD_PATTERN, { message: User.PASSWORD_PATTERN_MESSAGE })
   @Length(User.PASSWORD_MIN_LENGTH, User.PASSWORD_MAX_LENGTH)
   @IsNotEmpty()
   @Transform(({ value }) => value?.trim())
   @ApiProperty({ required: true })
-  password: string;  
+  password: string;
 }

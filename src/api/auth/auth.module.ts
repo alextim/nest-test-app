@@ -11,19 +11,16 @@ import { AuthController } from './auth.controller';
 import { LocalStrategy } from './local.strategy';
 import { LocalSerializer } from './local.serializer';
 import { TokensService } from './tokens.service';
-import MailService from './mail/mail.service';
-import MailProvider from '../../services/mail/implementation/MailProvider';
+import { MailModule } from '../../mail/mail.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Token]), UsersModule, PassportModule],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    LocalSerializer,
-    TokensService,
-    MailService,
-    MailProvider,
+  imports: [
+    TypeOrmModule.forFeature([Token]),
+    UsersModule,
+    PassportModule,
+    MailModule,
   ],
+  providers: [AuthService, LocalStrategy, LocalSerializer, TokensService],
   controllers: [AuthController],
 })
 export class AuthModule {}

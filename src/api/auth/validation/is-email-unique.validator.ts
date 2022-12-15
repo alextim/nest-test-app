@@ -15,7 +15,7 @@ export class IsEmailUniqueConstraint implements ValidatorConstraintInterface {
     @Inject(forwardRef(() => UsersService)) private userService: UsersService,
   ) {}
 
-  async validate(email: string, args: ValidationArguments) {
+  async validate(email: string) {
     if (!email) {
       return true;
     }
