@@ -1,6 +1,7 @@
 import {
-  Body,
   Req,
+  Res,
+  Next,
   Controller,
   HttpCode,
   Post,
@@ -8,83 +9,97 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Get,
-  Query,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
+import type { Response, Request, NextFunction, CookieOptions } from 'express';
+
+import { ExcludeNullInterceptor } from '../../interceptors/excludeNull.interceptor';
+import { getCookieOptions } from '../../config/cookie.config';
+
 import { AuthService } from './auth.service';
 
-import { SignupDto } from './dto/signup.dto';
-import { EmailVerificationDto } from './dto/email-verification.dto';
-import { SendPasswordResetDto } from './dto/send-password-reset.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-
 import RequestWithUser from './requestWithUser.interface';
-import { CookieAuthenticationGuard } from './guards/cookieAuthentication.guard';
-import { LogInWithCredentialsGuard } from './guards/logInWithCredentials.guard';
+import { CookieAuthGuard } from './guards/cookie-auth.guard';
+import { LocalLoginGuard } from './guards/local-login.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
-
-  @Post('signup')
-  async register(@Body() newUser: SignupDto) {
-    await this.authService.signup(newUser);
-    return `Verification token sent to ${newUser.email}. Check your email to complete registration`;
-  }
-
-  @Get('verify_email')
-  async verifyEmail(@Query() { token }: EmailVerificationDto) {
-    await this.authService.verifyEmailByToken(token);
-    return 'Email address is verified';
-  }
-
-  @Get('send_new_verification_link')
-  async sendNewVerificationLink(
-    @Query() { token: oldToken }: EmailVerificationDto,
-  ) {
-    await this.authService.sendNewVerificationLink(oldToken);
-    return 'New verification token sent';
-  }
-
-  @Get('send_password_reset_token')
-  async sendPasswordResetToken(@Query() { email }: SendPasswordResetDto) {
-    await this.authService.sendPasswordResetToken(email);
-    return `Password reset token sent to ${email}. Check your email`;
-  }
-
-  @Get('reset_password')
-  async resetPassword(@Query() dto: ResetPasswordDto) {
-    await this.authService.resetPasswordByToken(dto);
-    return 'New password successfully set';
-  }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @HttpCode(200)
-  @UseGuards(LogInWithCredentialsGuard)
+  @UseInterceptors(ExcludeNullInterceptor)
+  @UseGuards(LocalLoginGuard)
   @Post('login')
   async login(@Req() request: RequestWithUser) {
     return request.user;
   }
 
   @HttpCode(200)
-  @UseGuards(CookieAuthenticationGuard)
+  @UseGuards(CookieAuthGuard)
   @Get('authenticate')
   async authenticate(@Req() request: RequestWithUser) {
     return request.user;
   }
 
-  @HttpCode(200)
-  @UseGuards(CookieAuthenticationGuard)
-  @Post('logout')
-  async logout(@Req() request: RequestWithUser) {
-    // request.logOut();
-    request.session.cookie.maxAge = 0;
+  @UseGuards(CookieAuthGuard)
+  @Get('logout')
+  async logout(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ): Promise<void> {
+    req.logOut((err) => {
+      if (err) {
+        return next(err);
+      }
+      req.session.destroy((err) => {
+        if (err) {
+          return next(err);
+        }
+        res.cookie(this.configService.get('SESSION_COOKIE_NAME'), '', {
+          ...(getCookieOptions(this.configService) as CookieOptions),
+          maxAge: 0,
+          expires: new Date(1),
+          signed: false,
+        });
+
+        // redirect to homepage
+        // res.redirect('/');
+
+        res.end();
+      });
+    });
   }
 
   @HttpCode(200)
-  @UseGuards(CookieAuthenticationGuard)
+  @UseGuards(CookieAuthGuard)
   @Post('test')
   async test(@Req() request: RequestWithUser) {
-    // request.logOut();
+    // TODO:
+    (request as any).logOut();
     return request.user;
+  }
+
+  @Get('public')
+  publicRoute() {
+    return 'public';
+  }
+
+  @UseGuards(CookieAuthGuard)
+  @Get('protected')
+  guardedRoute() {
+    return 'protected';
+  }
+
+  @UseGuards(AdminGuard)
+  @Get('admin')
+  getAdminMessage() {
+    return 'admin';
   }
 }

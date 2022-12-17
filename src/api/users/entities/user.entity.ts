@@ -11,6 +11,7 @@ import {
   ArrayNotEmpty,
   ArrayUnique,
   IsArray,
+  IsBoolean,
   IsDate,
   IsEmail,
   IsEnum,
@@ -23,13 +24,13 @@ import {
   MinDate,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-
+import { CrudValidationGroups } from '@nestjsx/crud';
+import { Transform } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../shared/entities/BaseEntity';
-import { Token } from '../../auth/entities/token.entity';
-import { Transform } from 'class-transformer';
-import { CrudValidationGroups } from '@nestjsx/crud';
+import { Token } from '../../account/entities/token.entity';
+
 const { CREATE, UPDATE } = CrudValidationGroups;
 
 export enum Role {
@@ -52,7 +53,7 @@ export class User extends BaseEntity {
     'Password must contain at least 1 lowercase, 1 uppercase, 1 digit and 1 special char';
 
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Length(2, 30, {
     always: true,
@@ -63,15 +64,15 @@ export class User extends BaseEntity {
   @Transform(({ value }) => value?.trim())
   @ApiProperty({ required: false })
   @Column({ length: 30, nullable: true })
-  username?: string;
+  public username?: string;
 
   @IsEmail({}, { always: true, message: 'Incorrect email' })
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE], message: 'The email is required' })
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }) => value?.trim().toLowerCase())
   @ApiProperty({ required: true })
   @Column({ length: 254 })
-  email: string;
+  public email: string;
 
   @Matches(User.PASSWORD_PATTERN, {
     message: User.PASSWORD_PATTERN_MESSAGE,
@@ -79,8 +80,7 @@ export class User extends BaseEntity {
   @Length(User.PASSWORD_MIN_LENGTH, User.PASSWORD_MAX_LENGTH, {
     message: User.PASSWORD_LENGTH_MESSAGE,
   })
-  @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE], message: 'The password is required' })
+  @IsOptional({ always: true })
   @Transform(
     ({ value }) => {
       return value?.trim();
@@ -88,8 +88,30 @@ export class User extends BaseEntity {
     { toClassOnly: true },
   )
   @ApiProperty({ required: true })
-  @Column({ length: User.PASSWORD_MAX_LENGTH })
-  password: string;
+  @Column({ length: User.PASSWORD_MAX_LENGTH, nullable: true })
+  public password?: string;
+
+  @IsBoolean()
+  @IsOptional({ always: true })
+  @Column({ name: 'is_registered_with_google', default: false })
+  public isRegisteredWithGoogle: boolean;
+
+  @IsString()
+  @Length(21, 21, { always: true })
+  @IsOptional({ always: true })
+  @Column({ name: 'google_id', length: 21, nullable: true })
+  public googleId: string;
+
+  @IsBoolean()
+  @IsOptional({ always: true })
+  @Column({ name: 'is_registered_with_facebook', default: false })
+  public isRegisteredWithFacebook: boolean;
+
+  @IsString()
+  @Length(21, 21, { always: true })
+  @IsOptional({ always: true })
+  @Column({ name: 'facebook_id', length: 21, nullable: true })
+  public facebookId: string;
 
   @IsEnum(Role, { always: true, each: true })
   @ArrayUnique({ always: true })
@@ -104,7 +126,7 @@ export class User extends BaseEntity {
     array: true,
     default: [Role.USER],
   })
-  roles: Role[];
+  public roles: Role[];
 
   @MaxLength(40, { always: true })
   @IsString({ always: true })
@@ -112,7 +134,7 @@ export class User extends BaseEntity {
   @Transform(({ value }) => value?.trim())
   @ApiProperty({ required: false })
   @Column({ name: 'first_name', length: 40, nullable: true })
-  firstName?: string;
+  public firstName?: string;
 
   @MaxLength(40, { always: true })
   @IsString({ always: true })
@@ -120,7 +142,7 @@ export class User extends BaseEntity {
   @Transform(({ value }) => value?.trim())
   @ApiProperty({ required: false })
   @Column({ name: 'last_name', length: 40, nullable: true })
-  lastName?: string;
+  public lastName?: string;
 
   @IsDate({ always: true })
   @MinDate(new Date(), { always: true })
@@ -132,7 +154,7 @@ export class User extends BaseEntity {
     type: 'timestamptz',
     nullable: true,
   })
-  verificationCodeSentAt?: Date;
+  public verificationCodeSentAt?: Date;
 
   @IsDate({ always: true })
   @MinDate(new Date(), { always: true })
@@ -140,7 +162,7 @@ export class User extends BaseEntity {
   @IsOptional({ always: true })
   @ApiProperty({ required: false })
   @Column({ name: 'verified_at', type: 'timestamptz', nullable: true })
-  verifiedAt?: Date;
+  public verifiedAt?: Date;
 
   @OneToMany(() => Token, (token: Token) => token.user)
   public token: Token[];
@@ -150,25 +172,27 @@ export class User extends BaseEntity {
     Object.assign(this, user);
   }
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    this.password = await User.hash(this.password);
-  }
-
-  static async hash(s: string) {
+  public static async hash(s: string) {
     return hash(s, HASH_ROUNDS);
   }
 
-  async comparePasswords(plainPassword: string) {
+  @BeforeInsert()
+  @BeforeUpdate()
+  public async hashPassword() {
+    this.password = await User.hash(this.password);
+  }
+
+  public async comparePasswords(plainPassword: string) {
     return compare(plainPassword, this.password);
   }
 
-  getFullName() {
-    let name = this.firstName || '';
-    if (name && this.lastName) {
-      name += `  ${this.lastName}`;
+  public get fullName() {
+    if (!this.lastName) {
+      return this.firstName || '';
     }
-    return name || this.username || this.email;
+    if (!this.firstName) {
+      return this.lastName;
+    }
+    return `${this.firstName} ${this.lastName}`;
   }
 }

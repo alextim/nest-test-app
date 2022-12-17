@@ -48,6 +48,14 @@ export class UsersService extends TypeOrmCrudService<User> {
     await this.repo.update({ id: user.id }, { verifiedAt: date });
   }
 
+  async setGoogleId(user: User, googleId: string) {
+    await this.repo.update({ id: user.id }, { googleId });
+  }
+
+  async setFacebookId(user: User, facebookId: string) {
+    await this.repo.update({ id: user.id }, { facebookId });
+  }
+
   async setPassword(user: User, plainPassword: string) {
     const hashedPassword = await User.hash(plainPassword);
     await this.repo.update({ id: user.id }, { password: hashedPassword });

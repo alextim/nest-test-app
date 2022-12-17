@@ -5,7 +5,9 @@ import connectPgSimple from 'connect-pg-simple';
 // import { createClient } from 'redis';
 // import * as createRedisStore from 'connect-redis';
 
-export const getCookieSessionOptions = (
+import { getCookieOptions } from './cookie.config';
+
+export const getSessionOptions = (
   configService: ConfigService,
 ): SessionOptions => {
   const isProd = configService.get<string>('NODE_ENV') === 'production';
@@ -30,11 +32,7 @@ export const getCookieSessionOptions = (
     // https://stackoverflow.com/questions/40381401/when-to-use-saveuninitialized-and-resave-in-express-session
     saveUninitialized: false,
     store,
-    cookie: {
-      httpOnly: true,
-      signed: true,
-      sameSite: 'strict',
-      secure: isProd,
-    },
+    name: configService.get<string>('SESSION_NAME'),
+    cookie: getCookieOptions(configService),
   };
 };

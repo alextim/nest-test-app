@@ -1,26 +1,26 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UsersModule } from '../users/users.module';
-
-import { Token } from './entities/token.entity';
 
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { LocalStrategy } from './local.strategy';
 import { LocalSerializer } from './local.serializer';
-import { TokensService } from './tokens.service';
-import { MailModule } from '../../mail/mail.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Token]),
     UsersModule,
     PassportModule,
-    MailModule,
+    /*
+ PassportModule.register({
+      session: true,
+    }),    
+    */
+    ConfigModule,
   ],
-  providers: [AuthService, LocalStrategy, LocalSerializer, TokensService],
+  providers: [AuthService, LocalStrategy, LocalSerializer],
   controllers: [AuthController],
 })
 export class AuthModule {}

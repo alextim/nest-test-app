@@ -10,7 +10,7 @@ import session from 'express-session';
 import { AppModule } from './app.module';
 
 import { QueryErrorFilter } from './filters/query-error.filter';
-import { getCookieSessionOptions } from './config/cookie-session.config';
+import { getSessionOptions } from './config/session.config';
 
 export function setup(app: INestApplication) {
   app.setGlobalPrefix('api/v1', { exclude: ['/'] });
@@ -19,7 +19,7 @@ export function setup(app: INestApplication) {
   // QueryErrorFilter - catches any unique constraint violation exceptions during database create/update operations
   app.useGlobalFilters(new QueryErrorFilter(httpAdapter));
 
-  const config = app.get(ConfigService);
+  const configService = app.get(ConfigService);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -34,7 +34,7 @@ export function setup(app: INestApplication) {
     }),
   );
 
-  app.use(session(getCookieSessionOptions(config)));
+  app.use(session(getSessionOptions(configService)));
 
   app.use(passport.initialize());
   app.use(passport.session());

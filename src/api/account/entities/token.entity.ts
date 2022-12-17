@@ -30,7 +30,7 @@ export enum TokenType {
 
 @Entity({ name: 'token' })
 export class Token extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity', { generatedIdentity: 'ALWAYS' })
   id: number;
 
   @IsString()

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
 
-import { User } from '../users/entities/user.entity';
+import { Role, User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { Mapper } from '../users/mapper';
+import { UserMapper } from '../users/user-mapper';
 
 @Injectable()
 export class LocalSerializer extends PassportSerializer {
@@ -11,12 +11,29 @@ export class LocalSerializer extends PassportSerializer {
     super();
   }
 
+  /**
+   *  attach the {authenticate_user} to  req.session.passport.user.{authenticated_user}
+   *
+   * @param user
+   * @param done
+   */
   serializeUser(user: User, done: CallableFunction) {
-    done(null, user.id);
+    done(null, { id: user.id, roles: user.roles });
   }
 
-  async deserializeUser(userId: string, done: CallableFunction) {
-    const user = await this.usersService.findById(Number(userId));
-    done(null, Mapper.toDto(user));
+  /**
+   * get the {authenticated_user} for the session from
+   * "req.session.passport.user.{authenticated_user}, and attach it to
+   * req.user.{authenticated_user}
+   *
+   * @param userId
+   * @param done
+   */
+  async deserializeUser(
+    payload: { id: number; roles: Role[] },
+    done: CallableFunction,
+  ) {
+    const user = await this.usersService.findById(payload.id);
+    done(null, UserMapper.toDto(user));
   }
 }

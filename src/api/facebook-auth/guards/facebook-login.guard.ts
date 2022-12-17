@@ -2,16 +2,27 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class LogInWithCredentialsGuard extends AuthGuard('local') {
+export class FacebookLoginGuard extends AuthGuard('facebook') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // check the email and the password
-    await super.canActivate(context);
+    const result = (await super.canActivate(context)) as boolean;
 
     // initialize the session
     const request = context.switchToHttp().getRequest();
     await super.logIn(request);
 
     // if no exceptions were thrown, allow the access to the route
-    return true;
+    // return true;
+    // TODO:
+    return result;
   }
+  /*
+    handleRequest(err, user, info) {
+    // If authentication fails, we throw an UnauthorizedException so that
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+    return user;
+  }
+  */
 }

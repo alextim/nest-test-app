@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
@@ -7,10 +7,9 @@ import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApiModule } from './api/api.module';
-import { AuthModule } from './api/auth/auth.module';
 
 import { getEnvPath } from './config/helpers/getEnvPath';
-import { TypeOrmConfigService } from './config/typeorm/ormconfig.service';
+import { getTypeOrmOptions } from './config/typeorm/typeorm-module.options';
 import { validate } from './config/env.validation';
 
 const envFilePath = getEnvPath();
@@ -27,12 +26,16 @@ const staticPath =
       envFilePath,
       validate,
       isGlobal: true,
+      // expandVariables: true,
     }),
-    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: getTypeOrmOptions,
+      inject: [ConfigService],
+    }),
     ServeStaticModule.forRoot({
       rootPath: staticPath,
     }),
-    AuthModule,
     ApiModule,
   ],
   controllers: [AppController],

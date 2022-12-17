@@ -6,7 +6,7 @@ import { User } from '../../users/entities/user.entity';
 export class LoginDto {
   @IsEmail()
   @IsNotEmpty()
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }) => value?.trim().toLowerCase())
   @ApiProperty({ required: true })
   email: string;
 

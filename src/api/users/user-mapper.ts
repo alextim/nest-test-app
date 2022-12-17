@@ -1,7 +1,7 @@
 import { UserDto } from './dto/UserDto';
 import { User } from './entities/user.entity';
 
-export class Mapper {
+export class UserMapper {
   static toDto(user: User) {
     const dto: UserDto = {
       id: user.id,

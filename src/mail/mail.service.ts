@@ -16,7 +16,7 @@ export class MailService {
   constructor(private readonly config: ConfigService) {
     const mailConfig = {
       host: this.config.get<string>('MAIL_HOST'),
-      port: this.config.get<number>('MAIL_POST'),
+      port: this.config.get<number>('MAIL_PORT'),
       auth: {
         user: this.config.get<string>('MAIL_USERNAME'),
         pass: this.config.get<string>('MAIL_PASSWORD'),

@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import {
   IsEmail,
   IsEnum,
@@ -11,15 +11,15 @@ import {
   IsPositive,
 } from 'class-validator';
 
-enum EnvironmentType {
+enum Environment {
   Dev = 'development',
   Prod = 'production',
   Test = 'test',
 }
 
 class EnvironmentVariables {
-  @IsEnum(EnvironmentType)
-  NODE_ENV: EnvironmentType;
+  @IsEnum(Environment)
+  NODE_ENV: Environment;
 
   @IsString()
   @IsNotEmpty()
@@ -44,10 +44,18 @@ class EnvironmentVariables {
   @IsNotEmpty()
   PORT: number;
 
-  // Auth
+  // Session
   @IsString()
   @IsNotEmpty()
   SESSION_SECRET: string;
+
+  @IsString()
+  @IsOptional()
+  SESSION_NAME = 'connect.sid';
+
+  @IsString()
+  @IsOptional()
+  SESSION_COOKIE_DOMAIN?: string;
 
   // DB
   @IsString()
@@ -104,14 +112,32 @@ class EnvironmentVariables {
   @IsInt()
   @IsNotEmpty()
   EMAIL_VERIFICATION_TOKEN_TTL: number;
+
+  // Google OAuth 2.0
+  @IsString()
+  @IsNotEmpty()
+  GOOGLE_AUTH_CLIENT_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  GOOGLE_AUTH_CLIENT_SECRET: string;
+
+  // FaceBook
+  @IsString()
+  @IsNotEmpty()
+  FACEBOOK_APP_ID: string;
+
+  @IsString()
+  @IsNotEmpty()
+  FACEBOOK_APP_SECRET: string;
 }
 
-export function validate(configuration: Record<string, unknown>) {
-  const finalConfig = plainToClass(EnvironmentVariables, configuration, {
+export function validate(config: Record<string, unknown>) {
+  const finalConfig = plainToInstance(EnvironmentVariables, config, {
     enableImplicitConversion: true,
   });
 
-  const errors = validateSync(finalConfig, { skipMissingProperties: true });
+  const errors = validateSync(finalConfig, { skipMissingProperties: false });
 
   if (errors.length > 0) {
     throw new Error(errors.toString());
