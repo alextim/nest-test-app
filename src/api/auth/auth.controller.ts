@@ -19,10 +19,12 @@ import { getCookieOptions } from '../../config/cookie.config';
 
 import { AuthService } from './auth.service';
 
-import RequestWithUser from './requestWithUser.interface';
+import RequestWithUser from './interfaces/requestWithUser.interface';
 import { CookieAuthGuard } from './guards/cookie-auth.guard';
 import { LocalLoginGuard } from './guards/local-login.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { GoogleLoginGuard } from './guards/google-login.guard';
+import { FacebookLoginGuard } from './guards/facebook-login.guard';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -101,5 +103,43 @@ export class AuthController {
   @Get('admin')
   getAdminMessage() {
     return 'admin';
+  }
+
+  @Get('google')
+  @UseGuards(GoogleLoginGuard)
+  async signInWithGoogle(@Req() _) {
+    // Guard redirects
+  }
+
+  @Get('google/redirect')
+  @UseGuards(GoogleLoginGuard)
+  signInWithGoogleRedirect(@Req() req) {
+    if (!req.user) {
+      return 'No user from Google';
+    }
+
+    return {
+      message: 'User information from Google',
+      user: req.user,
+    };
+  }
+
+  @Get('facebook')
+  @UseGuards(FacebookLoginGuard)
+  async signInWithFacebook(@Req() _) {
+    // Guard redirects
+  }
+
+  @Get('facebook/redirect')
+  @UseGuards(FacebookLoginGuard)
+  signInWithFacebookRedirect(@Req() req) {
+    if (!req.user) {
+      return 'No user from facebook';
+    }
+
+    return {
+      message: 'User information from facebook',
+      user: req.user,
+    };
   }
 }

@@ -9,6 +9,7 @@ import {
   validateSync,
   IsUrl,
   IsPositive,
+  IsBoolean,
 } from 'class-validator';
 
 enum Environment {
@@ -130,6 +131,19 @@ class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   FACEBOOK_APP_SECRET: string;
+
+  // SSL
+  @IsBoolean()
+  @IsNotEmpty()
+  SSL: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  SSL_KEY_PATH: string;
+
+  @IsString()
+  @IsNotEmpty()
+  SSL_CERT_PATH: string;
 }
 
 export function validate(config: Record<string, unknown>) {

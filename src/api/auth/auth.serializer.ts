@@ -6,7 +6,7 @@ import { UsersService } from '../users/users.service';
 import { UserMapper } from '../users/user-mapper';
 
 @Injectable()
-export class LocalSerializer extends PassportSerializer {
+export class AuthSerializer extends PassportSerializer {
   constructor(private readonly usersService: UsersService) {
     super();
   }

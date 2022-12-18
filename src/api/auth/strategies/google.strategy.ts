@@ -5,20 +5,21 @@ import { PassportStrategy } from '@nestjs/passport';
 import type { Profile, VerifyCallback } from 'passport-google-oauth20';
 import { Strategy } from 'passport-google-oauth20';
 
-import { UserMapper } from '../users/user-mapper';
-import { GoogleAuthService } from './google-auth.service';
-import { StrategyGoogleProfile } from './interfaces/strategy-google-profile.interface';
+import { UserMapper } from '../../users/user-mapper';
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
     private readonly config: ConfigService,
-    private readonly googleAuthService: GoogleAuthService,
+    private readonly authService: AuthService,
   ) {
     super({
       clientID: config.get<string>('GOOGLE_AUTH_CLIENT_ID'),
       clientSecret: config.get<string>('GOOGLE_AUTH_CLIENT_SECRET'),
-      callbackURL: `${config.get<string>('BASE_URL')}/api/v1/google/redirect`,
+      callbackURL: `${config.get<string>(
+        'BASE_URL',
+      )}/api/v1/auth/google/redirect`,
       scope: ['email', 'profile'],
       // passReqToCallback:true
     });
@@ -44,7 +45,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       throw new Error('No verified email returned from Google Authorization!');
     }
 
-    const user = await this.googleAuthService.findOrCreateUser({
+    const user = await this.authService.findOrCreateUser({
       providerId,
       providerName,
 

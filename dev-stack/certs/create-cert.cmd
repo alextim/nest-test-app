@@ -1,0 +1,1 @@
+mkcert create-cert --cert local-cert.pem --key local-key.pem --domains localhost,127.0.0.1
