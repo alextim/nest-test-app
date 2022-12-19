@@ -11,7 +11,8 @@
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
-import { getDataSourceOptions } from './src/config/typeorm/datasource.options';
+import { getDataSourceOptions } from './src/lib/orm/datasource.options';
+
 import { FacebookAuth1671309913319 } from './migrations/1671309913319-FacebookAuth';
 
 config();

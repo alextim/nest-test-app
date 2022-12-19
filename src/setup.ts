@@ -1,6 +1,7 @@
 import { HttpAdapterHost } from '@nestjs/core';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { useContainer } from 'class-validator';
 
@@ -10,27 +11,26 @@ import session from 'express-session';
 import { AppModule } from './app.module';
 
 import { QueryErrorFilter } from './filters/query-error.filter';
-import { getSessionOptions } from './config/session.config';
+import { validationConfig } from './lib/config/configs/validation.config';
+import { getSessionOptions } from './lib/config/configs/session.config';
 
-export function setup(app: INestApplication) {
+export function setup(app: NestExpressApplication) {
+  const configService = app.get(ConfigService);
+
   app.setGlobalPrefix('api/v1', { exclude: ['/'] });
 
-  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.disable('x-powered-by');
+  app.disable('X-Powered-By');
+
   // QueryErrorFilter - catches any unique constraint violation exceptions during database create/update operations
+  const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new QueryErrorFilter(httpAdapter));
 
-  const configService = app.get(ConfigService);
 
   app.useGlobalPipes(
     new ValidationPipe({
+      ...validationConfig,
       transform: true,
-      whitelist: true,
-      stopAtFirstError: true,
-      enableDebugMessages: true,
-      validationError: {
-        target: true,
-        value: true,
-      },
     }),
   );
 

@@ -6,8 +6,9 @@ import pkg from '../package.json';
 
 export const setupSwagger = (
   app: INestApplication,
-  configService: ConfigService,
 ) => {
+  const configService = app.get(ConfigService);
+
   const swaggerOptions = new DocumentBuilder()
     .setTitle(configService.get<string>('APP_NAME'))
     .setDescription(pkg.description)
