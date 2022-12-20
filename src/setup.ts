@@ -11,7 +11,7 @@ import session from 'express-session';
 import { AppModule } from './app.module';
 
 import { QueryErrorFilter } from './filters/query-error.filter';
-import { validationConfig } from './lib/config/configs/validation.config';
+import { validatorConfig } from './lib/config/configs/validator.config';
 import { getSessionOptions } from './lib/config/configs/session.config';
 
 export function setup(app: NestExpressApplication) {
@@ -29,7 +29,7 @@ export function setup(app: NestExpressApplication) {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      ...validationConfig,
+      ...validatorConfig,
       transform: true,
     }),
   );

@@ -10,6 +10,9 @@ import {
   IsUrl,
   IsPositive,
   ValidateIf,
+  IsIn,
+  IsFQDN,
+  Matches
 } from 'class-validator';
 
 enum Environment {
@@ -37,7 +40,7 @@ class EnvironmentVariables {
   BASE_URL: string;
 
   // Server
-  @IsString()
+  @IsFQDN({ require_tld: false, allow_numeric_tld : true })
   @IsNotEmpty()
   HOST: string;
 
@@ -54,18 +57,19 @@ class EnvironmentVariables {
   @IsNotEmpty()
   LOG_LEVEL: string;
 
-  @IsString()
+  @IsIn(['true', 'false'])    
+  @ValidateIf(({ LOG_TO_FILE }) => LOG_TO_FILE)
   @IsOptional()
-  LOG_TO_FILE: string;
+  LOG_TO_FILE?: string;
 
   @IsString()
   @IsNotEmpty()
-  @ValidateIf((o) => o.LOG_TO_FILE === 'true')
+  @ValidateIf(({ LOG_TO_FILE }) => LOG_TO_FILE === 'true')
   LOG_DIR: string;
 
-  @IsString()
+  @Matches(/^([a-zA-Z0-9\s\._-]+)$/)
   @IsNotEmpty()
-  @ValidateIf((o) => o.LOG_TO_FILE === 'true')
+  @ValidateIf(({ LOG_TO_FILE }) => LOG_TO_FILE === 'true')
   LOG_FILENAME: string;
 
   // Session
@@ -82,11 +86,12 @@ class EnvironmentVariables {
   SESSION_COOKIE_DOMAIN?: string;
 
   // DB
-  @IsString()
+  @IsFQDN({ require_tld: false, allow_numeric_tld : true })
   @IsNotEmpty()
   DB_HOST: string;
 
   @IsInt()
+  @IsPositive()
   @IsNotEmpty()
   DB_PORT: number;
 
@@ -100,14 +105,29 @@ class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  DB_PASSWORD: string;
+  DB_PASSWORD?: string;
 
+  // typeorm
+  @IsOptional()
+  @IsIn(['advanced-console', 'simple-console', 'file', 'debug'])
+  @ValidateIf(({ TYPEORM_LOGGER }) => TYPEORM_LOGGER)
+  TYPEORM_LOGGER?: string;
+
+  @IsOptional()
+  TYPEORM_LOGGING?: string;
+
+  @IsPositive()
+  @IsInt()
+  @IsOptional()
+  TYPEORM_MAX_QUERY_EXECUTION_TIME?: number;
+  
   // mail
-  @IsString()
+  @IsFQDN()
   @IsNotEmpty()
   MAIL_HOST: string;
 
   @IsInt()
+  @IsPositive()
   @IsNotEmpty()
   MAIL_PORT: number;
 
@@ -156,19 +176,20 @@ class EnvironmentVariables {
   FACEBOOK_APP_SECRET: string;
 
   // SSL
-  @IsString()
+  @IsIn(['true', 'false'])    
+  @ValidateIf(({ SSL }) => SSL)
   @IsOptional()
-  SSL: string;
+  SSL?: string;
+
+  @IsString()
+  @ValidateIf(({ SSL }) => SSL === 'true')
+  @IsNotEmpty()
+  SSL_KEY_PATH?: string;
 
   @IsString()
   @ValidateIf((o) => o.SSL === 'true')
   @IsNotEmpty()
-  SSL_KEY_PATH: string;
-
-  @IsString()
-  @ValidateIf((o) => o.SSL === 'true')
-  @IsNotEmpty()
-  SSL_CERT_PATH: string;
+  SSL_CERT_PATH?: string;
 
   @Expose()
   get isProd() {
@@ -178,6 +199,26 @@ class EnvironmentVariables {
   @Expose()
   get isDev() {
     return this.NODE_ENV === 'development';
+  }
+
+  @Expose()
+  get typeorm() {
+    let logging: boolean | string | string[] | undefined = this.TYPEORM_LOGGING || undefined;
+    if (logging) {
+      if (logging === 'true') {
+        logging = true;
+      } else if (logging.includes(',')) {
+        logging = logging.split(',');
+      } 
+    }
+    return {
+      // advanced-console, simple-console, file, debug 
+      logger: this.TYPEORM_LOGGER, 
+      // true, all, [query, error, schema, warn, info, log] 
+      logging, 
+      // log all queries which run more then `maxQueryExecutionTime`
+      maxQueryExecutionTime: this.TYPEORM_MAX_QUERY_EXECUTION_TIME,       
+    }
   }
 }
 

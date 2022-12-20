@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 
 import nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
@@ -13,6 +14,8 @@ import SendMailDto from './providers/dto/SendMail.dto';
 @Injectable()
 export class MailService {
   private readonly client: Transporter;
+  private readonly logger = new Logger(MailService.name);
+
   constructor(private readonly config: ConfigService) {
     const mailConfig = {
       host: this.config.get<string>('MAIL_HOST'),
@@ -50,8 +53,14 @@ export class MailService {
     };
 
     const info = await this.client.sendMail(mailOptions);
-    console.log('Message sent: %s', info.messageId);
-    // Preview only available when sending through an Ethereal account
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    this.logger.debug('Message sent  %o', info);
+
+    if (this.config.get<string>('isDev')) {
+      // Preview only available when sending through an Ethereal account
+      this.logger.log('Message sent: %s', info.messageId);
+      this.logger.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    } else {
+      this.logger.log('Message sent to: %s %o', to.email, info.response);
+    }
   }
 }

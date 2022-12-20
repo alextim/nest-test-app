@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { validate } from 'class-validator';
 
-import { validationConfig } from '../../../lib/config/configs/validation.config';
+import { validatorConfig } from '../../../lib/config/configs/validator.config';
 
 import { UserDto } from '../../users/dto/UserDto';
 import { UserMapper } from '../../users/user-mapper';
@@ -21,7 +21,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(email: string, password: string): Promise<UserDto> {
     const dto = new LoginDto(email, password);
-    const errors = await validate(dto, validationConfig);
+    const errors = await validate(dto, validatorConfig);
     if (errors.length > 0) {
       throw new UnauthorizedException('Invalid username/password');
     }

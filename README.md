@@ -1,5 +1,16 @@
 # NestJS + Mongoose + MongoDB Starter Template
 
+## setup
+
+```env
+SESSION_COOKIE_DOMAIN=.example.com
+```
+or leave it empty
+```env
+SESSION_COOKIE_DOMAIN=
+```
+
+
 https://github.com/zainuddin25/NestJS-Rest-API/blob/main/src/health/health.controller.ts
 https://github.com/gabrielmaialva33/base-nest-api/blob/master/src/modules/health/health.controller.ts
 

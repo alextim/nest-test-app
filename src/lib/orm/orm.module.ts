@@ -17,8 +17,12 @@ import { getDataSourceOptions } from './datasource.options';
         subscribers: ['dist/subscriber/**/*.{ts,js}'],
 
         migrationsTableName: 'typeorm_migrations',
-        logger: 'file',
-        synchronize: true, // never use TRUE in production!
+        synchronize: configService.get<boolean>('isDev'), // never use TRUE in production!
+        
+        // logger settings
+        logger: configService.get('typeorm.logger'), // advanced-console, simple-console, file, debug 
+        logging: configService.get('typeorm.logging'), // true, all, query, error, schema, warn, info, log 
+        maxQueryExecutionTime: configService.get('typeorm.maxQueryExecutionTime'), // log all queries which run more then `maxQueryExecutionTime`
       }),
       inject: [ConfigService],
     }),

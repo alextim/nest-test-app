@@ -26,6 +26,7 @@ specifiers:
   '@types/passport-facebook-token': ^0.4.35
   '@types/passport-google-oauth20': ^2.0.11
   '@types/passport-local': ^1.0.34
+  '@types/sonic-boom': ^2.1.1
   '@types/supertest': ^2.0.12
   '@typescript-eslint/eslint-plugin': ^5.47.0
   '@typescript-eslint/parser': ^5.47.0
@@ -59,6 +60,7 @@ specifiers:
   reflect-metadata: ^0.1.13
   rimraf: ^3.0.2
   rxjs: ^7.8.0
+  sonic-boom: ^3.2.1
   source-map-support: ^0.5.21
   supertest: ^6.3.3
   ts-jest: 29.0.3
@@ -120,6 +122,7 @@ devDependencies:
   '@types/passport-facebook-token': 0.4.35
   '@types/passport-google-oauth20': 2.0.11
   '@types/passport-local': 1.0.34
+  '@types/sonic-boom': 2.1.1
   '@types/supertest': 2.0.12
   '@typescript-eslint/eslint-plugin': 5.47.0_ncmi6noazr3nzas7jxykisekym
   '@typescript-eslint/parser': 5.47.0_lzzuuodtsqwxnvqeq4g4likcqa
@@ -130,6 +133,7 @@ devDependencies:
   jest: 29.3.1_xgdmd3tdlagpkcvgycprrn3igm
   pino-pretty: 9.1.1
   prettier: 2.8.1
+  sonic-boom: 3.2.1
   source-map-support: 0.5.21
   supertest: 6.3.3
   ts-jest: 29.0.3_p6ekqnroyms5nhqbfxosryz7rm
@@ -1566,6 +1570,13 @@ packages:
     dependencies:
       '@types/mime': 3.0.1
       '@types/node': 18.11.17
+    dev: true
+
+  /@types/sonic-boom/2.1.1:
+    resolution: {integrity: sha512-CiKn+8CDgtBspfAVPwC8PXCMPhqeL7pFS4aWuj+WJnHLZlu4OGPctdZ6Mob43jRe0kkd7Ztb2Hcu9kzB+b7ZFw==}
+    deprecated: This is a stub types definition. sonic-boom provides its own type definitions, so you do not need this installed.
+    dependencies:
+      sonic-boom: 3.2.1
     dev: true
 
   /@types/stack-utils/2.0.1:

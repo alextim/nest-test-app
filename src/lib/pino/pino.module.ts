@@ -1,46 +1,45 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
-import type { Params } from 'nestjs-pino';
 import pino from 'pino';
+import type { Params } from 'nestjs-pino';
+import type { SonicBoom } from 'sonic-boom';
 
 @Module({
   imports: [
     ConfigModule,
     LoggerModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const isProd = configService.get<boolean>('isProd');
+      useFactory: (configService: ConfigService): Params => {
+        let stream: SonicBoom;
+        let transport: pino.TransportSingleOptions<Record<string, any>>; 
 
-        const dest =
-          configService.get<string>('LOG_TO_FILE') === 'true'
-            ? `${configService.get<string>(
-                'LOG_DIR',
-              )}${configService.get<string>('LOG_FILENAME')}`
-            : undefined;
-        const stream = isProd
-          ? pino.destination({
-              dest, // omit for stdout
-              // There is a possibility of the most recently buffered log messages being lost in case of a system failure, e.g. a power cut.
-              minLength: 4096, // Buffer before writing
-              sync: false, // Asynchronous logging
-              mkdir: true,
-            })
-          : undefined;
+        if (configService.get<boolean>('isProd')) {
+          let dest: string;
+          if (configService.get<string>('LOG_TO_FILE') === 'true') {
+            dest = `${configService.get<string>('LOG_DIR')}${configService.get<string>('LOG_FILENAME')}`;
+          }
+          
+          stream = pino.destination({
+            dest, // omit for stdout
+            // There is a possibility of the most recently buffered log messages being lost in case of a system failure, e.g. a power cut.
+            minLength: 4096, // Buffer before writing
+            sync: false, // Asynchronous logging
+            mkdir: true,
+          });
+        } else {
+          transport = {
+            target: 'pino-pretty',
+            options: {
+              colorize: true,
+              levelFirst: true,
+              singleLine: true,
+              translateTime: 'HH:MM:ss',
+            },
+          };
+        }
 
-        const transport = isProd
-          ? undefined
-          : {
-              target: 'pino-pretty',
-              options: {
-                colorize: true,
-                levelFirst: true,
-                singleLine: true,
-                translateTime: 'HH:MM:ss',
-              },
-            };
-
-        const config: Params = {
+        return {
           pinoHttp: {
             customProps: (req, res) => ({
               context: 'HTTP',
@@ -56,12 +55,10 @@ import pino from 'pino';
                 'req.headers',
               ],
             },
-            transport,
-            stream,
+            transport, // for development
+            stream,    // for production
           },
         };
-
-        return config;
       },
     }),
   ],

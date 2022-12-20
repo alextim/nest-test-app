@@ -1,6 +1,6 @@
 import type { ValidatorOptions } from 'class-validator';
 
-export const validationConfig: ValidatorOptions = {
+export const validatorConfig: ValidatorOptions = {
   whitelist: true,
   stopAtFirstError: true,
   enableDebugMessages: true,
