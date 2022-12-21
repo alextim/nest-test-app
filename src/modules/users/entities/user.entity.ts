@@ -16,6 +16,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -25,7 +26,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CrudValidationGroups } from '@nestjsx/crud';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../shared/entities/BaseEntity';
@@ -52,7 +53,7 @@ export class User extends BaseEntity {
   static readonly PASSWORD_PATTERN_MESSAGE =
     'Password must contain at least 1 lowercase, 1 uppercase, 1 digit and 1 special char';
 
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity', { generatedIdentity: 'ALWAYS' })
   public id: number;
 
   @Length(2, 30, {
@@ -119,7 +120,20 @@ export class User extends BaseEntity {
   @IsArray({ always: true, message: 'The roles must be an array' })
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE], message: 'Roles are required' })
-  @ApiProperty({ required: true })
+  @ApiProperty({
+    required: true,
+    isArray: true,
+    enum: Role,
+  })
+  @Transform(({ value }) => {
+    if (!value || Array.isArray(value) || typeof value !== 'string') {
+      return value;
+    }
+    if (value.includes(',')) {
+      return value.split(',').map((key) => key.trim());
+    }
+    return [value.trim()];
+  })
   @Column({
     type: 'enum',
     enum: Role,
@@ -143,6 +157,14 @@ export class User extends BaseEntity {
   @ApiProperty({ required: false })
   @Column({ name: 'last_name', length: 40, nullable: true })
   public lastName?: string;
+
+  @MaxLength(100, { always: true })
+  @IsString({ always: true })
+  @IsOptional({ always: true })
+  @Transform(({ value }) => value?.trim())
+  @ApiProperty({ required: false })
+  @Column({ length: 100, nullable: true })
+  public avatar?: string;
 
   @IsDate({ always: true })
   @MinDate(new Date(), { always: true })

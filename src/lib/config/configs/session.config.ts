@@ -22,12 +22,12 @@ export const getSessionOptions = (
     : new session.MemoryStore();
 
   return {
-    secret: configService.get<string>('SESSION_SECRET'),
+    secret: configService.get<string>('session.secret'),
     resave: false,
     // https://stackoverflow.com/questions/40381401/when-to-use-saveuninitialized-and-resave-in-express-session
     saveUninitialized: false,
     store,
-    name: configService.get<string>('SESSION_NAME'),
+    name: configService.get<string>('session.name'),
     cookie: getCookieOptions(configService),
   };
 };

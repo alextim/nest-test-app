@@ -29,7 +29,7 @@ const getHttpsOptions = () => {
 
 async function bootstrap() {
   const httpsOptions = getHttpsOptions();
-  
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions,
     bufferLogs: true,
@@ -40,16 +40,16 @@ async function bootstrap() {
 
   setup(app);
 
-  const config = app.get(ConfigService);
-  
+  const configService = app.get(ConfigService);
+
   setupSwagger(app);
 
-  const port = config.get<number>('PORT');
-  const host = config.get<string>('HOST');
+  const port = configService.get<number>('server.port');
+  const host = configService.get<string>('server.host');
 
   await app.listen(port, host, undefined);
   NestLogger.log(
-    `Application is running on ${await app.getUrl()} in environment ${config.get<string>(
+    `Application is running on ${await app.getUrl()} in environment ${configService.get<string>(
       'NODE_ENV',
     )}`,
   );

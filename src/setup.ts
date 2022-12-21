@@ -1,5 +1,5 @@
 import { HttpAdapterHost } from '@nestjs/core';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -25,7 +25,6 @@ export function setup(app: NestExpressApplication) {
   // QueryErrorFilter - catches any unique constraint violation exceptions during database create/update operations
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new QueryErrorFilter(httpAdapter));
-
 
   app.useGlobalPipes(
     new ValidationPipe({

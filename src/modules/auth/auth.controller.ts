@@ -17,8 +17,6 @@ import type { Response, Request, NextFunction, CookieOptions } from 'express';
 import { ExcludeNullInterceptor } from '../../interceptors/excludeNull.interceptor';
 import { getCookieOptions } from '../../lib/config/configs/cookie.config';
 
-import { AuthService } from './auth.service';
-
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { CookieAuthGuard } from './guards/cookie-auth.guard';
 import { LoginGuard } from './guards/login.guard';
@@ -27,10 +25,7 @@ import { AdminGuard } from './guards/admin.guard';
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   @HttpCode(200)
   @UseInterceptors(ExcludeNullInterceptor)
@@ -62,7 +57,7 @@ export class AuthController {
         if (err) {
           return next(err);
         }
-        res.cookie(this.configService.get('SESSION_COOKIE_NAME'), '', {
+        res.cookie(this.configService.get<string>('session.cookieName'), '', {
           ...(getCookieOptions(this.configService) as CookieOptions),
           maxAge: 0,
           expires: new Date(1),
@@ -80,10 +75,10 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(CookieAuthGuard)
   @Post('test')
-  async test(@Req() request: RequestWithUser) {
+  async test(@Req() req: RequestWithUser) {
     // TODO:
-    (request as any).logOut();
-    return request.user;
+    (req as any).logOut();
+    return req.user;
   }
 
   @Get('public')
@@ -105,7 +100,7 @@ export class AuthController {
 
   @Get('login/google')
   @UseGuards(LoginGuard)
-  async signInWithGoogle(@Req() _) {
+  async signInWithGoogle() {
     // Guard redirects
   }
 
@@ -124,7 +119,7 @@ export class AuthController {
 
   @Get('login/facebook')
   @UseGuards(LoginGuard)
-  async signInWithFacebook(@Req() _) {
+  async signInWithFacebook() {
     // Guard redirects
   }
 

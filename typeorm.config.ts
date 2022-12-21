@@ -12,17 +12,23 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { getDataSourceOptions } from './src/lib/orm/datasource.options';
-
-import { FacebookAuth1671309913319 } from './migrations/1671309913319-FacebookAuth';
+import { Avatar1671566650134 } from './migrations/1671566650134-Avatar';
 
 config();
  
 const configService = new ConfigService();
 
 const dataSourceOptions = {
-  ...getDataSourceOptions(configService),
+  ...getDataSourceOptions(configService) as any,
+
+  host: configService.get<string>('DB_HOST'),
+  port: configService.get<number>('DB_PORT'),
+  database: configService.get<string>('DB_NAME'),
+  username: configService.get<string>('DB_USERNAME'),
+  password: configService.get<string>('DB_PASSWORD'),  
+
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
-  migrations: [FacebookAuth1671309913319],
+  migrations: [Avatar1671566650134],
 };
 export default new DataSource(dataSourceOptions);

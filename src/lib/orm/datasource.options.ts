@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import type { DataSourceOptions } from 'typeorm';
+import type { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { CustomNamingStrategy } from './CustomNamingStrategy';
 
 export const getDataSourceOptions = (
@@ -7,10 +8,6 @@ export const getDataSourceOptions = (
 ): DataSourceOptions => ({
   type: 'postgres',
   schema: 'public',
-  host: configService.get<string>('DB_HOST'),
-  port: configService.get<number>('DB_PORT'),
-  database: configService.get<string>('DB_NAME'),
-  username: configService.get<string>('DB_USER'),
-  password: configService.get<string>('DB_PASSWORD'),
+  ...configService.get<PostgresConnectionOptions>('db'),
   namingStrategy: new CustomNamingStrategy(),
 });

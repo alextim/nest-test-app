@@ -9,7 +9,7 @@ import { Token, TokenType, TOKEN_LENGTH } from './entities/token.entity';
 export class TokensService {
   constructor(
     @InjectRepository(Token) private readonly repo,
-    private readonly config: ConfigService,
+    private readonly configService: ConfigService,
   ) {}
 
   private static generateToken() {
@@ -38,7 +38,7 @@ export class TokensService {
     return this.createToken(
       userId,
       TokenType.EmailVerification,
-      this.config.get<number>('EMAIL_VERIFICATION_TOKEN_TTL'),
+      this.configService.get<number>('auth.emailVerificationTokenTTL'),
     );
   }
 
@@ -46,7 +46,7 @@ export class TokensService {
     return this.createToken(
       userId,
       TokenType.PasswordReset,
-      this.config.get<number>('PASSWORD_RESET_TOKEN_TTL'),
+      this.configService.get<number>('auth.passwordRecoveryTokenTTL'),
     );
   }
 

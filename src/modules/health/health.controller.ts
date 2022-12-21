@@ -11,8 +11,8 @@ import {
 @Controller('health')
 export class HealthController {
   constructor(
-    private diskHealthIndicator: DiskHealthIndicator,    
-    private health: HealthCheckService, 
+    private diskHealthIndicator: DiskHealthIndicator,
+    private health: HealthCheckService,
     // private http: HttpHealthIndicator,
     private memory: MemoryHealthIndicator,
     private db: TypeOrmHealthIndicator,
@@ -22,8 +22,8 @@ export class HealthController {
   @HealthCheck()
   check() {
     return this.health.check([
-    // the used disk storage should not exceed the 50% of the available space
-     () =>
+      // the used disk storage should not exceed the 50% of the available space
+      () =>
         this.diskHealthIndicator.checkStorage('disk_health', {
           thresholdPercent: 0.5,
           path: '/',

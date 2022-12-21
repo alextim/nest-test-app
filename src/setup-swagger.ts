@@ -4,13 +4,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import pkg from '../package.json';
 
-export const setupSwagger = (
-  app: INestApplication,
-) => {
+export const setupSwagger = (app: INestApplication) => {
   const configService = app.get(ConfigService);
 
   const swaggerOptions = new DocumentBuilder()
-    .setTitle(configService.get<string>('APP_NAME'))
+    .setTitle(configService.get<string>('appName'))
     .setDescription(pkg.description)
     .setVersion(pkg.version)
     .build();

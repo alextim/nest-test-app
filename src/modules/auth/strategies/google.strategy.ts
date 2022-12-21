@@ -11,14 +11,14 @@ import { AuthService } from '../auth.service';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
-    private readonly config: ConfigService,
+    private readonly configService: ConfigService,
     private readonly authService: AuthService,
   ) {
     super({
-      clientID: config.get<string>('GOOGLE_AUTH_CLIENT_ID'),
-      clientSecret: config.get<string>('GOOGLE_AUTH_CLIENT_SECRET'),
-      callbackURL: `${config.get<string>(
-        'BASE_URL',
+      clientID: configService.get<string>('auth.google.clientId'),
+      clientSecret: configService.get<string>('auth.google.clientSecret'),
+      callbackURL: `${configService.get<string>(
+        'baseUrl',
       )}/api/v1/auth/login/google/redirect`,
       scope: ['email', 'profile'],
       // passReqToCallback:true

@@ -12,14 +12,14 @@ import { StrategyFacebookProfile } from '../interfaces/strategy-facebook-profile
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   constructor(
-    private readonly config: ConfigService,
+    private readonly configService: ConfigService,
     private readonly authService: AuthService,
   ) {
     super({
-      clientID: config.get<string>('FACEBOOK_APP_ID'),
-      clientSecret: config.get<string>('FACEBOOK_APP_SECRET'),
-      callbackURL: `${config.get<string>(
-        'BASE_URL',
+      clientID: configService.get<string>('auth.facebook.appId'),
+      clientSecret: configService.get<string>('auth.facebook.appSecret'),
+      callbackURL: `${configService.get<string>(
+        'baseUrl',
       )}/api/v1/auth/login/facebook/redirect`,
       scope: ['email', 'profile'],
       // passReqToCallback:true

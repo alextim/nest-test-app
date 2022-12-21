@@ -21,7 +21,7 @@ import { TokensService } from './tokens.service';
 @Injectable()
 export class AccountService {
   constructor(
-    private readonly config: ConfigService,
+    private readonly configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly tokensService: TokensService,
     private readonly mailService: MailService,
@@ -47,7 +47,7 @@ export class AccountService {
         ),
       },
       `Your account verification code (valid for only ${this.getHumanizedTTL(
-        'EMAIL_VERIFICATION_TOKEN_TTL',
+        'auth.emailVerificationTokenTTL',
       )}) `,
     );
 
@@ -55,13 +55,13 @@ export class AccountService {
   }
 
   private getHumanizedTTL(key: string) {
-    return humanizeDuration(this.config.get<number>(key));
+    return humanizeDuration(this.configService.get<number>(key));
   }
 
   private getLink(path: string, token: string) {
-    const baseUrl = this.config.get<string>('BASE_URL');
-    const link = `${baseUrl}/api/v1/account/${path}?token=${token}`;
-    return link;
+    return `${this.configService.get<string>(
+      'baseUrl',
+    )}/api/v1/account/${path}?token=${token}`;
   }
 
   private async send(
@@ -70,7 +70,7 @@ export class AccountService {
     params: Record<string, string | number>,
     subject: string,
   ) {
-    const appName = this.config.get<string>('APP_NAME');
+    const appName = this.configService.get<string>('appName');
 
     const name = user.fullName || user.username || user.email;
     const email = user.email;
@@ -142,7 +142,7 @@ export class AccountService {
         TokenType.PasswordReset,
         { link: this.getLink('reset_password', token) },
         `Your one-time password reset code (valid for only ${this.getHumanizedTTL(
-          'PASSWORD_RESET_TOKEN_TTL',
+          'auth.passwordResetTokenTTL',
         )})`,
       );
     } catch (error) {

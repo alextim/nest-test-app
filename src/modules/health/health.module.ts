@@ -5,10 +5,7 @@ import { OrmModule } from '../../lib/orm/orm.module';
 import { HealthController } from './health.controller';
 
 @Module({
-  imports: [
-    OrmModule,
-    TerminusModule,
-  ],
+  imports: [OrmModule, TerminusModule],
   controllers: [HealthController],
 })
 export class HealthModule {}

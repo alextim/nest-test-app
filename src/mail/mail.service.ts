@@ -16,13 +16,13 @@ export class MailService {
   private readonly client: Transporter;
   private readonly logger = new Logger(MailService.name);
 
-  constructor(private readonly config: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     const mailConfig = {
-      host: this.config.get<string>('MAIL_HOST'),
-      port: this.config.get<number>('MAIL_PORT'),
+      host: this.configService.get<string>('mail.host'),
+      port: this.configService.get<number>('mail.port'),
       auth: {
-        user: this.config.get<string>('MAIL_USERNAME'),
-        pass: this.config.get<string>('MAIL_PASSWORD'),
+        user: this.configService.get<string>('mail.username'),
+        pass: this.configService.get<string>('mail.password'),
       },
     };
 
@@ -41,8 +41,9 @@ export class MailService {
 
     const mailOptions = {
       from: {
-        name: from?.name || this.config.get<string>('MAIL_FROM_NAME'),
-        address: from?.email || this.config.get<string>('MAIL_FROM_EMAIL'),
+        name: from?.name || this.configService.get<string>('mail.fromName'),
+        address:
+          from?.email || this.configService.get<string>('mail.fromEmail'),
       },
       to: {
         name: to.name,
@@ -55,7 +56,7 @@ export class MailService {
     const info = await this.client.sendMail(mailOptions);
     this.logger.debug('Message sent  %o', info);
 
-    if (this.config.get<string>('isDev')) {
+    if (this.configService.get<boolean>('isDev')) {
       // Preview only available when sending through an Ethereal account
       this.logger.log('Message sent: %s', info.messageId);
       this.logger.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
