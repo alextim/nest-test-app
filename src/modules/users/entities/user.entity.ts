@@ -16,7 +16,6 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -26,11 +25,12 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CrudValidationGroups } from '@nestjsx/crud';
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../shared/entities/BaseEntity';
 import { Token } from '../../account/entities/token.entity';
+import { BadRequestException } from '@nestjs/common';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -62,7 +62,7 @@ export class User extends BaseEntity {
   })
   @IsString({ always: true })
   @IsOptional({ always: true })
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @ApiProperty({ required: false })
   @Column({ length: 30, nullable: true })
   public username?: string;
@@ -70,7 +70,7 @@ export class User extends BaseEntity {
   @IsEmail({}, { always: true, message: 'Incorrect email' })
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE], message: 'The email is required' })
-  @Transform(({ value }) => value?.trim().toLowerCase())
+  @Transform(({ value }) => value?.trim().toLowerCase(), { toClassOnly: true })
   @ApiProperty({ required: true })
   @Column({ length: 254 })
   public email: string;
@@ -82,36 +82,33 @@ export class User extends BaseEntity {
     message: User.PASSWORD_LENGTH_MESSAGE,
   })
   @IsOptional({ always: true })
-  @Transform(
-    ({ value }) => {
-      return value?.trim();
-    },
-    { toClassOnly: true },
-  )
+  @Transform(({ value }) => value?.trim(), { toClassOnly: true })
   @ApiProperty({ required: true })
   @Column({ length: User.PASSWORD_MAX_LENGTH, nullable: true })
   public password?: string;
 
   @IsBoolean()
   @IsOptional({ always: true })
-  @Column({ name: 'is_registered_with_google', default: false })
+  @Column({ default: false })
   public isRegisteredWithGoogle: boolean;
 
   @IsString()
   @Length(21, 21, { always: true })
   @IsOptional({ always: true })
-  @Column({ name: 'google_id', length: 21, nullable: true })
+  @Transform(({ value }) => value || undefined, { toPlainOnly: true })
+  @Column({ length: 21, nullable: true })
   public googleId: string;
 
   @IsBoolean()
   @IsOptional({ always: true })
-  @Column({ name: 'is_registered_with_facebook', default: false })
+  @Column({ default: false })
   public isRegisteredWithFacebook: boolean;
 
   @IsString()
   @Length(21, 21, { always: true })
   @IsOptional({ always: true })
-  @Column({ name: 'facebook_id', length: 21, nullable: true })
+  @Transform(({ value }) => value || undefined, { toPlainOnly: true })
+  @Column({ length: 21, nullable: true })
   public facebookId: string;
 
   @IsEnum(Role, { always: true, each: true })
@@ -125,15 +122,18 @@ export class User extends BaseEntity {
     isArray: true,
     enum: Role,
   })
-  @Transform(({ value }) => {
-    if (!value || Array.isArray(value) || typeof value !== 'string') {
-      return value;
-    }
-    if (value.includes(',')) {
-      return value.split(',').map((key) => key.trim());
-    }
-    return [value.trim()];
-  })
+  @Transform(
+    ({ value }) => {
+      if (!value || Array.isArray(value) || typeof value !== 'string') {
+        return value;
+      }
+      if (value.includes(',')) {
+        return value.split(',').map((key) => key.trim());
+      }
+      return [value.trim()];
+    },
+    { toClassOnly: true },
+  )
   @Column({
     type: 'enum',
     enum: Role,
@@ -145,23 +145,23 @@ export class User extends BaseEntity {
   @MaxLength(40, { always: true })
   @IsString({ always: true })
   @IsOptional({ groups: [CREATE, UPDATE] })
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }) => (value ? value.trim() : undefined))
   @ApiProperty({ required: false })
-  @Column({ name: 'first_name', length: 40, nullable: true })
+  @Column({ length: 40, nullable: true })
   public firstName?: string;
 
   @MaxLength(40, { always: true })
   @IsString({ always: true })
   @IsOptional({ always: true })
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }) => (value ? value.trim() : undefined))
   @ApiProperty({ required: false })
-  @Column({ name: 'last_name', length: 40, nullable: true })
+  @Column({ length: 40, nullable: true })
   public lastName?: string;
 
   @MaxLength(100, { always: true })
   @IsString({ always: true })
   @IsOptional({ always: true })
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }) => value || undefined)
   @ApiProperty({ required: false })
   @Column({ length: 100, nullable: true })
   public avatar?: string;
@@ -171,8 +171,8 @@ export class User extends BaseEntity {
   @Transform(({ value }) => value && new Date(value))
   @IsOptional({ always: true })
   @ApiProperty({ required: false })
+  @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({
-    name: 'verification_sent_at',
     type: 'timestamptz',
     nullable: true,
   })
@@ -183,7 +183,8 @@ export class User extends BaseEntity {
   @Transform(({ value }) => value && new Date(value))
   @IsOptional({ always: true })
   @ApiProperty({ required: false })
-  @Column({ name: 'verified_at', type: 'timestamptz', nullable: true })
+  @Transform(({ value }) => value || undefined, { toPlainOnly: true })
+  @Column({ type: 'timestamptz', nullable: true })
   public verifiedAt?: Date;
 
   @OneToMany(() => Token, (token: Token) => token.user)
@@ -206,7 +207,7 @@ export class User extends BaseEntity {
       return;
     }
     if (!this.isRegisteredWithFacebook && !this.isRegisteredWithGoogle) {
-      throw new Error('The password must not be empty to hash');
+      throw new BadRequestException('The password must not be empty to hash');
     }
   }
 

@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  UseInterceptors,
-  ClassSerializerInterceptor,
-  Get,
-  Post,
-  Query,
-  HttpCode,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, HttpCode } from '@nestjs/common';
 import { AccountService } from './account.service';
 
 import { AccountDto } from './dto/email-verification.dto';
@@ -15,7 +6,6 @@ import { SendPasswordResetDto } from './dto/send-password-reset.dto';
 import { SignupDto } from './dto/signup.dto';
 
 @Controller('account')
-@UseInterceptors(ClassSerializerInterceptor)
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
   @HttpCode(200)

@@ -1,8 +1,9 @@
-import { DefaultNamingStrategy, Table, NamingStrategyInterface } from 'typeorm';
+import { Table, NamingStrategyInterface } from 'typeorm';
 import crypto from 'node:crypto';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export class CustomNamingStrategy
-  extends DefaultNamingStrategy
+  extends SnakeNamingStrategy
   implements NamingStrategyInterface
 {
   primaryKeyName(tableOrName: Table | string, columnNames: string[]) {

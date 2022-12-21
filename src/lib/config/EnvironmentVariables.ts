@@ -11,7 +11,6 @@ import {
   IsIn,
   IsFQDN,
   Matches,
-  isInt,
 } from 'class-validator';
 
 export enum Environment {
@@ -48,7 +47,7 @@ export class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   UPLOADS_DIR: string;
-  
+
   @IsPositive()
   @IsInt()
   @Type(() => Number)

@@ -4,7 +4,6 @@ import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 export abstract class BaseEntity {
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({
-    name: 'created_at',
     type: 'timestamptz',
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',
@@ -13,7 +12,6 @@ export abstract class BaseEntity {
 
   @ApiProperty({ readOnly: true })
   @UpdateDateColumn({
-    name: 'updated_at',
     type: 'timestamptz',
     nullable: false,
     default: () => 'CURRENT_TIMESTAMP',

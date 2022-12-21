@@ -23,6 +23,10 @@ export class UsersService extends TypeOrmCrudService<User> {
     return count > 0;
   }
 
+  async idExists(id: number) {
+    return this.exists({ id });
+  }
+
   async emailExists(email: string) {
     return this.exists({ email });
   }

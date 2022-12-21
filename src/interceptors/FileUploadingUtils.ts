@@ -5,7 +5,6 @@ import { diskStorage } from 'multer';
 import { BadRequestException } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
-
 const geRandomFilename = (filename: string) => {
   const random = Array(32)
     .fill(null)
@@ -15,31 +14,44 @@ const geRandomFilename = (filename: string) => {
   return `${name}-${random}${ext}`;
 };
 
-const IMAGE_MIME_TYPES = ['image/avif', 'image/jpeg', 'image/png', 'image/webp'];
+const IMAGE_MIME_TYPES = [
+  'image/avif',
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+];
 const UPLOAD_FILE_SIZE = 1024 * 1024;
 const DESTINATION_SUB_DIR = 'images';
 
-const multerOptions = (destination: string, fileSize: number, supportedMimeTypes: string[]): MulterOptions => ({
+const multerOptions = (
+  destination: string,
+  fileSize: number,
+  supportedMimeTypes: string[],
+): MulterOptions => ({
   limits: {
     files: 1,
     fileSize,
-  },      
-  
+  },
+
   storage: diskStorage({
-    destination: (req, file, cb) => cb(null, path.resolve('.', 'public', 'uploads', destination)),
-    filename: (req, file, cb) =>
-      cb(null, geRandomFilename(file.originalname)),
+    destination: (req, file, cb) =>
+      cb(null, path.resolve('.', 'public', 'uploads', destination)),
+    filename: (req, file, cb) => cb(null, geRandomFilename(file.originalname)),
   }),
 
   fileFilter(req, file, cb) {
     if (!supportedMimeTypes.some((mimetype) => mimetype === file.mimetype)) {
-      cb(new BadRequestException(`Unsupported file type ${path.extname(file.originalname)}`), false);
+      cb(
+        new BadRequestException(
+          `Unsupported file type ${path.extname(file.originalname)}`,
+        ),
+        false,
+      );
     } else {
       cb(null, true);
     }
   },
-});   
-
+});
 
 export class FileUploadingUtils {
   static singleFileUploader(
@@ -48,7 +60,10 @@ export class FileUploadingUtils {
     fileSize = UPLOAD_FILE_SIZE,
     supportedMimeTypes = IMAGE_MIME_TYPES,
   ) {
-    return FileInterceptor(fieldName, multerOptions(destination, fileSize, supportedMimeTypes));
+    return FileInterceptor(
+      fieldName,
+      multerOptions(destination, fileSize, supportedMimeTypes),
+    );
   }
 
   static multipleFileUploader(
@@ -58,6 +73,10 @@ export class FileUploadingUtils {
     supportedMimeTypes = IMAGE_MIME_TYPES,
     maxFileNumber = 10,
   ) {
-    return FilesInterceptor(fieldName, maxFileNumber, multerOptions(destination, fileSize, supportedMimeTypes));
+    return FilesInterceptor(
+      fieldName,
+      maxFileNumber,
+      multerOptions(destination, fileSize, supportedMimeTypes),
+    );
   }
 }

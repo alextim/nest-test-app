@@ -3,7 +3,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  JoinColumn,
   RelationId,
 } from 'typeorm';
 import crypto from 'node:crypto';
@@ -53,19 +52,15 @@ export class Token extends BaseEntity {
   @Transform(({ value }) => value && new Date(value))
   @IsNotEmpty({ message: 'The token expiration date is required' })
   @Column({
-    name: 'expires_at',
     type: 'timestamptz',
   })
   expiresAt?: Date;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 
   @RelationId((token: Token) => token.user) // you need to specify target relation
-  @Column({
-    name: 'user_id',
-  })
+  @Column()
   userId: number;
 
   constructor(token?: Partial<Token>) {

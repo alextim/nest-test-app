@@ -7,7 +7,6 @@ import {
   Post,
   UseGuards,
   UseInterceptors,
-  ClassSerializerInterceptor,
   Get,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -23,7 +22,7 @@ import { LoginGuard } from './guards/login.guard';
 import { AdminGuard } from './guards/admin.guard';
 
 @Controller('auth')
-@UseInterceptors(ClassSerializerInterceptor)
+// @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(private readonly configService: ConfigService) {}
 

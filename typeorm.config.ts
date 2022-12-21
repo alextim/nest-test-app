@@ -12,7 +12,6 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { getDataSourceOptions } from './src/lib/orm/datasource.options';
-import { Avatar1671566650134 } from './migrations/1671566650134-Avatar';
 
 config();
  
@@ -29,6 +28,6 @@ const dataSourceOptions = {
 
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
-  migrations: [Avatar1671566650134],
+  migrations: [],
 };
 export default new DataSource(dataSourceOptions);

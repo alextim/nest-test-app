@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 
 import { NestConfigModule } from './lib/config/config.module';
 import { NestPinoModule } from './lib/pino/pino.module';
@@ -9,8 +9,15 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AccountModule } from './modules/account/account.module';
 import { UsersModule } from './modules/users/users.module';
 import { HealthModule } from './modules/health/health.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+  ],
   imports: [
     NestConfigModule,
     NestPinoModule,

@@ -8,7 +8,12 @@ export function IsImageFile(options?: ValidationOptions) {
       options,
       validator: {
         validate(mimeType) {
-          const acceptMimeTypes = ['image/avif', 'image/jpeg', 'image/png', 'image/webp'];
+          const acceptMimeTypes = [
+            'image/avif',
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+          ];
           const fileType = acceptMimeTypes.find((type) => type === mimeType);
           return !fileType;
         },
