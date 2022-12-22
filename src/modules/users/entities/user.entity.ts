@@ -23,14 +23,13 @@ import {
   MaxLength,
   MinDate,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { CrudValidationGroups } from '@nestjsx/crud';
 import { Transform } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../shared/entities/BaseEntity';
 import { Token } from '../../account/entities/token.entity';
-import { BadRequestException } from '@nestjs/common';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -45,9 +44,14 @@ const HASH_ROUNDS = 8;
 @Unique('UQ_user_email', ['email'])
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
+  static readonly USERNAME_MIN_LENGTH = 2;
+  static readonly USERNAME_MAX_LENGTH = 30;
+  static readonly USERNAME_LENGTH_MESSAGE = 'The username must be at least $constraint1 but not longer than $constraint2 characters';
+
   static readonly PASSWORD_MIN_LENGTH = 8;
   static readonly PASSWORD_MAX_LENGTH = 128;
-  static readonly PASSWORD_LENGTH_MESSAGE = `The password must be at least ${User.PASSWORD_MIN_LENGTH} but not longer than ${User.PASSWORD_MAX_LENGTH} characters`;
+  static readonly PASSWORD_LENGTH_MESSAGE = 'The password must be at least $constraint1 but not longer than $constraint2 characters';
+
   static readonly PASSWORD_PATTERN =
     /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
   static readonly PASSWORD_PATTERN_MESSAGE =
@@ -56,25 +60,26 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn('identity', { generatedIdentity: 'ALWAYS' })
   public id: number;
 
-  @Length(2, 30, {
+  @ApiPropertyOptional()
+  @Length(User.USERNAME_MIN_LENGTH, User.USERNAME_MAX_LENGTH, {
     always: true,
-    message: 'The name must be at least 2 but not longer than 30 characters',
+    message: User.USERNAME_LENGTH_MESSAGE,
   })
   @IsString({ always: true })
   @IsOptional({ always: true })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
-  @ApiProperty({ required: false })
-  @Column({ length: 30, nullable: true })
+  @Column({ length: User.USERNAME_MAX_LENGTH, nullable: true })
   public username?: string;
 
+  @ApiPropertyOptional()
   @IsEmail({}, { always: true, message: 'Incorrect email' })
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE], message: 'The email is required' })
   @Transform(({ value }) => value?.trim().toLowerCase(), { toClassOnly: true })
-  @ApiProperty({ required: true })
   @Column({ length: 254 })
   public email: string;
 
+  @ApiPropertyOptional()
   @Matches(User.PASSWORD_PATTERN, {
     message: User.PASSWORD_PATTERN_MESSAGE,
   })
@@ -83,45 +88,47 @@ export class User extends BaseEntity {
   })
   @IsOptional({ always: true })
   @Transform(({ value }) => value?.trim(), { toClassOnly: true })
-  @ApiProperty({ required: true })
   @Column({ length: User.PASSWORD_MAX_LENGTH, nullable: true })
   public password?: string;
 
+  @ApiPropertyOptional()
   @IsBoolean()
   @IsOptional({ always: true })
   @Column({ default: false })
-  public isRegisteredWithGoogle: boolean;
+  public isRegisteredWithGoogle?: boolean;
 
+  @ApiPropertyOptional()
   @IsString()
   @Length(21, 21, { always: true })
   @IsOptional({ always: true })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({ length: 21, nullable: true })
-  public googleId: string;
+  public googleId?: string;
 
+  @ApiPropertyOptional()
   @IsBoolean()
   @IsOptional({ always: true })
   @Column({ default: false })
-  public isRegisteredWithFacebook: boolean;
+  public isRegisteredWithFacebook?: boolean;
 
+  @ApiPropertyOptional()
   @IsString()
   @Length(21, 21, { always: true })
   @IsOptional({ always: true })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({ length: 21, nullable: true })
-  public facebookId: string;
+  public facebookId?: string;
 
+  @ApiProperty({
+    isArray: true,
+    enum: Role,
+  })
   @IsEnum(Role, { always: true, each: true })
   @ArrayUnique({ always: true })
   @ArrayNotEmpty({ always: true })
   @IsArray({ always: true, message: 'The roles must be an array' })
   @IsOptional({ groups: [UPDATE] })
   @IsNotEmpty({ groups: [CREATE], message: 'Roles are required' })
-  @ApiProperty({
-    required: true,
-    isArray: true,
-    enum: Role,
-  })
   @Transform(
     ({ value }) => {
       if (!value || Array.isArray(value) || typeof value !== 'string') {
@@ -142,35 +149,35 @@ export class User extends BaseEntity {
   })
   public roles: Role[];
 
+  @ApiPropertyOptional()
   @MaxLength(40, { always: true })
   @IsString({ always: true })
   @IsOptional({ groups: [CREATE, UPDATE] })
   @Transform(({ value }) => (value ? value.trim() : undefined))
-  @ApiProperty({ required: false })
   @Column({ length: 40, nullable: true })
   public firstName?: string;
 
+  @ApiPropertyOptional()
   @MaxLength(40, { always: true })
   @IsString({ always: true })
   @IsOptional({ always: true })
   @Transform(({ value }) => (value ? value.trim() : undefined))
-  @ApiProperty({ required: false })
   @Column({ length: 40, nullable: true })
   public lastName?: string;
 
+  @ApiPropertyOptional({ type: 'file' })
   @MaxLength(100, { always: true })
   @IsString({ always: true })
   @IsOptional({ always: true })
   @Transform(({ value }) => value || undefined)
-  @ApiProperty({ required: false })
   @Column({ length: 100, nullable: true })
   public avatar?: string;
 
+  @ApiPropertyOptional()
   @IsDate({ always: true })
   @MinDate(new Date(), { always: true })
   @Transform(({ value }) => value && new Date(value))
   @IsOptional({ always: true })
-  @ApiProperty({ required: false })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({
     type: 'timestamptz',
@@ -178,11 +185,11 @@ export class User extends BaseEntity {
   })
   public verificationCodeSentAt?: Date;
 
+  @ApiPropertyOptional()
   @IsDate({ always: true })
   @MinDate(new Date(), { always: true })
   @Transform(({ value }) => value && new Date(value))
   @IsOptional({ always: true })
-  @ApiProperty({ required: false })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({ type: 'timestamptz', nullable: true })
   public verifiedAt?: Date;
@@ -204,10 +211,6 @@ export class User extends BaseEntity {
   public async hashPassword() {
     if (this.password) {
       this.password = await User.hash(this.password);
-      return;
-    }
-    if (!this.isRegisteredWithFacebook && !this.isRegisteredWithGoogle) {
-      throw new BadRequestException('The password must not be empty to hash');
     }
   }
 

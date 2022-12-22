@@ -1,4 +1,4 @@
-import { Controller, NotFoundException, UploadedFile } from '@nestjs/common';
+import { Controller, NotFoundException, Param, UploadedFile  } from '@nestjs/common';
 import { ApiConsumes } from '@nestjs/swagger';
 
 import {
@@ -9,7 +9,9 @@ import {
   ParsedBody,
   ParsedRequest,
 } from '@nestjsx/crud';
+
 import { FileUploadingUtils } from '../../interceptors/FileUploadingUtils';
+
 
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -26,11 +28,9 @@ import { UsersService } from './users.service';
       interceptors: [FileUploadingUtils.singleFileUploader('avatar')],
     },
     replaceOneBase: {
-      // allowParamsOverride: true,
       interceptors: [FileUploadingUtils.singleFileUploader('avatar')],
     },
     updateOneBase: {
-      // allowParamsOverride: true,
       interceptors: [FileUploadingUtils.singleFileUploader('avatar')],
     },
     deleteOneBase: {
@@ -60,11 +60,11 @@ export class UsersController implements CrudController<User> {
   @Override()
   @ApiConsumes('multipart/form-data')
   async replaceOne(
+    @Param('id') id: number,
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() dto: User,
     @UploadedFile() avatar: Express.Multer.File,
   ) {
-    const id = req.parsed.paramsFilter[0].value;
     if (!(await this.service.idExists(id))) {
       throw new NotFoundException('User not found');
     }
@@ -75,11 +75,11 @@ export class UsersController implements CrudController<User> {
   @Override()
   @ApiConsumes('multipart/form-data')
   async updateOne(
+    @Param('id') id: number,
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() dto: User,
     @UploadedFile() avatar: Express.Multer.File,
   ) {
-    const id = req.parsed.paramsFilter[0].value;
     if (!(await this.service.idExists(id))) {
       throw new NotFoundException('User not found');
     }
@@ -87,3 +87,5 @@ export class UsersController implements CrudController<User> {
     return this.base.updateOneBase(req, dto);
   }
 }
+
+

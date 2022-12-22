@@ -4,17 +4,43 @@ import { ConfigService } from '@nestjs/config';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 
 import { useContainer } from 'class-validator';
-
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 import passport from 'passport';
 import session from 'express-session';
+import * as Sentry from '@sentry/node';
 
 import { AppModule } from './app.module';
 
 import { QueryErrorFilter } from './filters/query-error.filter';
 import { validatorConfig } from './lib/config/configs/validator.config';
 import { getSessionOptions } from './lib/config/configs/session.config';
+import { AllExceptionsFilter } from './filters/all-exception.filter';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 export function setup(app: NestExpressApplication) {
+  app.use(helmet());
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100 // limit each IP to 100 requests per windowMs
+    })
+  );
+
+    Sentry.init({
+    dsn:
+    "https://b2b38becc1d34313a51fd11318ce0f75@o370170.ingest.sentry.io/4504374259744768",
+
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0
+  });
+
+  // filters
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   const configService = app.get(ConfigService);
 
   app.setGlobalPrefix('api/v1', { exclude: ['/'] });
@@ -32,6 +58,7 @@ export function setup(app: NestExpressApplication) {
       transform: true,
     }),
   );
+  app.set('trust proxy', 1);
 
   app.use(session(getSessionOptions(configService)));
 
@@ -41,9 +68,12 @@ export function setup(app: NestExpressApplication) {
   // setupSwagger(app, config);
 
   app.enableCors({
-    origin: process.env.ALLOWED_ORIGINS?.split(/\s*,\s*/) ?? '*',
-    credentials: true,
-    exposedHeaders: ['Authorization'],
+    origin: configService.get('cors.allowedOrigins'),
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE','OPTION'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,    
+    // credentials: true,
+    // exposedHeaders: ['Authorization'],
   });
 
   // app.enableShutdownHooks();

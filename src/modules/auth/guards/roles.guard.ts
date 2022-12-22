@@ -1,23 +1,38 @@
-/*
-https://github.com/joeygoksu/prime-nestjs/blob/main/src/auth/strategy/roles.guard.ts
-
-import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from 'src/custom.decorator';
-import { Role } from 'src/users/enums/role.enum';
+import { Request } from 'express';
+
+import { Role } from '../../users/entities/user.entity';
+import { CookieAuthGuard } from './cookie-auth.guard';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+export class RolesGuard extends CookieAuthGuard {
+  constructor(private reflector: Reflector) {
+    super();
+  }
 
-  canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
+  async canActivate(context: ExecutionContext) {
+    if (!(await super.canActivate(context))) {
+      return false;
+    }
+    
+    // const requiredRoles = this.reflector.getAllAndOverride<Role[]>(Role, [context.getHandler(), context.getClass()]);
+    const requiredRoles = this.reflector.get<Role[]>(
+      Role,
+      context.getHandler()
+    );
     if (!requiredRoles) {
       return true;
     }
-    const { user } = context.switchToHttp().getRequest();
+
+    const req = context.switchToHttp().getRequest<Request>();
+    // const { user } = req;
+    const { user } = (req.session as any).passport as any;
+
+    if (user.roles.some((role) => role === Role.ADMIN)) {
+      return true;
+    }
 
     return requiredRoles.some((role) => user.roles?.includes(role));
   }
 }
-*/

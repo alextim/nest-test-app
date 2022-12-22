@@ -8,8 +8,8 @@ export class LoginGuard extends AuthGuard(['local', 'google', 'facebook']) {
     const result = (await super.canActivate(context)) as boolean;
 
     // initialize the session
-    const request = context.switchToHttp().getRequest();
-    await super.logIn(request);
+    const req = context.switchToHttp().getRequest();
+    await super.logIn(req);
 
     return result;
   }

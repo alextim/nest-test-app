@@ -10,6 +10,7 @@ import { AccountModule } from './modules/account/account.module';
 import { UsersModule } from './modules/users/users.module';
 import { HealthModule } from './modules/health/health.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { TestModule } from './modules/test/test.module';
 
 @Module({
   providers: [
@@ -27,6 +28,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     AccountModule,
     UsersModule,
     HealthModule,
+    TestModule,
   ],
 })
 export class AppModule {}

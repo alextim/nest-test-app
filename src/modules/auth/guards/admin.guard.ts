@@ -1,22 +1,18 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
+import { Role } from '../../users/entities/user.entity';
+import { CookieAuthGuard } from './cookie-auth.guard';
 
-import { LoginGuard } from './login.guard';
 
 @Injectable()
-export class AdminGuard extends LoginGuard {
+export class AdminGuard extends CookieAuthGuard {
   async canActivate(context: ExecutionContext) {
-    /*
     if (!(await super.canActivate(context))) {
       return false;
     }
-    */
     const req = context.switchToHttp().getRequest();
-    if (!req.isAuthenticated()) {
-      return false;
-    }
 
+    // const { user } = req;
     const { user } = req.session.passport;
-    const isAdmin = user.roles.some((role: string) => role === 'admin');
-    return isAdmin;
+    return user.roles.some((role: string) => role === Role.ADMIN);
   }
 }

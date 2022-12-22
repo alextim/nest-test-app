@@ -87,6 +87,11 @@ export class EnvironmentVariables {
   @IsOptional()
   SESSION_COOKIE_DOMAIN?: string;
 
+  // Cors
+  @IsString()
+  @IsOptional()
+  CORS_ALLOWED_ORIGINS?: string;
+
   // DB
   @IsFQDN({ require_tld: false, allow_numeric_tld: true })
   @IsNotEmpty()

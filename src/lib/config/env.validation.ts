@@ -1,5 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
+import path from 'node:path';
 
 import { EnvironmentVariables } from './EnvironmentVariables';
 
@@ -54,9 +55,9 @@ export function validate(config: Record<string, unknown>) {
       host,
       port,
 
-      publicDir: env.PUBLIC_DIR,
+      publicDir: path.join(__dirname, env.PUBLIC_DIR),
 
-      uploadsDir: env.UPLOADS_DIR,
+      uploadsDir: path.join(__dirname, env.UPLOADS_DIR),
       maxUploadFileSize: env.MAX_UPLOAD_FILE_SIZE,
     },
 
@@ -71,6 +72,10 @@ export function validate(config: Record<string, unknown>) {
       secret: env.SESSION_SECRET,
       name: env.SESSION_NAME || undefined,
       cookieDomain: env.SESSION_COOKIE_DOMAIN || undefined,
+    },
+
+    cors: {
+      allowedOrigins: env.CORS_ALLOWED_ORIGINS?.split(/\s*,\s*/) ?? '*',
     },
 
     db: {
@@ -114,8 +119,8 @@ export function validate(config: Record<string, unknown>) {
 
     ssl: isSSL
       ? {
-          keyPath: env.SSL_KEY_PATH,
-          sertPath: env.SSL_CERT_PATH,
+          keyPath: path.join(__dirname, env.SSL_KEY_PATH),
+          sertPath: path.join(__dirname, env.SSL_CERT_PATH),
         }
       : undefined,
   };
