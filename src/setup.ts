@@ -42,7 +42,9 @@ export function setup(app: NestExpressApplication) {
 
   const configService = app.get(ConfigService);
 
-  app.setGlobalPrefix('api/v1', { exclude: ['/'] });
+  app.setGlobalPrefix(configService.get<string>('urlPrefix'), {
+    exclude: ['/'],
+  });
 
   app.disable('x-powered-by');
   app.disable('X-Powered-By');

@@ -212,11 +212,19 @@ export class User extends BaseEntity {
     return user.roles.some((role) => role === Role.ADMIN);
   }
 
+  private isHashed = false;
+
+  public setPassword(plainPassword: string) {
+    this.password = plainPassword;
+    this.isHashed = false;
+  }
+
   @BeforeInsert()
   @BeforeUpdate()
   public async hashPassword() {
-    if (this.password) {
+    if (this.password && !this.isHashed) {
       this.password = await User.hash(this.password);
+      this.isHashed = true;
     }
   }
 

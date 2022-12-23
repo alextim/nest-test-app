@@ -64,4 +64,12 @@ export class UsersService extends TypeOrmCrudService<User> {
     const hashedPassword = await User.hash(plainPassword);
     await this.repo.update({ id: user.id }, { password: hashedPassword });
   }
+
+  async save(user: User): Promise<User> {
+    return await this.repo.save(user);
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.repo.delete(id);
+  }
 }

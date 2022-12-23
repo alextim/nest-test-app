@@ -27,7 +27,7 @@ export const getSessionOptions = (
     // https://stackoverflow.com/questions/40381401/when-to-use-saveuninitialized-and-resave-in-express-session
     saveUninitialized: false,
     store,
-    name: configService.get<string>('session.name'),
+    name: configService.get<string>('session.cookieName'),
     cookie: getCookieOptions(configService),
   };
 };

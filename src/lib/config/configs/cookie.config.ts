@@ -9,7 +9,7 @@ export const getCookieOptions = (
     signed: true,
     sameSite: 'strict',
     secure: configService.get<boolean>('isProd'),
-    domain: configService.get('session.cookieDomain'), // .example.com || undefined
+    domain: configService.get<string | undefined>('session.cookieDomain'), // .example.com || undefined
     path: '/',
   };
 };

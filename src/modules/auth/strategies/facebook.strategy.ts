@@ -20,7 +20,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
       clientSecret: configService.get<string>('auth.facebook.appSecret'),
       callbackURL: `${configService.get<string>(
         'baseUrl',
-      )}/api/v1/auth/login/facebook/redirect`,
+      )}${configService.get<string>('urlPrefix')}/auth/login/facebook/redirect`,
       scope: ['email', 'profile'],
       // passReqToCallback:true
     });

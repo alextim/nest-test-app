@@ -31,6 +31,10 @@ export class EnvironmentVariables {
   @IsOptional()
   APP_PATH_BASE?: string;
 
+  @IsString()
+  @IsOptional()
+  URL_PREFIX?: string;
+
   // Server
   @IsFQDN({ require_tld: false, allow_numeric_tld: true })
   @IsNotEmpty()
@@ -81,7 +85,7 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  SESSION_NAME = 'connect.sid';
+  SESSION_COOKIE_NAME?: string;
 
   @IsString()
   @IsOptional()

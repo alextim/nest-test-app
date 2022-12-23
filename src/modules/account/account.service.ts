@@ -59,9 +59,9 @@ export class AccountService {
   }
 
   private getLink(path: string, token: string) {
-    return `${this.configService.get<string>(
-      'baseUrl',
-    )}/api/v1/account/${path}?token=${token}`;
+    const baseUrl = this.configService.get<string>('baseUrl');
+    const urlPrefix = this.configService.get<string>('urlPrefix');
+    return `${baseUrl}${urlPrefix}/account/${path}?token=${token}`;
   }
 
   private async send(

@@ -19,7 +19,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: configService.get<string>('auth.google.clientSecret'),
       callbackURL: `${configService.get<string>(
         'baseUrl',
-      )}/api/v1/auth/login/google/redirect`,
+      )}${configService.get<string>('urlPrefix')}/auth/login/google/redirect`,
       scope: ['email', 'profile'],
       // passReqToCallback:true
     });

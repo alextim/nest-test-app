@@ -49,7 +49,9 @@ export function validate(config: Record<string, unknown>) {
     isTest: env.NODE_ENV === 'test',
 
     appName: env.APP_NAME,
+
     baseUrl,
+    urlPrefix: env.URL_PREFIX,
 
     server: {
       host,
@@ -70,12 +72,14 @@ export function validate(config: Record<string, unknown>) {
 
     session: {
       secret: env.SESSION_SECRET,
-      name: env.SESSION_NAME || undefined,
+      cookieName: env.SESSION_COOKIE_NAME || 'connect.sid',
       cookieDomain: env.SESSION_COOKIE_DOMAIN || undefined,
     },
 
     cors: {
-      allowedOrigins: env.CORS_ALLOWED_ORIGINS?.split(/\s*,\s*/) ?? '*',
+      allowedOrigins: env.CORS_ALLOWED_ORIGINS
+        ? env.CORS_ALLOWED_ORIGINS.split(/\s*,\s*/)
+        : '*',
     },
 
     db: {
@@ -120,7 +124,7 @@ export function validate(config: Record<string, unknown>) {
     ssl: isSSL
       ? {
           keyPath: path.join(__dirname, env.SSL_KEY_PATH),
-          sertPath: path.join(__dirname, env.SSL_CERT_PATH),
+          certPath: path.join(__dirname, env.SSL_CERT_PATH),
         }
       : undefined,
   };
