@@ -46,11 +46,13 @@ const HASH_ROUNDS = 8;
 export class User extends BaseEntity {
   static readonly USERNAME_MIN_LENGTH = 2;
   static readonly USERNAME_MAX_LENGTH = 30;
-  static readonly USERNAME_LENGTH_MESSAGE = 'The username must be at least $constraint1 but not longer than $constraint2 characters';
+  static readonly USERNAME_LENGTH_MESSAGE =
+    'The username must be at least $constraint1 but not longer than $constraint2 characters';
 
   static readonly PASSWORD_MIN_LENGTH = 8;
   static readonly PASSWORD_MAX_LENGTH = 128;
-  static readonly PASSWORD_LENGTH_MESSAGE = 'The password must be at least $constraint1 but not longer than $constraint2 characters';
+  static readonly PASSWORD_LENGTH_MESSAGE =
+    'The password must be at least $constraint1 but not longer than $constraint2 characters';
 
   static readonly PASSWORD_PATTERN =
     /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
@@ -204,6 +206,10 @@ export class User extends BaseEntity {
 
   public static async hash(s: string) {
     return hash(s, HASH_ROUNDS);
+  }
+
+  public static isAdmin(user: User) {
+    return user.roles.some((role) => role === Role.ADMIN);
   }
 
   @BeforeInsert()

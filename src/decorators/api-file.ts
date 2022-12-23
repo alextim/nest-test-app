@@ -1,14 +1,24 @@
 // https://github.com/nestjs/swagger/issues/167
-import { ApiProperty, ApiPropertyOptions } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptions } from '@nestjs/swagger';
 
-export const ApiFile = (options?: ApiPropertyOptions): PropertyDecorator => (
-  target: Object,
-  propertyKey: string | symbol,
-) => {
-  if (options?.isArray) {
-    ApiProperty({
-      type: 'array',
-      items: {
+export const ApiFile =
+  (options?: ApiPropertyOptions): PropertyDecorator =>
+  (target: object, propertyKey: string | symbol) => {
+    if (options?.isArray) {
+      ApiProperty({
+        type: 'array',
+        items: {
+          type: 'file',
+          properties: {
+            [propertyKey]: {
+              type: 'string',
+              format: 'binary',
+            },
+          },
+        },
+      })(target, propertyKey);
+    } else {
+      ApiProperty({
         type: 'file',
         properties: {
           [propertyKey]: {
@@ -16,18 +26,6 @@ export const ApiFile = (options?: ApiPropertyOptions): PropertyDecorator => (
             format: 'binary',
           },
         },
-      },
-    })(target, propertyKey);
-  } else {
-    ApiProperty({
-      type: 'file',
-      properties: {
-        [propertyKey]: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    })(target, propertyKey);
-  }
-};
-
+      })(target, propertyKey);
+    }
+  };

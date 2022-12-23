@@ -1,4 +1,10 @@
-import { Controller, NotFoundException, Param, UploadedFile  } from '@nestjs/common';
+import {
+  Controller,
+  NotFoundException,
+  Param,
+  UploadedFile,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiConsumes } from '@nestjs/swagger';
 
 import {
@@ -11,11 +17,12 @@ import {
 } from '@nestjsx/crud';
 
 import { FileUploadingUtils } from '../../interceptors/FileUploadingUtils';
-
+import { SelfGuard } from '../auth/guards/self.guard';
 
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
+@UseGuards(SelfGuard)
 @Crud({
   model: {
     type: User,
@@ -87,5 +94,3 @@ export class UsersController implements CrudController<User> {
     return this.base.updateOneBase(req, dto);
   }
 }
-
-

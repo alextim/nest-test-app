@@ -19,10 +19,6 @@ import { getCookieOptions } from '../../lib/config/configs/cookie.config';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { CookieAuthGuard } from './guards/cookie-auth.guard';
 import { LoginGuard } from './guards/login.guard';
-import { AdminGuard } from './guards/admin.guard';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from '../users/entities/user.entity';
-import { RolesGuard } from './guards/roles.guard';
 
 @Controller('auth')
 // @UseInterceptors(ClassSerializerInterceptor)
@@ -72,53 +68,6 @@ export class AuthController {
         res.end();
       });
     });
-  }
-
-  @HttpCode(200)
-  @UseGuards(CookieAuthGuard)
-  @Post('test')
-  async test(@Req() req: RequestWithUser) {
-    // TODO:
-    (req as any).logOut();
-    return req.user;
-  }
-
-  @Get('public')
-  publicRoute() {
-    return 'public';
-  }
-
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN, Role.USER)
-  @Get('all')
-  allRoute() {
-    return 'user,admin';
-  }  
-
-  @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
-  @Get('admin')
-  adminRoute() {
-    return 'admin';
-  }  
-
-  @UseGuards(RolesGuard)
-  @Roles(Role.USER)
-  @Get('user')
-  userRoute() {
-    return 'user';
-  }
-
-  @UseGuards(CookieAuthGuard)
-  @Get('protected')
-  guardedRoute() {
-    return 'protected';
-  }
-
-  @UseGuards(AdminGuard)
-  @Get('admin0')
-  getAdminMessage() {
-    return 'admin0';
   }
 
   @Get('login/google')

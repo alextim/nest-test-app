@@ -23,18 +23,17 @@ export function setup(app: NestExpressApplication) {
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100 // limit each IP to 100 requests per windowMs
-    })
+      max: 100, // limit each IP to 100 requests per windowMs
+    }),
   );
 
-    Sentry.init({
-    dsn:
-    "https://b2b38becc1d34313a51fd11318ce0f75@o370170.ingest.sentry.io/4504374259744768",
+  Sentry.init({
+    dsn: 'https://b2b38becc1d34313a51fd11318ce0f75@o370170.ingest.sentry.io/4504374259744768',
 
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    tracesSampleRate: 1.0
+    tracesSampleRate: 1.0,
   });
 
   // filters
@@ -69,9 +68,9 @@ export function setup(app: NestExpressApplication) {
 
   app.enableCors({
     origin: configService.get('cors.allowedOrigins'),
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE','OPTION'],
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTION'],
     preflightContinue: false,
-    optionsSuccessStatus: 204,    
+    optionsSuccessStatus: 204,
     // credentials: true,
     // exposedHeaders: ['Authorization'],
   });

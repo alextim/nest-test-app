@@ -7,9 +7,9 @@ export class LoginGuard extends AuthGuard(['local', 'google', 'facebook']) {
     // check the credentials (email/password or google or fb)
     const result = (await super.canActivate(context)) as boolean;
 
-    // initialize the session
     const req = context.switchToHttp().getRequest();
-    await super.logIn(req);
+
+    await super.logIn(req); // Use passport authentication strategy & initialize the session
 
     return result;
   }
