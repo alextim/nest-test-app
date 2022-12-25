@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  RelationId,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, RelationId } from 'typeorm';
 import crypto from 'node:crypto';
 import { Transform } from 'class-transformer';
 import {
@@ -17,7 +11,7 @@ import {
   MinDate,
 } from 'class-validator';
 
-import { BaseEntity } from '../../../shared/entities/BaseEntity';
+import { BaseEntity } from '../../../core/entities/BaseEntity';
 import { User } from '../../users/entities/user.entity';
 
 export const TOKEN_LENGTH = 256;
@@ -29,9 +23,6 @@ export enum TokenType {
 
 @Entity({ name: 'token' })
 export class Token extends BaseEntity {
-  @PrimaryGeneratedColumn('identity', { generatedIdentity: 'ALWAYS' })
-  id: number;
-
   @IsString()
   @Matches(/^[A-Za-z0-9]*$/)
   @Length(TOKEN_LENGTH, TOKEN_LENGTH)

@@ -5,3 +5,9 @@ export class UserNotFoundException extends NotFoundException {
     super('User not found');
   }
 }
+
+export class AvatarNotFoundException extends NotFoundException {
+  constructor() {
+    super('No avatar found');
+  }
+}

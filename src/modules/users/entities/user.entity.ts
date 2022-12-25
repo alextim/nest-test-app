@@ -2,10 +2,11 @@ import {
   Entity,
   Unique,
   Column,
-  PrimaryGeneratedColumn,
   BeforeInsert,
   BeforeUpdate,
   OneToMany,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import {
   ArrayNotEmpty,
@@ -28,8 +29,9 @@ import { CrudValidationGroups } from '@nestjsx/crud';
 import { Transform } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 
-import { BaseEntity } from '../../../shared/entities/BaseEntity';
+import { BaseEntity } from '../../../core/entities/BaseEntity';
 import { Token } from '../../account/entities/token.entity';
+import LocalFile from 'src/modules/local-files/entities/local-file.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -59,9 +61,6 @@ export class User extends BaseEntity {
   static readonly PASSWORD_PATTERN_MESSAGE =
     'Password must contain at least 1 lowercase, 1 uppercase, 1 digit and 1 special char';
 
-  @PrimaryGeneratedColumn('identity', { generatedIdentity: 'ALWAYS' })
-  public id: number;
-
   @ApiPropertyOptional()
   @Length(User.USERNAME_MIN_LENGTH, User.USERNAME_MAX_LENGTH, {
     always: true,
@@ -74,9 +73,9 @@ export class User extends BaseEntity {
   public username?: string;
 
   @ApiPropertyOptional()
-  @IsEmail({}, { always: true, message: 'Incorrect email' })
+  @IsEmail({}, { always: true })
   @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE], message: 'The email is required' })
+  @IsNotEmpty({ groups: [CREATE] })
   @Transform(({ value }) => value?.trim().toLowerCase(), { toClassOnly: true })
   @Column({ length: 254 })
   public email: string;
@@ -130,7 +129,7 @@ export class User extends BaseEntity {
   @ArrayNotEmpty({ always: true })
   @IsArray({ always: true, message: 'The roles must be an array' })
   @IsOptional({ groups: [UPDATE] })
-  @IsNotEmpty({ groups: [CREATE], message: 'Roles are required' })
+  @IsNotEmpty({ groups: [CREATE] })
   @Transform(
     ({ value }) => {
       if (!value || Array.isArray(value) || typeof value !== 'string') {
@@ -154,7 +153,7 @@ export class User extends BaseEntity {
   @ApiPropertyOptional()
   @MaxLength(40, { always: true })
   @IsString({ always: true })
-  @IsOptional({ groups: [CREATE, UPDATE] })
+  @IsOptional({ always: true })
   @Transform(({ value }) => (value ? value.trim() : undefined))
   @Column({ length: 40, nullable: true })
   public firstName?: string;
@@ -167,13 +166,13 @@ export class User extends BaseEntity {
   @Column({ length: 40, nullable: true })
   public lastName?: string;
 
-  @ApiPropertyOptional({ type: 'file' })
-  @MaxLength(100, { always: true })
-  @IsString({ always: true })
-  @IsOptional({ always: true })
-  @Transform(({ value }) => value || undefined)
-  @Column({ length: 100, nullable: true })
-  public avatar?: string;
+  @Column({ nullable: true })
+  public avatarId?: number;
+
+  @OneToOne(() => LocalFile)
+  @JoinColumn()
+  avatar: LocalFile;
+
 
   @ApiPropertyOptional()
   @IsDate({ always: true })

@@ -58,9 +58,11 @@ export function validate(config: Record<string, unknown>) {
       port,
 
       publicDir: path.join(__dirname, env.PUBLIC_DIR),
+    },
 
-      uploadsDir: path.join(__dirname, env.UPLOADS_DIR),
-      maxUploadFileSize: env.MAX_UPLOAD_FILE_SIZE,
+    uploads: {
+      dir: path.join(__dirname, env.UPLOADS_DIR),
+      maxFileSize: env.UPLOADS_MAX_FILE_SIZE,
     },
 
     log: {

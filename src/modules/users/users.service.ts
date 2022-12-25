@@ -3,11 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import { DeepPartial, FindOptionsWhere } from 'typeorm';
 
+import { LocalFileDto } from '../local-files/dto/local-file.dto';
+import LocalFilesService from '../local-files/local-files.service';
+
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService extends TypeOrmCrudService<User> {
-  constructor(@InjectRepository(User) repo) {
+  constructor(
+    @InjectRepository(User) repo,
+    private localFilesService: LocalFilesService,
+  ) {
     super(repo);
   }
   async findById(id: number) {
@@ -71,5 +77,14 @@ export class UsersService extends TypeOrmCrudService<User> {
 
   async remove(id: string): Promise<void> {
     await this.repo.delete(id);
+  }
+
+  async addAvatar(userId: number, fileData: LocalFileDto) {
+    const avatar = await this.localFilesService.saveLocalFileData(fileData);
+    await this.repo.update({ id: userId }, { avatarId: avatar.id });
+  }
+
+  async removeAvatar(userId: number) {
+    await this.repo.update({ id: userId }, { avatarId: null });
   }
 }

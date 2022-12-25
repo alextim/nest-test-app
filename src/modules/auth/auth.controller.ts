@@ -13,7 +13,7 @@ import { ConfigService } from '@nestjs/config';
 
 import type { Response, Request, NextFunction, CookieOptions } from 'express';
 
-import { ExcludeNullInterceptor } from '../../interceptors/excludeNull.interceptor';
+import { ExcludeNullInterceptor } from '../../interceptors/exclude-null';
 import { getCookieOptions } from '../../lib/config/configs/cookie.config';
 
 import RequestWithUser from './interfaces/requestWithUser.interface';

@@ -56,7 +56,7 @@ export class EnvironmentVariables {
   @IsInt()
   @Type(() => Number)
   @IsOptional()
-  MAX_UPLOAD_FILE_SIZE = 1024 * 1024;
+  UPLOADS_MAX_FILE_SIZE = 1024 * 1024;
 
   // log
   @IsString()
