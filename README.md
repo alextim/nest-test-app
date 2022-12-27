@@ -15,6 +15,8 @@ https://github.com/zainuddin25/NestJS-Rest-API/blob/main/src/health/health.contr
 https://github.com/gabrielmaialva33/base-nest-api/blob/master/src/modules/health/health.controller.ts
 
 
+duplicate primary column https://github.com/nestjsx/crud/issues/777
+
 =================================================================
 
 

@@ -80,8 +80,10 @@ export class UsersService extends TypeOrmCrudService<User> {
   }
 
   async addAvatar(userId: number, fileData: LocalFileDto) {
-    const avatar = await this.localFilesService.saveLocalFileData(fileData);
-    await this.repo.update({ id: userId }, { avatarId: avatar.id });
+    const { id: avatarId } = await this.localFilesService.saveLocalFileData(
+      fileData,
+    );
+    await this.repo.update({ id: userId }, { avatarId });
   }
 
   async removeAvatar(userId: number) {

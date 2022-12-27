@@ -93,11 +93,11 @@ export class CreateUserDto {
   @Transform(({ value }) => value?.trim())
   public lastName?: string;
 
-  @ApiPropertyOptional({ type: 'file' })
-  @MaxLength(100)
-  @IsString()
+  @ApiPropertyOptional()
+  //@MaxLength(100)
+ // @IsString()
   @IsOptional()
-  public avatar?: string;
+  public avatarId?: number;
 
   @ApiPropertyOptional()
   @IsDate()

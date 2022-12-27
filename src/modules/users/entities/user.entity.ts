@@ -169,10 +169,9 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   public avatarId?: number;
 
-  @OneToOne(() => LocalFile)
+  @OneToOne(() => LocalFile, { cascade: true, onDelete: 'SET NULL' })
   @JoinColumn()
   avatar: LocalFile;
-
 
   @ApiPropertyOptional()
   @IsDate({ always: true })

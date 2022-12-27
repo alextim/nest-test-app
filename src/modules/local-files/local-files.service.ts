@@ -5,16 +5,26 @@ import fs from 'node:fs';
 
 import { LocalFileDto } from './dto/local-file.dto';
 import LocalFile from './entities/local-file.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 class LocalFilesService {
   constructor(
     @InjectRepository(LocalFile)
     private localFilesRepository: Repository<LocalFile>,
+    private readonly configService: ConfigService,
   ) {}
 
-  async saveLocalFileData(fileData: LocalFileDto) {
-    const newFile = await this.localFilesRepository.create(fileData);
+  async saveLocalFileData(dto: LocalFileDto) {
+    const baseUrl = this.configService.get<string>('uploads.baseUrl');
+    let url = dto.path.replace(/\\/g, '/');
+    const n = url.indexOf(baseUrl);
+    url = url.substring(n);
+
+    const newFile = await this.localFilesRepository.create({
+      ...dto,
+      url,
+    });
     await this.localFilesRepository.save(newFile);
     return newFile;
   }

@@ -10,6 +10,9 @@ export class LocalFile extends BaseEntity {
   path: string;
 
   @Column()
+  url: string;
+
+  @Column()
   mimetype: string;
 }
 

@@ -41,6 +41,9 @@ export function validate(config: Record<string, unknown>) {
     baseUrl += host + (port ? `:${port}` : '');
   }
 
+  const n = env.UPLOADS_DIR.indexOf(env.PUBLIC_DIR);
+  const uploadsUrl = env.UPLOADS_DIR.substring(n + env.PUBLIC_DIR.length)
+
   const appConfig = {
     NODE_ENV: env.NODE_ENV,
 
@@ -62,6 +65,7 @@ export function validate(config: Record<string, unknown>) {
 
     uploads: {
       dir: path.join(__dirname, env.UPLOADS_DIR),
+      baseUrl: uploadsUrl,
       maxFileSize: env.UPLOADS_MAX_FILE_SIZE,
     },
 

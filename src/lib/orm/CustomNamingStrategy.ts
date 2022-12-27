@@ -42,12 +42,16 @@ export class CustomNamingStrategy
     return `FK_${table}_${columnsSnakeCase}__${referenced}`;
   }
 
-  relationConstraintName(tableOrName: Table | string, columnNames: string[], where?: string) {
+  relationConstraintName(
+    tableOrName: Table | string,
+    columnNames: string[],
+    where?: string,
+  ) {
     const table = tableOrName instanceof Table ? tableOrName.name : tableOrName;
     const columnsSnakeCase = columnNames.join('_');
-    
+
     const wherePart = where ? `__${where}` : '';
-    
+
     return `REL_${table}_${columnsSnakeCase}${wherePart}`;
   }
 }

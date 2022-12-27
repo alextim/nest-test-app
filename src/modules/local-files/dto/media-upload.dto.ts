@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AvatarUploadDto {
+export class MediaUploadDto {
   @ApiProperty({
     type: 'string',
     format: 'binary',
   })
-  avatar: Express.Multer.File;
+  file: Express.Multer.File;
 }

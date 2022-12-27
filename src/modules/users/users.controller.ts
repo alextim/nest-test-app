@@ -68,6 +68,9 @@ import { UsersService } from './users.service';
   },
   query: {
     exclude: ['password'],
+    join: {
+      avatar: { eager: true, allow: ['id', 'url'] },
+    },
   },
   routes: {
     deleteOneBase: {
@@ -79,13 +82,24 @@ import { UsersService } from './users.service';
 export class UsersController implements CrudController<User> {
   constructor(
     public readonly service: UsersService,
-    private readonly configService: ConfigService,
-    private readonly localFilesService: LocalFilesService
+    private readonly localFilesService: LocalFilesService,
   ) {}
 
   get base(): CrudController<User> {
     return this;
   }
+
+
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @Override()
+  async createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: CreateUserDto,
+  ) {
+    return this.base.createOneBase(req, dto as any);
+  }  
+
 
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -93,12 +107,12 @@ export class UsersController implements CrudController<User> {
   async replaceOne(
     @Param('id', ParseIntPipe) id: number,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: User,
+    @ParsedBody() dto: UpdateUserDto,
   ) {
     if (!(await this.service.idExists(id))) {
       throw new UserNotFoundException();
     }
-    return this.base.replaceOneBase(req, dto);
+    return this.base.replaceOneBase(req, dto as any);
   }
 
   @ApiBadRequestResponse()
@@ -107,12 +121,12 @@ export class UsersController implements CrudController<User> {
   async updateOne(
     @Param('id', ParseIntPipe) id: number,
     @ParsedRequest() req: CrudRequest,
-    @ParsedBody() dto: User,
+    @ParsedBody() dto: UpdateUserDto,
   ) {
     if (!(await this.service.idExists(id))) {
       throw new UserNotFoundException();
     }
-    return this.base.updateOneBase(req, dto);
+    return this.base.updateOneBase(req, dto as any);
   }
 
   @ApiBadRequestResponse()
@@ -148,19 +162,17 @@ export class UsersController implements CrudController<User> {
   }
 
   @ApiConsumes('multipart/form-data')
-  // @ApiBody({ type: AvatarUploadDto })
+  @ApiBody({ type: AvatarUploadDto })
   @ApiNotFoundResponse()
   @ApiUnsupportedMediaTypeResponse()
   @ApiPayloadTooLargeResponse()
   @HttpCode(200)
   @Post(':id/avatar')
-  @UseInterceptors(LocalFilesInterceptor({ fieldName: 'image' }))
+  @UseInterceptors(LocalFilesInterceptor({ fieldName: 'avatar' }))
   async uploadAvatar(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: AvatarUploadDto,
     @UploadedFile(ParseFile) file: Express.Multer.File,
   ) {
-    console.log(dto);
     if (!(await this.service.idExists(id))) {
       throw new UserNotFoundException();
     }
@@ -172,41 +184,42 @@ export class UsersController implements CrudController<User> {
     });
   }
 
-  
   @Get(':id/avatar')
   async getAvatar(
     @Param('id', ParseIntPipe) id: number,
     @Res({ passthrough: true }) response: Response,
-    @Req() request: Request
+    @Req() request: Request,
   ) {
     const user = await this.service.findById(id);
     if (!user) {
       throw new UserNotFoundException();
-    }    
+    }
     const fileId = user.avatarId;
     if (!fileId) {
       throw new AvatarNotFoundException();
     }
-    const fileMetadata = await this.localFilesService.getFileById(user.avatarId);
- 
+    const fileMetadata = await this.localFilesService.getFileById(
+      user.avatarId,
+    );
+
     // const pathOnDisk = path.join(process.cwd(), fileMetadata.path);
     const pathOnDisk = fileMetadata.path;
- 
+
     const file = await fs.readFile(pathOnDisk);
- 
+
     const tag = etag(file);
- 
+
     response.set({
       'Content-Disposition': `inline; filename="${fileMetadata.filename}"`,
       'Content-Type': fileMetadata.mimetype,
       ETag: tag,
     });
- 
+
     if (request.headers['if-none-match'] === tag) {
       response.status(304);
       return;
     }
- 
+
     return new StreamableFile(file);
   }
 
