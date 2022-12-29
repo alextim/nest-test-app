@@ -94,6 +94,13 @@ export class CreateUserDto {
   public lastName?: string;
 
   @ApiPropertyOptional()
+  @MaxLength(20)
+  @IsString()
+  @IsOptional()
+  @Transform(({ value }) => value?.trim())
+  public phone?: string;  
+
+  @ApiPropertyOptional()
   //@MaxLength(100)
  // @IsString()
   @IsOptional()

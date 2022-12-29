@@ -5,5 +5,5 @@ export class AvatarUploadDto {
     type: 'string',
     format: 'binary',
   })
-  avatar: Express.Multer.File;
+  file: Express.Multer.File;
 }

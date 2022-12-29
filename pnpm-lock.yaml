@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@nestjs/cli': ^9.1.7
+  '@nestjs/cli': ^9.1.8
   '@nestjs/common': ^9.2.1
   '@nestjs/config': ^2.2.0
   '@nestjs/core': ^9.2.1
@@ -126,7 +126,7 @@ dependencies:
   typeorm-naming-strategies: 4.1.0_typeorm@0.3.11
 
 devDependencies:
-  '@nestjs/cli': 9.1.7
+  '@nestjs/cli': 9.1.8
   '@nestjs/schematics': 9.0.4_typescript@4.9.4
   '@nestjs/testing': 9.2.1_wdbvfsxfdwzlwdfiyh2gynjl4m
   '@types/bcrypt': 5.0.0
@@ -923,8 +923,8 @@ packages:
       - supports-color
     dev: false
 
-  /@nestjs/cli/9.1.7:
-    resolution: {integrity: sha512-l0+vWXr571JcQ2LnQU3otxsvF5KUXqcAWCjnjMZH7ALVxcYi7BTif8q9YX0QHUETd9xPbH2YWkqV8SvlwgqEVg==}
+  /@nestjs/cli/9.1.8:
+    resolution: {integrity: sha512-53laCMoPLAkjyz3405FlMSrHnbr3DGeoaQjY963bEroezLlm/qfQhwj6oGJwtgA28eNFgx68mvQV2f1VZNUJtw==}
     engines: {node: '>= 12.9.0'}
     hasBin: true
     dependencies:

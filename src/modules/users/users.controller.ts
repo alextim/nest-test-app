@@ -10,6 +10,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Req,
   Res,
   StreamableFile,
@@ -134,25 +135,42 @@ export class UsersController implements CrudController<User> {
   @ApiUnauthorizedResponse()
   @HttpCode(200)
   @Post('change-password')
-  async changePassword(
-    @Body() { oldPassword, newPassword }: ChangePasswordDto,
+  async changePasswordForAuthenticatedUser(
+    @Body() dto: ChangePasswordDto,
     @Req() req: RequestWithUser,
   ) {
-    if (oldPassword === newPassword) {
-      throw new BadRequestException(
-        'The new password is the same as the old one',
-      );
-    }
     if (!req.user) {
       throw new UnauthorizedException(
         'The user must be logged in to change the password',
       );
     }
-    const user = await this.service.findById(req.user.id);
+    return this.changePassword(req.user.id, dto, req);
+  }
+
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
+  @HttpCode(200)
+  @Put('change-password/:id')
+  async changePasswordForAdmin(
+    @Param('id', ParseIntPipe) id: number,    
+    @Body() dto: ChangePasswordDto,
+    @Req() req: RequestWithUser,
+  ) {
+    return this.changePassword(id, dto, req);
+  }
+
+  async changePassword(id: number, { oldPassword, newPassword }: ChangePasswordDto, req: RequestWithUser) {
+    if (oldPassword === newPassword) {
+      throw new BadRequestException(
+        'The new password is the same as the old one',
+      );
+    }
+    const user = await this.service.findById(id);
     if (!user) {
       throw new UserNotFoundException();
     }
-    const isPasswordValid = await user.comparePasswords(oldPassword);
+    const isPasswordValid = !user.password || await user.comparePasswords(oldPassword);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Wrong password');
     }
@@ -168,7 +186,7 @@ export class UsersController implements CrudController<User> {
   @ApiPayloadTooLargeResponse()
   @HttpCode(200)
   @Post(':id/avatar')
-  @UseInterceptors(LocalFilesInterceptor({ fieldName: 'avatar' }))
+  @UseInterceptors(LocalFilesInterceptor({ fieldName: 'file' }))
   async uploadAvatar(
     @Param('id', ParseIntPipe) id: number,
     @UploadedFile(ParseFile) file: Express.Multer.File,

@@ -166,6 +166,14 @@ export class User extends BaseEntity {
   @Column({ length: 40, nullable: true })
   public lastName?: string;
 
+  @ApiPropertyOptional()
+  @MaxLength(20, { always: true })
+  @IsString({ always: true })
+  @IsOptional({ always: true })
+  @Transform(({ value }) => (value ? value.trim() : undefined))
+  @Column({ length: 20, nullable: true })
+  public phone?: string;  
+
   @Column({ nullable: true })
   public avatarId?: number;
 

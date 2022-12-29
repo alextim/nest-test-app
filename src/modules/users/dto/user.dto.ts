@@ -39,6 +39,10 @@ export class UserDto2 {
   @Transform(({ value }) => value || undefined)
   public lastName?: string;
 
+  @ApiPropertyOptional()
+  @Transform(({ value }) => value || undefined)
+  public phone?: string;
+
   @Transform(({ value }) => value || undefined)
   public avatar?: string;
 
