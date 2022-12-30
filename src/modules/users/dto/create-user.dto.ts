@@ -108,14 +108,12 @@ export class CreateUserDto {
 
   @ApiPropertyOptional()
   @IsDate()
-  @MinDate(new Date())
   @Transform(({ value }) => value && new Date(value))
   @IsOptional()
   public verificationCodeSentAt?: Date;
 
   @ApiPropertyOptional()
   @IsDate()
-  @MinDate(new Date())
   @Transform(({ value }) => value && new Date(value))
   @IsOptional()
   public verifiedAt?: Date;

@@ -9,6 +9,7 @@ import {
   HttpCode,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Put,
   Req,
@@ -151,7 +152,7 @@ export class UsersController implements CrudController<User> {
   @ApiNotFoundResponse()
   @ApiUnauthorizedResponse()
   @HttpCode(200)
-  @Put('change-password/:id')
+  @Patch('change-password/:id')
   async changePasswordForAdmin(
     @Param('id', ParseIntPipe) id: number,    
     @Body() dto: ChangePasswordDto,
