@@ -73,7 +73,7 @@ export function setup(app: NestExpressApplication) {
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTION'],
     preflightContinue: false,
     optionsSuccessStatus: 204,
-    // credentials: true,
+    credentials: true,
     // exposedHeaders: ['Authorization'],
   });
 
