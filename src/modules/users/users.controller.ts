@@ -56,6 +56,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { AvatarNotFoundException, UserNotFoundException } from './users.error';
 import { UsersService } from './users.service';
+import { SetPasswordDto } from './dto/set-password.dto';
 
 // @ApiCookieAuth()
 // @UseGuards(SelfGuard)
@@ -161,8 +162,8 @@ export class UsersController implements CrudController<User> {
     return this.changePassword(id, dto, req);
   }
 
-  async changePassword(id: number, { oldPassword, newPassword }: ChangePasswordDto, req: RequestWithUser) {
-    if (oldPassword === newPassword) {
+  async changePassword(id: number, { currentPassword, password }: ChangePasswordDto, req: RequestWithUser) {
+    if (currentPassword === password) {
       throw new BadRequestException(
         'The new password is the same as the old one',
       );
@@ -171,14 +172,35 @@ export class UsersController implements CrudController<User> {
     if (!user) {
       throw new UserNotFoundException();
     }
-    const isPasswordValid = !user.password || await user.comparePasswords(oldPassword);
+    const isPasswordValid = !user.password || await user.comparePasswords(currentPassword);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Wrong password');
+      throw new UnauthorizedException('Wrong current password');
     }
-    user.setPassword(newPassword);
+    return this.updatePassword(password, user);
+  }
+
+  private async updatePassword(password: string, user: User) {
+    user.setPassword(password);
     await this.service.save(user);
     return 'New password set';
   }
+
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiUnauthorizedResponse()
+  @HttpCode(200)
+  @Patch('set-password/:id')
+  async setPassword(
+    @Param('id', ParseIntPipe) id: number,    
+    @Body() { password }: SetPasswordDto,
+    @Req() req: RequestWithUser,
+  ) {
+    const user = await this.service.findById(id);
+    if (!user) {
+      throw new UserNotFoundException();
+    }    
+    return this.updatePassword(password, user);
+  }  
 
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: AvatarUploadDto })

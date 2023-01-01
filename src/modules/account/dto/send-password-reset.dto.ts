@@ -1,11 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { EmailDto } from './email.dto';
 
-export class SendPasswordResetDto {
-  @IsEmail()
-  @IsNotEmpty()
-  @Transform(({ value }) => value?.trim())
-  @ApiProperty({ required: true })
-  email: string;
+export class SendPasswordResetDto extends EmailDto {
 }

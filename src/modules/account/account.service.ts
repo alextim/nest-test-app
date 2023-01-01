@@ -31,7 +31,7 @@ export class AccountService {
     await this.createTokenAndSendVerificationLink(user);
   }
 
-  private async createTokenAndSendVerificationLink(user: User) {
+  public async createTokenAndSendVerificationLink(user: User) {
     const token = await this.tokensService.createEmailVerificationToken(
       user.id,
     );
@@ -170,7 +170,7 @@ export class AccountService {
       throw new ForbiddenException('User not verified');
     }
 
-    await this.usersService.setPassword(user, plainPassword);
+    await this.usersService.updatePassword(user, plainPassword);
     await this.tokensService.expire(token.id);
   }
 }

@@ -57,7 +57,7 @@ export class User extends BaseEntity {
     'The password must be at least $constraint1 but not longer than $constraint2 characters';
 
   static readonly PASSWORD_PATTERN =
-    /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+    /^(?=.*\d)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[()[\]{}<>`~!@#№%$^&*\-_=+:;"'\\|,.?/]).{8,}$/;
   static readonly PASSWORD_PATTERN_MESSAGE =
     'Password must contain at least 1 lowercase, 1 uppercase, 1 digit and 1 special char';
 
