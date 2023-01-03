@@ -11,6 +11,8 @@ import { AccountModule } from './modules/account/account.module';
 import { UsersModule } from './modules/users/users.module';
 import { HealthModule } from './modules/health/health.module';
 import { LocalFilesModule } from './modules/local-files/local-files.module';
+import { GoogleAuthModule } from './modules/google-auth/google-auth.module';
+
 
 @Module({
   providers: [
@@ -25,6 +27,7 @@ import { LocalFilesModule } from './modules/local-files/local-files.module';
     OrmModule,
     NestServeStaticModule,
     AuthModule,
+    GoogleAuthModule,
     AccountModule,
     UsersModule,
     HealthModule,

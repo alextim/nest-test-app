@@ -10,19 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import type { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { diskStorage } from 'multer';
 import path from 'node:path';
-
-const geFilename = (originalname: string) => {
-  const stringDate = new Date().toISOString().slice(0, 10);
-
-  const randomPart = new Array(10)
-    .fill(0)
-    .map(() => (Math.random() * 10).toFixed(0).toString())
-    .join('');
-
-  const normalized = originalname.replace(/\s+/g, '-');
-
-  return `${stringDate}-${randomPart}-${normalized}`;
-};
+import { getRandomFilename } from './get-random-filename';
 
 interface LocalFilesInterceptorOptions {
   fieldName: string;
@@ -67,7 +55,7 @@ function LocalFilesInterceptor(
       const multerOptions: MulterOptions = {
         storage: diskStorage({
           destination,
-          filename: (req, file, cb) => cb(null, geFilename(file.originalname)),
+          filename: (req, file, cb) => cb(null, getRandomFilename(file.originalname)),
         }),
 
         fileFilter: options.fileFilter || imageFileFilter,
