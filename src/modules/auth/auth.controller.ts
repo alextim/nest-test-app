@@ -33,10 +33,9 @@ export class AuthController {
     return request.user;
   }
 
-  @HttpCode(200)
   @UseGuards(CookieAuthGuard)
   @Get('me')
-  async authenticate(@Req() req: RequestWithUser) {
+  async me(@Req() req: RequestWithUser) {
     return req.user;
   }
 
