@@ -38,7 +38,10 @@ class LocalFilesService {
 
   async download(downloadUrl: string, name: string) {
     const dir = this.configService.get<string>('uploads.dir');
-    const { filepath, mimetype } = await download(downloadUrl, path.join(dir, getRandomFilename(name)));
+    const { filepath, mimetype } = await download(
+      downloadUrl,
+      path.join(dir, getRandomFilename(name)),
+    );
 
     const url = this.getUrlFromFilepath(filepath);
     const filename = path.basename(filepath);
@@ -67,4 +70,3 @@ class LocalFilesService {
 }
 
 export default LocalFilesService;
-

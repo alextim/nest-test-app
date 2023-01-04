@@ -55,7 +55,8 @@ function LocalFilesInterceptor(
       const multerOptions: MulterOptions = {
         storage: diskStorage({
           destination,
-          filename: (req, file, cb) => cb(null, getRandomFilename(file.originalname)),
+          filename: (req, file, cb) =>
+            cb(null, getRandomFilename(file.originalname)),
         }),
 
         fileFilter: options.fileFilter || imageFileFilter,

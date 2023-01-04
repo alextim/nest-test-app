@@ -30,8 +30,8 @@ import { Transform } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
-import { Token } from '../../account/entities/token.entity';
-import LocalFile from 'src/modules/local-files/entities/local-file.entity';
+import { Token } from '../../profile/entities/token.entity';
+import LocalFile from '../../local-files/entities/local-file.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -172,7 +172,7 @@ export class User extends BaseEntity {
   @IsOptional({ always: true })
   @Transform(({ value }) => (value ? value.trim() : undefined))
   @Column({ length: 20, nullable: true })
-  public phone?: string;  
+  public phone?: string;
 
   @Column({ nullable: true })
   public avatarId?: number;

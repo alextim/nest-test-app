@@ -1,15 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, Length, Matches } from 'class-validator';
+
 import { User } from '../../users/entities/user.entity';
 
 export class SignupDto {
+  @ApiProperty({ required: true })
   @IsEmail({}, { message: 'Incorrect email' })
   @IsNotEmpty({ message: 'The email is required' })
   @Transform(({ value }) => value?.trim())
-  @ApiProperty({ required: true })
   email: string;
 
+  @ApiProperty({ required: true })
   @Matches(User.PASSWORD_PATTERN, {
     message: User.PASSWORD_PATTERN_MESSAGE,
   })
@@ -18,6 +20,5 @@ export class SignupDto {
   })
   @IsNotEmpty({ message: 'The password is required' })
   @Transform(({ value }) => value?.trim())
-  @ApiProperty({ required: true })
   password: string;
 }

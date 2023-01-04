@@ -42,7 +42,7 @@ export function validate(config: Record<string, unknown>) {
   }
 
   const n = env.UPLOADS_DIR.indexOf(env.PUBLIC_DIR);
-  const uploadsUrl = env.UPLOADS_DIR.substring(n + env.PUBLIC_DIR.length)
+  const uploadsUrl = env.UPLOADS_DIR.substring(n + env.PUBLIC_DIR.length);
 
   const appConfig = {
     NODE_ENV: env.NODE_ENV,

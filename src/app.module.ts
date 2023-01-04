@@ -7,12 +7,11 @@ import { OrmModule } from './lib/orm/orm.module';
 import { NestServeStaticModule } from './lib/serve-static/serve-static.module';
 
 import { AuthModule } from './modules/auth/auth.module';
-import { AccountModule } from './modules/account/account.module';
+import { ProfileModule } from './modules/profile/profile.module';
 import { UsersModule } from './modules/users/users.module';
 import { HealthModule } from './modules/health/health.module';
 import { LocalFilesModule } from './modules/local-files/local-files.module';
 import { GoogleAuthModule } from './modules/google-auth/google-auth.module';
-
 
 @Module({
   providers: [
@@ -28,7 +27,7 @@ import { GoogleAuthModule } from './modules/google-auth/google-auth.module';
     NestServeStaticModule,
     AuthModule,
     GoogleAuthModule,
-    AccountModule,
+    ProfileModule,
     UsersModule,
     HealthModule,
     LocalFilesModule,

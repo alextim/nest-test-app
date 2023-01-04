@@ -69,13 +69,14 @@ export class AuthController {
     });
   }
 
-  @Get('login/google')
+  /*
+  @Get('auth/login/google')
   @UseGuards(LoginGuard)
   async signInWithGoogle() {
     // Guard redirects
   }
 
-  @Get('login/google/redirect')
+  @Get('auth/login/google/redirect')
   @UseGuards(LoginGuard)
   signInWithGoogleRedirect(@Req() req) {
     if (!req.user) {
@@ -87,7 +88,9 @@ export class AuthController {
       user: req.user,
     };
   }
-
+  */
+  
+  /*
   @Get('login/facebook')
   @UseGuards(LoginGuard)
   async signInWithFacebook() {
@@ -106,4 +109,5 @@ export class AuthController {
       user: req.user,
     };
   }
+  */
 }

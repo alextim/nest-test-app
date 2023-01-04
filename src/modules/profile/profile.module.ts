@@ -5,8 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from '../../mail/mail.module';
 import { UsersModule } from '../users/users.module';
 
-import { AccountService } from './account.service';
-import { AccountController } from './account.controller';
+import { ProfileService } from './profile.service';
+import { ProfileController } from './profile.controller';
 
 import { TokensService } from './tokens.service';
 import { Token } from './entities/token.entity';
@@ -18,8 +18,8 @@ import { Token } from './entities/token.entity';
     MailModule,
     ConfigModule,
   ],
-  providers: [AccountService, TokensService],
-  controllers: [AccountController],
-  exports: [AccountService, TokensService],
+  providers: [ProfileService, TokensService],
+  controllers: [ProfileController],
+  exports: [ProfileService, TokensService],
 })
-export class AccountModule {}
+export class ProfileModule {}

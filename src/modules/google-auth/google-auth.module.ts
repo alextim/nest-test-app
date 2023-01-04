@@ -5,11 +5,8 @@ import { GoogleAuthController } from './google-auth.controller';
 import { GoogleAuthService } from './google-auth.service';
 
 @Module({
-  imports: [
-    UsersModule,
-    LocalFilesModule,
-  ],  
+  imports: [UsersModule, LocalFilesModule],
   controllers: [GoogleAuthController],
-  providers: [GoogleAuthService]
+  providers: [GoogleAuthService],
 })
 export class GoogleAuthModule {}

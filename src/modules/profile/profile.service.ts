@@ -19,7 +19,7 @@ import { TokenType } from './entities/token.entity';
 import { TokensService } from './tokens.service';
 
 @Injectable()
-export class AccountService {
+export class ProfileService {
   constructor(
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
@@ -61,7 +61,7 @@ export class AccountService {
   private getLink(path: string, token: string) {
     const baseUrl = this.configService.get<string>('baseUrl');
     const urlPrefix = this.configService.get<string>('urlPrefix');
-    return `${baseUrl}${urlPrefix}/account/${path}?token=${token}`;
+    return `${baseUrl}${urlPrefix}/profile/${path}?token=${token}`;
   }
 
   private async send(

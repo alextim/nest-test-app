@@ -1,4 +1,3 @@
-import path from 'node:path';
 import fs from 'node:fs/promises';
 import {
   BadRequestException,
@@ -11,7 +10,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Put,
   Req,
   Res,
   StreamableFile,
@@ -20,7 +18,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   ApiBadRequestResponse,
   ApiBody,
@@ -42,12 +39,13 @@ import {
 import { Response, Request } from 'express';
 import etag from 'etag';
 
-import LocalFilesInterceptor from 'src/modules/local-files/local-files.interceptor';
-import { ParseFile } from 'src/modules/local-files/parse-file.pipe';
+import LocalFilesInterceptor from '../local-files/local-files.interceptor';
+import { ParseFile } from '../local-files/parse-file.pipe';
 
 import { SelfGuard } from '../auth/guards/self.guard';
 import RequestWithUser from '../auth/interfaces/requestWithUser.interface';
 import LocalFilesService from '../local-files/local-files.service';
+
 import { AvatarUploadDto } from './dto/avatar-upload.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -92,7 +90,6 @@ export class UsersController implements CrudController<User> {
     return this;
   }
 
-
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @Override()
@@ -101,8 +98,7 @@ export class UsersController implements CrudController<User> {
     @ParsedBody() dto: CreateUserDto,
   ) {
     return this.base.createOneBase(req, dto as any);
-  }  
-
+  }
 
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
@@ -155,14 +151,18 @@ export class UsersController implements CrudController<User> {
   @HttpCode(200)
   @Patch('change-password/:id')
   async changePasswordForAdmin(
-    @Param('id', ParseIntPipe) id: number,    
+    @Param('id', ParseIntPipe) id: number,
     @Body() dto: ChangePasswordDto,
     @Req() req: RequestWithUser,
   ) {
     return this.changePassword(id, dto, req);
   }
 
-  async changePassword(id: number, { currentPassword, password }: ChangePasswordDto, req: RequestWithUser) {
+  async changePassword(
+    id: number,
+    { currentPassword, password }: ChangePasswordDto,
+    _: RequestWithUser,
+  ) {
     if (currentPassword === password) {
       throw new BadRequestException(
         'The new password is the same as the old one',
@@ -172,7 +172,8 @@ export class UsersController implements CrudController<User> {
     if (!user) {
       throw new UserNotFoundException();
     }
-    const isPasswordValid = !user.password || await user.comparePasswords(currentPassword);
+    const isPasswordValid =
+      !user.password || (await user.comparePasswords(currentPassword));
     if (!isPasswordValid) {
       throw new UnauthorizedException('Wrong current password');
     }
@@ -191,16 +192,16 @@ export class UsersController implements CrudController<User> {
   @HttpCode(200)
   @Patch('set-password/:id')
   async setPassword(
-    @Param('id', ParseIntPipe) id: number,    
+    @Param('id', ParseIntPipe) id: number,
     @Body() { password }: SetPasswordDto,
-    @Req() req: RequestWithUser,
+    @Req() _: RequestWithUser,
   ) {
     const user = await this.service.findById(id);
     if (!user) {
       throw new UserNotFoundException();
-    }    
+    }
     return this.updatePassword(password, user);
-  }  
+  }
 
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: AvatarUploadDto })
@@ -228,8 +229,8 @@ export class UsersController implements CrudController<User> {
   @Get(':id/avatar')
   async getAvatar(
     @Param('id', ParseIntPipe) id: number,
-    @Res({ passthrough: true }) response: Response,
-    @Req() request: Request,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
   ) {
     const user = await this.service.findById(id);
     if (!user) {
@@ -250,14 +251,14 @@ export class UsersController implements CrudController<User> {
 
     const tag = etag(file);
 
-    response.set({
+    res.set({
       'Content-Disposition': `inline; filename="${fileMetadata.filename}"`,
       'Content-Type': fileMetadata.mimetype,
       ETag: tag,
     });
 
-    if (request.headers['if-none-match'] === tag) {
-      response.status(304);
+    if (req.headers['if-none-match'] === tag) {
+      res.status(304);
       return;
     }
 

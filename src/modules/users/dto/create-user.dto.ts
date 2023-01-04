@@ -12,7 +12,6 @@ import {
   Length,
   Matches,
   MaxLength,
-  MinDate,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
@@ -98,11 +97,11 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   @Transform(({ value }) => value?.trim())
-  public phone?: string;  
+  public phone?: string;
 
   @ApiPropertyOptional()
   //@MaxLength(100)
- // @IsString()
+  // @IsString()
   @IsOptional()
   public avatarId?: number;
 

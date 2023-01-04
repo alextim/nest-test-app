@@ -10,7 +10,7 @@ import {
 export class ParseFile implements PipeTransform {
   transform(
     files: Express.Multer.File | Express.Multer.File[],
-    metadata: ArgumentMetadata,
+    _: ArgumentMetadata,
   ): Express.Multer.File | Express.Multer.File[] {
     if (
       files === undefined ||

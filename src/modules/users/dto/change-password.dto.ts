@@ -5,7 +5,7 @@ import { Transform } from 'class-transformer';
 import { User } from '../entities/user.entity';
 import { SetPasswordDto } from './set-password.dto';
 
-export class ChangePasswordDto extends SetPasswordDto{
+export class ChangePasswordDto extends SetPasswordDto {
   @ApiProperty()
   @Matches(User.PASSWORD_PATTERN, {
     message: User.PASSWORD_PATTERN_MESSAGE,

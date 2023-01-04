@@ -6,21 +6,26 @@ import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class GoogleAuthService {
-  private readonly oauthClient:  OAuth2Client;
+  private readonly oauthClient: OAuth2Client;
   private readonly clientId: string;
-  
-  constructor(private readonly usersService: UsersService,
+
+  constructor(
+    private readonly usersService: UsersService,
     private readonly localFilesService: LocalFilesService,
-    private readonly configService: ConfigService) { 
+    private readonly configService: ConfigService,
+  ) {
     this.clientId = this.configService.get<string>('auth.google.clientId');
-    this.oauthClient = new OAuth2Client(this.clientId, this.configService.get<string>('auth.google.clientSecret'));
+    this.oauthClient = new OAuth2Client(
+      this.clientId,
+      this.configService.get<string>('auth.google.clientSecret'),
+    );
   }
 
   private async verifyGoogleToken(token: string) {
     try {
       const loginTicket = await this.oauthClient.verifyIdToken({
         idToken: token,
-        audience: this.clientId
+        audience: this.clientId,
       });
       const payload = loginTicket.getPayload();
       return payload;
@@ -36,7 +41,15 @@ export class GoogleAuthService {
       throw new UnauthorizedException('No data from Google');
     }
 
-    const { email, email_verified: emailVerified, given_name: firstName, family_name: lastName, profile, picture, sub: googleId } = payload;
+    const {
+      email,
+      email_verified: emailVerified,
+      given_name: firstName,
+      family_name: lastName,
+      // profile,
+      picture,
+      sub: googleId,
+    } = payload;
 
     if (!email) {
       throw new UnauthorizedException('No email from Google');
@@ -64,14 +77,14 @@ export class GoogleAuthService {
       if (!user.verifiedAt) {
         needUpdate = true;
         user.verifiedAt = new Date();
-      }      
+      }
       if (!user.avatarId && picture) {
         const avatarId = await this.downloadAvatar(picture);
         if (avatarId) {
           needUpdate = true;
           user.avatarId = avatarId;
         }
-      }  
+      }
       if (needUpdate) {
         await this.usersService.save(user);
       }
@@ -93,7 +106,7 @@ export class GoogleAuthService {
 
   private async downloadAvatar(picture: string) {
     try {
-      const {id} = await this.localFilesService.download(picture, 'avatar')
+      const { id } = await this.localFilesService.download(picture, 'avatar');
       return id;
     } catch (err) {
       console.error(err);

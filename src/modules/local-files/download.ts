@@ -5,7 +5,7 @@ import https from 'node:https';
 function fetch(url: string): Promise<[Buffer, string]> {
   return new Promise((resolve, reject) => {
     const data = [];
-    const client = url.startsWith("https") ? https : http;
+    const client = url.startsWith('https') ? https : http;
     client
       .request(url, (res) => {
         res.on('data', (chunk) => data.push(chunk));
@@ -17,7 +17,7 @@ function fetch(url: string): Promise<[Buffer, string]> {
       })
       .end();
   });
-};
+}
 
 export async function download(url: string, fileWithoutExtension: string) {
   const [bytes, mimetype] = await fetch(url);
