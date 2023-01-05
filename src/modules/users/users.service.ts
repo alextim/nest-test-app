@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CrudRequest } from '@nestjsx/crud';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
-import { DeepPartial, FindOptionsWhere } from 'typeorm';
+import type { DeepPartial, FindOptionsWhere } from 'typeorm';
+import { plainToInstance } from 'class-transformer';
 
 import { LocalFileDto } from '../local-files/dto/local-file.dto';
 import LocalFilesService from '../local-files/local-files.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 import { User } from './entities/user.entity';
 
@@ -88,5 +91,25 @@ export class UsersService extends TypeOrmCrudService<User> {
 
   async removeAvatar(userId: number) {
     await this.repo.update({ id: userId }, { avatarId: null });
+  }
+
+  async updateOneBy(dto: UpdateUserDto, req: CrudRequest) {
+    const { allowParamsOverride, returnShallow } = req.options.routes.updateOneBase;
+    const paramsFilters = this.getParamFilters(req.parsed);
+    const found = await this.getOneOrFail(req, returnShallow);
+    delete found.avatar;
+    const toSave = { ...found, ...dto, ...(allowParamsOverride ? {} : paramsFilters), ...req.parsed.authPersist };
+
+    const user = plainToInstance(this.entityType, toSave);
+    const updated = await this.repo.save(user);
+
+    if (returnShallow) {
+        return updated;
+    }
+
+    req.parsed.paramsFilter.forEach((filter) => {
+        filter.value = updated[filter.field];
+    });
+    return this.getOneOrFail(req);
   }
 }

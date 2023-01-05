@@ -54,6 +54,7 @@ export class CreateUserDto {
   @IsString()
   @Length(21, 21)
   @IsOptional()
+  @Transform(({ value }) => value?.trim() || null)
   public googleId?: string;
 
   @ApiPropertyOptional()
@@ -65,6 +66,7 @@ export class CreateUserDto {
   @IsString()
   @Length(21, 21)
   @IsOptional()
+  @Transform(({ value }) => value?.trim() || null)
   public facebookId?: string;
 
   @ApiProperty({
@@ -103,7 +105,7 @@ export class CreateUserDto {
   //@MaxLength(100)
   // @IsString()
   @IsOptional()
-  public avatarId?: number;
+  public avatarId?: number | null;
 
   @ApiPropertyOptional()
   @IsDate()

@@ -1,7 +1,3 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { TokenDto } from "./token.dto";
 
-export class GoogleAuthDto {
-  @IsString()
-  @IsNotEmpty()
-  token: string;
-}
+export class GoogleAuthDto extends TokenDto {}

@@ -118,14 +118,15 @@ export class UsersController implements CrudController<User> {
   @ApiNotFoundResponse()
   @Override()
   async updateOne(
-    @Param('id', ParseIntPipe) id: number,
+    // @Param('id', ParseIntPipe) id: number,
     @ParsedRequest() req: CrudRequest,
     @ParsedBody() dto: UpdateUserDto,
   ) {
-    if (!(await this.service.idExists(id))) {
-      throw new UserNotFoundException();
-    }
-    return this.base.updateOneBase(req, dto as any);
+    // if (!(await this.service.idExists(id))) {
+    //   throw new UserNotFoundException();
+    // }
+    // return this.base.updateOneBase(req, dto as any);
+    return this.service.updateOneBy(dto, req);
   }
 
   @ApiBadRequestResponse()

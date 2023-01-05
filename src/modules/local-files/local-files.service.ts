@@ -7,7 +7,7 @@ import path from 'node:path';
 
 import { LocalFileDto } from './dto/local-file.dto';
 import LocalFile from './entities/local-file.entity';
-import { download } from './download';
+import { downloadFromUrl } from './download-from-url';
 import { getRandomFilename } from './get-random-filename';
 
 @Injectable()
@@ -36,11 +36,10 @@ class LocalFilesService {
     return newFile;
   }
 
-  async download(downloadUrl: string, name: string) {
-    const dir = this.configService.get<string>('uploads.dir');
-    const { filepath, mimetype } = await download(
+  async download(downloadUrl: string, name: string, dir: string) {
+    const { filepath, mimetype } = await downloadFromUrl(
       downloadUrl,
-      path.join(dir, getRandomFilename(name)),
+      path.join(this.configService.get<string>('uploads.dir'), dir, getRandomFilename(name)),
     );
 
     const url = this.getUrlFromFilepath(filepath);

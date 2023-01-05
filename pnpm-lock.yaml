@@ -52,7 +52,7 @@ specifiers:
   humanize-duration: ^3.27.3
   jest: 29.3.1
   multer: 1.4.5-lts.1
-  nestjs-pino: ^3.1.1
+  nestjs-pino: ^3.1.2
   nodemailer: ^6.8.0
   passport: ^0.6.0
   passport-facebook: ^3.0.0
@@ -106,7 +106,7 @@ dependencies:
   helmet: 6.0.1
   humanize-duration: 3.27.3
   multer: 1.4.5-lts.1
-  nestjs-pino: 3.1.1_sfapocvosrcjidgmqxjuhlo64q
+  nestjs-pino: 3.1.2_sfapocvosrcjidgmqxjuhlo64q
   nodemailer: 6.8.0
   passport: 0.6.0
   passport-facebook: 3.0.0
@@ -5419,8 +5419,8 @@ packages:
   /neo-async/2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  /nestjs-pino/3.1.1_sfapocvosrcjidgmqxjuhlo64q:
-    resolution: {integrity: sha512-T7ajfqYTSHKrirzrElQJ3EWO/OZF5fFFkgaRvD+I7F5YY2hU3X295E/CnTkgpHZozL0s/3Ud4OtTZlT3NisTBw==}
+  /nestjs-pino/3.1.2_sfapocvosrcjidgmqxjuhlo64q:
+    resolution: {integrity: sha512-Rxt9v/OlHwurE2GPyBlHVjzCLCnxIPxGa+Esligij412zEcqqB6kka5MhKAk3l61u1jyTLx3Mzol+HQrR6/f9w==}
     engines: {node: '>= 14'}
     requiresBuild: true
     peerDependencies:

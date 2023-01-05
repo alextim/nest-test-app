@@ -175,9 +175,9 @@ export class User extends BaseEntity {
   public phone?: string;
 
   @Column({ nullable: true })
-  public avatarId?: number;
+  public avatarId?: number | null;
 
-  @OneToOne(() => LocalFile, { cascade: true, onDelete: 'SET NULL' })
+  @OneToOne(() => LocalFile, { cascade: true, onDelete: 'SET NULL', eager: true })
   @JoinColumn()
   avatar: LocalFile;
 
