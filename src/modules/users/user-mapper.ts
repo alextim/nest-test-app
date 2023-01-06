@@ -10,7 +10,7 @@ export class UserMapper {
       roles: [...user.roles],
       firstName: user.firstName,
       lastName: user.lastName,
-      avatar: user.avatar ? {...user.avatar} : undefined,
+      avatar: user.avatar ? { ...user.avatar } : undefined,
     };
     return dto;
   }

@@ -35,6 +35,10 @@ export class EnvironmentVariables {
   @IsOptional()
   URL_PREFIX?: string;
 
+  @IsString()
+  @IsOptional()
+  FRONTEND_APP_URL?: string;
+
   // Server
   @IsFQDN({ require_tld: false, allow_numeric_tld: true })
   @IsNotEmpty()

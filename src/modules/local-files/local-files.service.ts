@@ -39,7 +39,11 @@ class LocalFilesService {
   async download(downloadUrl: string, name: string, dir: string) {
     const { filepath, mimetype } = await downloadFromUrl(
       downloadUrl,
-      path.join(this.configService.get<string>('uploads.dir'), dir, getRandomFilename(name)),
+      path.join(
+        this.configService.get<string>('uploads.dir'),
+        dir,
+        getRandomFilename(name),
+      ),
     );
 
     const url = this.getUrlFromFilepath(filepath);

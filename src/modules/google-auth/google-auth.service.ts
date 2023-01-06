@@ -117,7 +117,7 @@ export class GoogleAuthService {
         user.avatarId = avatarId;
       }
     }
-    
+
     if (needUpdate) {
       await this.usersService.save(user);
     }
@@ -128,7 +128,11 @@ export class GoogleAuthService {
   private async downloadAvatar(picture: string, name: string) {
     const AVATARS_DIR = 'avatars';
     try {
-      const { id: fileId } = await this.localFilesService.download(picture, name, AVATARS_DIR);
+      const { id: fileId } = await this.localFilesService.download(
+        picture,
+        name,
+        AVATARS_DIR,
+      );
       return fileId;
     } catch (err) {
       console.error(err);

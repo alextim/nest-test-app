@@ -56,6 +56,8 @@ export function validate(config: Record<string, unknown>) {
     baseUrl,
     urlPrefix: env.URL_PREFIX,
 
+    frontendAppUrl: env.FRONTEND_APP_URL || baseUrl,
+
     server: {
       host,
       port,

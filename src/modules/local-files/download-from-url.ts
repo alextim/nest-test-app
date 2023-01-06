@@ -21,7 +21,10 @@ function fetch(url: string): Promise<[Buffer, string]> {
   });
 }
 
-export async function downloadFromUrl(url: string, fileWithoutExtension: string) {
+export async function downloadFromUrl(
+  url: string,
+  fileWithoutExtension: string,
+) {
   const [bytes, mimetype] = await fetch(url);
   const [, ext] = mimetype.split('/');
   const filepath = `${fileWithoutExtension}.${ext}`;

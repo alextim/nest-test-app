@@ -7,7 +7,7 @@ const getEnvPath = (): string => {
   if (!env || env === 'production') {
     return '.env';
   }
-  return `.${env}.env`;
+  return `.env.${env}`;
 };
 
 @Global()

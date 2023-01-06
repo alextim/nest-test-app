@@ -45,5 +45,5 @@ export class GoogleAuthController {
   @Post('profile/signup/google')
   async signup(@Body() { token }: GoogleSignupDto) {
     await this.googleAuthService.signup(token);
-  }  
+  }
 }

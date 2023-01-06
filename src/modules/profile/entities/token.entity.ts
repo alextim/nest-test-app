@@ -14,7 +14,7 @@ import {
 import { BaseEntity } from '../../../core/entities/BaseEntity';
 import { User } from '../../users/entities/user.entity';
 
-export const TOKEN_LENGTH = 256;
+export const TOKEN_LENGTH = 64;
 
 export enum TokenType {
   PasswordReset = 'password_reset',

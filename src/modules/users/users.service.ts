@@ -94,21 +94,27 @@ export class UsersService extends TypeOrmCrudService<User> {
   }
 
   async updateOneBy(dto: UpdateUserDto, req: CrudRequest) {
-    const { allowParamsOverride, returnShallow } = req.options.routes.updateOneBase;
+    const { allowParamsOverride, returnShallow } =
+      req.options.routes.updateOneBase;
     const paramsFilters = this.getParamFilters(req.parsed);
     const found = await this.getOneOrFail(req, returnShallow);
     delete found.avatar;
-    const toSave = { ...found, ...dto, ...(allowParamsOverride ? {} : paramsFilters), ...req.parsed.authPersist };
+    const toSave = {
+      ...found,
+      ...dto,
+      ...(allowParamsOverride ? {} : paramsFilters),
+      ...req.parsed.authPersist,
+    };
 
     const user = plainToInstance(this.entityType, toSave);
     const updated = await this.repo.save(user);
 
     if (returnShallow) {
-        return updated;
+      return updated;
     }
 
     req.parsed.paramsFilter.forEach((filter) => {
-        filter.value = updated[filter.field];
+      filter.value = updated[filter.field];
     });
     return this.getOneOrFail(req);
   }

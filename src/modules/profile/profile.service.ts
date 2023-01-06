@@ -140,7 +140,11 @@ export class ProfileService {
       await this.send(
         user,
         TokenType.PasswordReset,
-        { link: this.getLink('reset_password', token) },
+        {
+          link: `${this.configService.get<string>(
+            'frontendAppUrl',
+          )}/update-password?token=${token}`,
+        },
         `Your one-time password reset code (valid for only ${this.getHumanizedTTL(
           'auth.passwordResetTokenTTL',
         )})`,

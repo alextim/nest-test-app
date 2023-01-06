@@ -10,14 +10,15 @@ import { SendEmailVerificationDto } from './dto/send-email-verification.dto';
 import { SendEmailVerificationLinkDto } from './dto/send-email-verification-link.dto';
 import { SendPasswordResetDto } from './dto/send-password-reset.dto';
 import { SignupDto } from './dto/signup.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('profile')
 export class ProfileController {
   constructor(
     private readonly profileService: ProfileService,
     private readonly usersService: UsersService,
-  ) { }
-  
+  ) {}
+
   @HttpCode(200)
   @Post('signup')
   async signup(@Body() newUser: SignupDto) {
@@ -62,6 +63,15 @@ export class ProfileController {
       throw new UserNotFoundException();
     }
     await this.profileService.sendPasswordResetToken(email);
-    return `Password reset token sent to ${email}. Check your email`;
+    return 'Check your email for reset instructions';
+  }
+
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @HttpCode(200)
+  @Post('reset_password')
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    await this.profileService.resetPasswordByToken(dto);
+    return 'New password set';
   }
 }
