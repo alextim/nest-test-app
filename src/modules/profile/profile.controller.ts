@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Post, Query, HttpCode } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, HttpCode, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiBadRequestResponse, ApiNotFoundResponse } from '@nestjs/swagger';
+import type { Response } from 'express';
 
 import { UserNotFoundException } from '../users/users.error';
 import { UsersService } from '../users/users.service';
@@ -17,6 +19,7 @@ export class ProfileController {
   constructor(
     private readonly profileService: ProfileService,
     private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
   ) {}
 
   @HttpCode(200)
@@ -40,8 +43,11 @@ export class ProfileController {
   }
 
   @Get('verify_email')
-  async verifyEmail(@Query() { token }: SendEmailVerificationDto) {
+  async verifyEmail(@Query() { token }: SendEmailVerificationDto, @Res() res: Response) {
     await this.profileService.verifyEmailByToken(token);
+    if (this.configService.get<boolean>('redirectAfterVerification')) {
+      res.redirect(this.configService.get<string>('redirectUrlAfterVerification'));
+    }
     return 'Email address is verified';
   }
 

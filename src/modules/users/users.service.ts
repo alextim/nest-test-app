@@ -4,6 +4,7 @@ import { CrudRequest } from '@nestjsx/crud';
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
 import type { DeepPartial, FindOptionsWhere } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
+import type { TokenPayload } from 'google-auth-library';
 
 import { LocalFileDto } from '../local-files/dto/local-file.dto';
 import LocalFilesService from '../local-files/local-files.service';
@@ -118,4 +119,57 @@ export class UsersService extends TypeOrmCrudService<User> {
     });
     return this.getOneOrFail(req);
   }
+
+  async downloadAvatarFromUrl(url: string, name: string) {
+    const AVATARS_DIR = 'avatars';
+    try {
+      const { id: fileId } = await this.localFilesService.download(
+        url,
+        name,
+        AVATARS_DIR,
+      );
+      return fileId;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async updateUserFromGooglePayload(user: User, { email,
+      given_name: firstName,
+      family_name: lastName,
+      // profile,
+      picture,
+    sub: googleId }: TokenPayload) {
+      let needUpdate = false;
+      if (!user.lastName && lastName) {
+        needUpdate = true;
+        user.lastName = lastName;
+      }
+      if (!user.firstName && firstName) {
+        needUpdate = true;
+        user.lastName = firstName;
+      }
+      if (!user.googleId) {
+        needUpdate = true;
+        user.googleId = googleId;
+      }
+      if (!user.verifiedAt) {
+        needUpdate = true;
+        user.verifiedAt = new Date();
+      }
+      if (!user.avatarId && picture) {
+        const avatarId = await this.downloadAvatarFromUrl(picture, email.split('@')[0]);
+        if (avatarId) {
+          needUpdate = true;
+          user.avatarId = avatarId;
+        }
+      }
+
+      if (needUpdate) {
+        return this.save(user);
+      }
+
+    return user;  
+  }
+
 }

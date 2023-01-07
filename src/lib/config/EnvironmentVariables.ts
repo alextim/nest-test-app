@@ -39,6 +39,14 @@ export class EnvironmentVariables {
   @IsOptional()
   FRONTEND_APP_URL?: string;
 
+  @IsIn(['true', 'false'])
+  @IsOptional()
+  REDIRECT_AFTER_VERIFICATION?: string;
+
+  @IsString()
+  @IsOptional()
+  REDIRECT_URL_AFTER_VERIFICATION?: string;
+
   // Server
   @IsFQDN({ require_tld: false, allow_numeric_tld: true })
   @IsNotEmpty()

@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import type { TokenPayload } from 'google-auth-library';
 import { OAuth2Client } from 'google-auth-library';
 
-import LocalFilesService from '../local-files/local-files.service';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -13,7 +12,6 @@ export class GoogleAuthService {
 
   constructor(
     private readonly usersService: UsersService,
-    private readonly localFilesService: LocalFilesService,
     private readonly configService: ConfigService,
   ) {
     this.clientId = this.configService.get<string>('auth.google.clientId');
@@ -50,92 +48,38 @@ export class GoogleAuthService {
   }
 
   async signup(token: string) {
-    const {
-      email,
-      given_name: firstName,
-      family_name: lastName,
-      // profile,
-      picture,
-      sub: googleId,
-    } = await this.verifyGoogleToken(token);
+    const payload = await this.verifyGoogleToken(token);
 
-    if (await this.usersService.emailExists(email)) {
-      throw new UnauthorizedException('Already registered');
+    let user = await this.usersService.findByEmail(payload.email)
+    if (user) {
+      if (user.verifiedAt) {
+        throw new UnauthorizedException('Already registered');
+      }
+
+      return this.usersService.updateUserFromGooglePayload(user, payload);
     }
 
-    const avatarId = await this.downloadAvatar(picture, email.split('@')[0]);
+    const avatarId = await this.usersService.downloadAvatarFromUrl(payload.picture, payload.email.split('@')[0]);
 
-    const user = await this.usersService.create({
-      lastName,
-      firstName,
-      email,
+    return this.usersService.create({
+      lastName: payload.family_name,
+      firstName: payload.given_name,
+      email: payload.email,
       isRegisteredWithGoogle: true,
-      googleId,
+      googleId: payload.sub,
       avatarId,
       verifiedAt: new Date(),
     });
-
-    return user;
   }
 
   async authenticate(token: string) {
-    const {
-      email,
-      given_name: firstName,
-      family_name: lastName,
-      // profile,
-      picture,
-      sub: googleId,
-    } = await this.verifyGoogleToken(token);
+    const payload  = await this.verifyGoogleToken(token);
 
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmail(payload.email);
     if (!user) {
       throw new UnauthorizedException('User not registered');
     }
 
-    let needUpdate = false;
-    if (!user.lastName && lastName) {
-      needUpdate = true;
-      user.lastName = lastName;
-    }
-    if (!user.firstName && firstName) {
-      needUpdate = true;
-      user.lastName = firstName;
-    }
-    if (!user.googleId) {
-      needUpdate = true;
-      user.googleId = googleId;
-    }
-    if (!user.verifiedAt) {
-      needUpdate = true;
-      user.verifiedAt = new Date();
-    }
-    if (!user.avatarId && picture) {
-      const avatarId = await this.downloadAvatar(picture, email.split('@')[0]);
-      if (avatarId) {
-        needUpdate = true;
-        user.avatarId = avatarId;
-      }
-    }
-
-    if (needUpdate) {
-      await this.usersService.save(user);
-    }
-
-    return user;
-  }
-
-  private async downloadAvatar(picture: string, name: string) {
-    const AVATARS_DIR = 'avatars';
-    try {
-      const { id: fileId } = await this.localFilesService.download(
-        picture,
-        name,
-        AVATARS_DIR,
-      );
-      return fileId;
-    } catch (err) {
-      console.error(err);
-    }
+    return this.usersService.updateUserFromGooglePayload(user, payload);
   }
 }

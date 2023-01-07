@@ -19,6 +19,7 @@ import { getCookieOptions } from '../../lib/config/configs/cookie.config';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { CookieAuthGuard } from './guards/cookie-auth.guard';
 import { LoginGuard } from './guards/login.guard';
+import { GOOGLE_REDIRECT_PATH } from './constants';
 
 @Controller('auth')
 // @UseInterceptors(ClassSerializerInterceptor)
@@ -69,26 +70,21 @@ export class AuthController {
     });
   }
 
-  /*
-  @Get('auth/login/google')
+
+  @Get('login/google2')
   @UseGuards(LoginGuard)
   async signInWithGoogle() {
     // Guard redirects
   }
 
-  @Get('auth/login/google/redirect')
+  @Get(GOOGLE_REDIRECT_PATH)
   @UseGuards(LoginGuard)
-  signInWithGoogleRedirect(@Req() req) {
+  signInWithGoogleRedirect(@Req() req: RequestWithUser, @Res() res: Response) {
     if (!req.user) {
-      return 'No user from Google';
+      res.redirect('/login'); 
     }
-
-    return {
-      message: 'User information from Google',
-      user: req.user,
-    };
+    res.redirect('/users?pageSize=10&current=1&sorter[0][field]=id&sorter[0][order]=desc')
   }
-  */
 
   /*
   @Get('login/facebook')

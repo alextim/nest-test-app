@@ -44,6 +44,7 @@ export function validate(config: Record<string, unknown>) {
   const n = env.UPLOADS_DIR.indexOf(env.PUBLIC_DIR);
   const uploadsUrl = env.UPLOADS_DIR.substring(n + env.PUBLIC_DIR.length);
 
+  const frontendAppUrl = env.FRONTEND_APP_URL || baseUrl;
   const appConfig = {
     NODE_ENV: env.NODE_ENV,
 
@@ -56,7 +57,10 @@ export function validate(config: Record<string, unknown>) {
     baseUrl,
     urlPrefix: env.URL_PREFIX,
 
-    frontendAppUrl: env.FRONTEND_APP_URL || baseUrl,
+    frontendAppUrl,
+
+    redirectAfterVerification: env.REDIRECT_AFTER_VERIFICATION,
+    redirectUrlAfterVerification: env.REDIRECT_URL_AFTER_VERIFICATION ? `${frontendAppUrl}${env.REDIRECT_URL_AFTER_VERIFICATION}` : frontendAppUrl,
 
     server: {
       host,

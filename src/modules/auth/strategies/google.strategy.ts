@@ -7,6 +7,7 @@ import { Strategy } from 'passport-google-oauth20';
 
 import { UserMapper } from '../../users/user-mapper';
 import { AuthService } from '../auth.service';
+import { GOOGLE_REDIRECT_PATH } from '../constants';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -14,12 +15,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     private readonly configService: ConfigService,
     private readonly authService: AuthService,
   ) {
+    const callbackURL = `${configService.get<string>(
+      'baseUrl',
+    )}${configService.get<string>('urlPrefix')}/auth/${GOOGLE_REDIRECT_PATH}`;
     super({
       clientID: configService.get<string>('auth.google.clientId'),
       clientSecret: configService.get<string>('auth.google.clientSecret'),
-      callbackURL: `${configService.get<string>(
-        'baseUrl',
-      )}${configService.get<string>('urlPrefix')}/auth/login/google/redirect`,
+      callbackURL,
       scope: ['email', 'profile'],
       // passReqToCallback:true
     });
