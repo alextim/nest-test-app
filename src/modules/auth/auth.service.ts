@@ -64,8 +64,8 @@ export class AuthService {
 
     return this.usersService.create({
       email: dto.email,
-      firstName: dto.email,
-      lastName: dto.email,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
       googleId,
       isRegisteredWithGoogle: !!googleId,
       facebookId,

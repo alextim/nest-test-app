@@ -19,7 +19,16 @@ import { AllExceptionsFilter } from './filters/all-exception.filter';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 export function setup(app: NestExpressApplication) {
+  const configService = app.get(ConfigService);
+
   app.use(helmet());
+  app.use(helmet.contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      imgSrc: ["'self'", 'data:', 'blob:'],
+    },
+  }));
+  
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
@@ -40,7 +49,7 @@ export function setup(app: NestExpressApplication) {
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  const configService = app.get(ConfigService);
+  
 
   app.setGlobalPrefix(configService.get<string>('urlPrefix'), {
     exclude: ['/'],

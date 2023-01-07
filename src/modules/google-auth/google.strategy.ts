@@ -17,7 +17,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ) {
     const callbackURL = `${configService.get<string>(
       'baseUrl',
-    )}${configService.get<string>('urlPrefix')}/auth/${GOOGLE_REDIRECT_PATH}`;
+    )}${configService.get<string>('urlPrefix')}/${GOOGLE_REDIRECT_PATH}`;
     super({
       clientID: configService.get<string>('auth.google.clientId'),
       clientSecret: configService.get<string>('auth.google.clientSecret'),

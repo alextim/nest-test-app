@@ -1,1 +1,1 @@
-export const GOOGLE_REDIRECT_PATH = 'login/google/redirect';
+export const GOOGLE_REDIRECT_PATH = 'auth/login/google/redirect';
