@@ -37,7 +37,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthSerializer } from './auth.serializer';
-import { GoogleStrategy } from './strategies/google.strategy';
+import { GoogleStrategy } from '../google-auth/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
 
 @Module({

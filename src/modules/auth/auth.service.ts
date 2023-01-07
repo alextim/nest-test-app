@@ -4,6 +4,7 @@ import {
   Injectable,
   BadRequestException,
 } from '@nestjs/common';
+import { User } from '../users/entities/user.entity';
 
 import { UsersService } from '../users/users.service';
 import { UserExternalAuthorizationDto } from './dto/user-external-authorization.dto';
@@ -31,56 +32,100 @@ export class AuthService {
     return user;
   }
 
-  async findOrCreateUser({
-    providerId,
-    providerName,
-    email,
-    firstName,
-    lastName,
-  }: UserExternalAuthorizationDto) {
-    if (!providerId) {
+  async findOrCreateUser(dto: UserExternalAuthorizationDto) {
+    if (!dto.providerId) {
       throw new BadRequestException('providerId required');
     }
 
     let facebookId: string;
     let googleId: string;
 
-    switch (providerName) {
+    switch (dto.providerName) {
       case 'google':
-        googleId = providerId;
+        googleId = dto.providerId;
         break;
       case 'facebook':
-        facebookId = providerId;
+        facebookId = dto.providerId;
         break;
       default:
         throw new BadRequestException('Unsupported provider');
     }
 
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findByEmail(dto.email);
 
     if (user) {
-      if (googleId) {
-        if (!user.googleId) {
-          await this.usersService.setGoogleId(user, providerId);
-          user.googleId = providerId;
-        }
-      } else if (facebookId) {
-        if (!user.facebookId) {
-          await this.usersService.setFacebookId(user, facebookId);
-          user.facebookId = facebookId;
-        }
-      }
-      return user;
+      return this.updateUserFromExternal(user, dto);
     }
 
+    const avatarId = await this.usersService.downloadAvatarFromUrl(
+      dto.avatar,
+      dto.email.split('@')[0],
+    );
+
     return this.usersService.create({
-      email,
-      firstName,
-      lastName,
+      email: dto.email,
+      firstName: dto.email,
+      lastName: dto.email,
       googleId,
       isRegisteredWithGoogle: !!googleId,
       facebookId,
       isRegisteredWithFacebook: !!facebookId,
+      avatarId,
+      verifiedAt: new Date(),
     });
+  }
+
+  async updateUserFromExternal(
+    user: User,
+    {
+      providerId,
+      providerName,
+      email,
+      firstName,
+      lastName,
+      avatar,
+    }: UserExternalAuthorizationDto,
+  ) {
+    let needUpdate = false;
+    if (!user.lastName && lastName) {
+      needUpdate = true;
+      user.lastName = lastName;
+    }
+    if (!user.firstName && firstName) {
+      needUpdate = true;
+      user.lastName = firstName;
+    }
+
+    if (providerName === 'google' && !user.googleId) {
+      needUpdate = true;
+      user.googleId = providerId;
+    }
+
+    if (providerName === 'facebook' && !user.facebookId) {
+      needUpdate = true;
+      user.facebookId = providerId;
+    }
+
+    if (!user.verifiedAt) {
+      needUpdate = true;
+      user.verifiedAt = new Date();
+    }
+
+    if (!user.avatarId && avatar) {
+      const avatarId = await this.usersService.downloadAvatarFromUrl(
+        avatar,
+        email.split('@')[0],
+      );
+      if (avatarId) {
+        needUpdate = true;
+        user.avatarId = avatarId;
+      }
+    }
+
+    if (needUpdate) {
+      return this.usersService.save(user);
+    }
+
+    return user;
   }
 }

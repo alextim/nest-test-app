@@ -1,8 +1,7 @@
-import { mkdir } from 'node:fs';
-import fs from 'node:fs/promises';
 import http from 'node:http';
 import https from 'node:https';
 import path from 'node:path';
+import fs from 'node:fs/promises';
 
 function fetch(url: string): Promise<[Buffer, string]> {
   return new Promise((resolve, reject) => {

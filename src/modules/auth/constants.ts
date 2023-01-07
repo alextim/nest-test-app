@@ -1,1 +1,0 @@
-export const GOOGLE_REDIRECT_PATH = 'login/google2/redirect';

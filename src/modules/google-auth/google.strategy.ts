@@ -4,10 +4,10 @@ import { PassportStrategy } from '@nestjs/passport';
 
 import type { Profile, VerifyCallback } from 'passport-google-oauth20';
 import { Strategy } from 'passport-google-oauth20';
+import { AuthService } from '../auth/auth.service';
 
-import { UserMapper } from '../../users/user-mapper';
-import { AuthService } from '../auth.service';
-import { GOOGLE_REDIRECT_PATH } from '../constants';
+import { UserMapper } from '../users/user-mapper';
+import { GOOGLE_REDIRECT_PATH } from './constants';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
