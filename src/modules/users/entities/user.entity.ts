@@ -31,7 +31,9 @@ import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
 import { Token } from '../../profile/entities/token.entity';
-import LocalFile from '../../local-files/entities/local-file.entity';
+import { LocalFile } from '../../local-files/entities/local-file.entity';
+import { Schedule } from '../../schedules/entities/schedule.entity';
+import { Job } from '../../jobs/entities/job.entity';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
 
@@ -206,8 +208,14 @@ export class User extends BaseEntity {
   @Column({ type: 'timestamptz', nullable: true })
   public verifiedAt?: Date;
 
-  @OneToMany(() => Token, (token: Token) => token.user)
+  @OneToMany(() => Token, (token) => token.user)
   public token: Token[];
+
+  @OneToMany(() => Schedule, (schedule) => schedule.user)
+  schedules: Schedule[];
+
+  @OneToMany(() => Job, (job) => job.user)
+  jobs: Job[];
 
   constructor(user?: Partial<User>) {
     super();

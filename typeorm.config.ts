@@ -4,7 +4,10 @@
  * https://wanago.io/2022/07/25/api-nestjs-database-migrations-typeorm/
  * 
  * 1) npm run typeorm:generate-migration --name={YourClassName}
- * 2) npm run typeorm:run-migrations
+ * 2) import the migration classes manually 
+ *    - add reference to migration: [...]
+ *    - import generated class from ./migration
+ * 3) npm run typeorm:run-migrations
  * 
  * npm run typeorm:revert-migration
  */
@@ -12,6 +15,9 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { getDataSourceOptions } from './src/lib/orm/datasource.options';
+import { Social1673422211209 } from './migrations/1673422211209-Social';
+
+
 
 config();
  
@@ -28,6 +34,7 @@ const dataSourceOptions = {
 
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
-  migrations: [],
+  /** 2) add reference to generated class here */
+  migrations: [Social1673422211209],
 };
 export default new DataSource(dataSourceOptions);

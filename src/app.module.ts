@@ -12,6 +12,11 @@ import { UsersModule } from './modules/users/users.module';
 import { HealthModule } from './modules/health/health.module';
 import { LocalFilesModule } from './modules/local-files/local-files.module';
 import { GoogleAuthModule } from './modules/google-auth/google-auth.module';
+import { ProxiesModule } from './modules/proxies/proxies.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { QueriesModule } from './modules/queries/queries.module';
+import { JobsModule } from './modules/jobs/jobs.module';
+import { SchedulesModule } from './modules/schedules/schedules.module';
 
 @Module({
   providers: [
@@ -31,6 +36,11 @@ import { GoogleAuthModule } from './modules/google-auth/google-auth.module';
     UsersModule,
     HealthModule,
     LocalFilesModule,
+    ProxiesModule,
+    CustomersModule,
+    QueriesModule,
+    JobsModule,
+    SchedulesModule,
   ],
 })
 export class AppModule {}

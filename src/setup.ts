@@ -22,13 +22,15 @@ export function setup(app: NestExpressApplication) {
   const configService = app.get(ConfigService);
 
   app.use(helmet());
-  app.use(helmet.contentSecurityPolicy({
-    useDefaults: true,
-    directives: {
-      imgSrc: ["'self'", 'data:', 'blob:'],
-    },
-  }));
-  
+  app.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        imgSrc: ["'self'", 'data:', 'blob:'],
+      },
+    }),
+  );
+
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
@@ -48,8 +50,6 @@ export function setup(app: NestExpressApplication) {
   // filters
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
-
-  
 
   app.setGlobalPrefix(configService.get<string>('urlPrefix'), {
     exclude: ['/'],
