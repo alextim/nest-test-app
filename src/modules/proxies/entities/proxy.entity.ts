@@ -1,3 +1,4 @@
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
@@ -6,30 +7,46 @@ import { Job } from '../../jobs/entities/job.entity';
 import { Query } from '../../queries/entities/query.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
 
+@Unique('UQ_proxy_name', ['name'])
 @Entity()
 export class Proxy extends BaseEntity {
+  @IsString()
+  @IsNotEmpty()
   @Column()
   name: string;
 
-  @Column()
+  @IsString()
+  @IsOptional()
+  @Column({ nullable: true })
   token?: string;
 
+  @IsString()
+  @IsNotEmpty()
   @Column()
   username: string;
 
-  @Column()
+  @IsString()
+  @IsNotEmpty()
   password: string;
 
-  @Column()
-  region: string;
+  @IsString()
+  @IsOptional()
+  @Column({ length: 2, nullable: true })
+  region?: string;
 
-  @Column()
+  @IsNumber()
+  @IsOptional()
+  @Column({ default: 0, nullable: true })
   parallelScrapingJobLimit?: number;
 
-  @Column()
+  @IsString()
+  @IsOptional()
+  @Column({ nullable: true })
   host?: string;
 
-  @Column()
+  @IsNumber()
+  @IsOptional()
+  @Column({ nullable: true })
   port?: number;
 
   @OneToMany(() => Query, (q) => q.proxy)

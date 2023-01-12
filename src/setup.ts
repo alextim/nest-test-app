@@ -34,7 +34,7 @@ export function setup(app: NestExpressApplication) {
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 1000, // limit each IP to 100 requests per windowMs
     }),
   );
 
@@ -78,7 +78,7 @@ export function setup(app: NestExpressApplication) {
   // setupSwagger(app, config);
 
   app.enableCors({
-    origin: configService.get('cors.allowedOrigins'),
+    origin: configService.get<string | string[]>('cors.allowedOrigins'),
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTION'],
     preflightContinue: false,
     optionsSuccessStatus: 204,

@@ -50,11 +50,11 @@ import { AvatarUploadDto } from './dto/avatar-upload.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SetPasswordDto } from './dto/set-password.dto';
 
 import { User } from './entities/user.entity';
 import { AvatarNotFoundException, UserNotFoundException } from './users.error';
 import { UsersService } from './users.service';
-import { SetPasswordDto } from './dto/set-password.dto';
 
 // @ApiCookieAuth()
 // @UseGuards(SelfGuard)

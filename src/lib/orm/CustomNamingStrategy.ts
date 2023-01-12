@@ -55,10 +55,13 @@ export class CustomNamingStrategy
     return `REL_${table}_${columnsSnakeCase}${wherePart}`;
   }
 
-  uniqueConstraintName(tableOrName: Table | string, columnNames: string[]): string {
+  uniqueConstraintName(
+    tableOrName: Table | string,
+    columnNames: string[],
+  ): string {
     const table = tableOrName instanceof Table ? tableOrName.name : tableOrName;
     const columnsSnakeCase = columnNames.join('_');
 
-    return `UQ_${table}_${columnsSnakeCase}`;  
+    return `UQ_${table}_${columnsSnakeCase}`;
   }
 }

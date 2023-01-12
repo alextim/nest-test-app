@@ -19,9 +19,10 @@ import {
   ApiUnsupportedMediaTypeResponse,
 } from '@nestjs/swagger';
 
-import { Response } from 'express';
-import { createReadStream } from 'fs';
-import { join } from 'path';
+import type { Response } from 'express';
+import { createReadStream } from 'node:fs';
+import { join } from 'node:path';
+
 import { MediaUploadDto } from './dto/media-upload.dto';
 import LocalFilesInterceptor from './local-files.interceptor';
 import LocalFilesService from './local-files.service';

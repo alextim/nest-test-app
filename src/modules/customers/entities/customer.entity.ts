@@ -5,10 +5,10 @@ import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
-
-import { LinkedInProfile } from './linked-in-profile.entity';
 import { Job } from '../../jobs/entities/job.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
+
+import { LinkedInProfile } from './linked-in-profile.entity';
 
 @Entity()
 export class Customer extends BaseEntity {
@@ -28,12 +28,14 @@ export class Customer extends BaseEntity {
   @Column({ length: 40, nullable: true })
   public lastName?: string;
 
-  @OneToOne(() => LinkedInProfile, (profile) => profile.customer)
-  linkedInProfile: LinkedInProfile;
-
   @OneToMany(() => Schedule, (schedule) => schedule.customer)
   schedules: Schedule[];
 
   @OneToMany(() => Job, (job) => job.customer)
   jobs: Job[];
+
+  @OneToOne(() => LinkedInProfile, (profile) => profile.customer, {
+    cascade: true,
+  })
+  linkedInProfile: LinkedInProfile;
 }

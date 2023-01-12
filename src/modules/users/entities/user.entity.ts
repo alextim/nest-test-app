@@ -34,13 +34,9 @@ import { Token } from '../../profile/entities/token.entity';
 import { LocalFile } from '../../local-files/entities/local-file.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
 import { Job } from '../../jobs/entities/job.entity';
+import { Role } from './role.enum';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
-
-export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
-}
 
 const HASH_ROUNDS = 8;
 

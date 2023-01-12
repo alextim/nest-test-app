@@ -1,16 +1,9 @@
-import { Column, Entity, ManyToOne, Unique } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
+import { ParserType } from './parser-type.enum';
 
 import { Selector } from './selector.entity';
-
-export enum ParserType {
-  RegexMatch = 'match',
-  Replace = 'replace',
-  Addition = 'addition',
-  StripHTML = 'html',
-  RemoveWhitespaces = 'spaces',
-}
 
 @Entity()
 export class Parser extends BaseEntity {
@@ -78,6 +71,9 @@ export class Parser extends BaseEntity {
   @Column({ default: false, nullable: true })
   removeNewlines?: boolean;
 
-  @ManyToOne(() => Selector, (sel) => sel.parsers)
+  @Column()
+  selectorId: number;
+
+  @ManyToOne(() => Selector, (sel) => sel.parsers, { onDelete: 'CASCADE' })
   selector: Selector;
 }

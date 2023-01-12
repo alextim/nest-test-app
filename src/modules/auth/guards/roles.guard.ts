@@ -2,7 +2,9 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 
-import { User, Role } from '../../users/entities/user.entity';
+import { Role } from '../../users/entities/role.enum';
+import { User } from '../../users/entities/user.entity';
+
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { CookieAuthGuard } from './cookie-auth.guard';
 

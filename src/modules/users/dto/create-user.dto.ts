@@ -16,7 +16,8 @@ import {
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
-import { Role, User } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
+import { Role } from '../entities/role.enum';
 
 export class CreateUserDto {
   @ApiPropertyOptional()

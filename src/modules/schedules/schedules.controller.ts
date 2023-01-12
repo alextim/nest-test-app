@@ -1,13 +1,5 @@
-import fs from 'node:fs/promises';
-import {
-  Controller,
-} from '@nestjs/common';
-import {
-  Crud,
-  CrudController,
-} from '@nestjsx/crud';
-
-
+import { Controller } from '@nestjs/common';
+import { Crud, CrudController } from '@nestjsx/crud';
 
 import { Schedule } from './entities/schedule.entity';
 import { SchedulesService } from './schedules.service';
@@ -26,11 +18,5 @@ import { SchedulesService } from './schedules.service';
 })
 @Controller('proxies')
 export class SchedulesController implements CrudController<Schedule> {
-  constructor(
-    public readonly service: SchedulesService,
-  ) {}
-
-  get base(): CrudController<Schedule> {
-    return this;
-  }
+  constructor(public readonly service: SchedulesService) {}
 }

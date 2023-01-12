@@ -1,6 +1,7 @@
 // https://gist.github.com/DimosthenisK/db21929a137d3e6c147f0bda3ecfbda6
 import { SetMetadata } from '@nestjs/common';
-import { Role } from '../../users/entities/user.entity';
+
+import { Role } from '../../users/entities/role.enum';
 import { PartialWithRequired } from '../../../types';
 
 export interface SelfDecoratorOptions {

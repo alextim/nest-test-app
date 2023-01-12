@@ -4,21 +4,7 @@ import { BaseEntity } from '../../../core/entities/BaseEntity';
 
 import { Parser } from './parser.entity';
 import { Query } from './query.entity';
-
-export enum SelectorType {
-  Text = 'text',
-  Link = 'link',
-  PopupLink = 'popupLink',
-  Image = 'image',
-  Table = 'table',
-  ElementAttribute = 'attribute',
-  HTML = 'html',
-  ElementScroll = 'scrollDown',
-  ElementClick = 'click',
-  Group = 'grouped',
-  SitemapXmlLink = 'sitemap',
-  Pagination = 'pagination',
-}
+import { SelectorType } from './selector-type.enum';
 
 @Unique('UQ_selector_name', ['name'])
 @Entity()
@@ -52,9 +38,12 @@ export class Selector extends BaseEntity {
   })
   regex?: string;
 
-  @OneToMany(() => Parser, (p) => p.selector)
+  @OneToMany(() => Parser, (parser) => parser.selector, { cascade: true })
   parsers?: Parser[];
 
-  @ManyToOne(() => Query, (q) => q.selectors)
+  @Column()
+  queryId: number;
+
+  @ManyToOne(() => Query, (q) => q.selectors, { onDelete: 'CASCADE' })
   query: Query;
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
 
-import { Role, User } from '../users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { UserMapper } from '../users/user-mapper';
+import { Role } from '../users/entities/role.enum';
 
 @Injectable()
 export class AuthSerializer extends PassportSerializer {

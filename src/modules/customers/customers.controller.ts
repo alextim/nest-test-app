@@ -1,16 +1,10 @@
-import fs from 'node:fs/promises';
-import {
-  Controller,
-} from '@nestjs/common';
-import {
-  Crud,
-  CrudController,
-} from '@nestjsx/crud';
-
-
+import { Controller } from '@nestjs/common';
+import { Crud, CrudController } from '@nestjsx/crud';
 
 import { Customer } from './entities/customer.entity';
 import { CustomersService } from './customers.service';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 // @ApiCookieAuth()
 // @UseGuards(SelfGuard)
@@ -18,19 +12,23 @@ import { CustomersService } from './customers.service';
   model: {
     type: Customer,
   },
+  query: {
+    join: {
+      linkedInProfile: { eager: true, allow: ['id', 'authCookie'] },
+    },
+  },
+  dto: {
+    create: CreateCustomerDto,
+    update: UpdateCustomerDto,
+    replace: UpdateCustomerDto,
+  },
   routes: {
     deleteOneBase: {
       returnDeleted: true,
     },
   },
 })
-@Controller('proxies')
+@Controller('customers')
 export class CustomersController implements CrudController<Customer> {
-  constructor(
-    public readonly service: CustomersService,
-  ) {}
-
-  get base(): CrudController<Customer> {
-    return this;
-  }
+  constructor(public readonly service: CustomersService) {}
 }

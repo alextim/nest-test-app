@@ -5,7 +5,6 @@ import { ProxiesService } from './proxies.service';
 import { ProxiesController } from './proxies.controller';
 import { Proxy } from './entities/proxy.entity';
 
-
 @Module({
   imports: [TypeOrmModule.forFeature([Proxy])],
   controllers: [ProxiesController],

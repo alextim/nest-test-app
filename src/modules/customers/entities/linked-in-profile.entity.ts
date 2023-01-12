@@ -11,7 +11,10 @@ export class LinkedInProfile extends BaseEntity {
   @Column({ length: AUTH_COOKIE_LENGTH })
   public authCookie?: string;
 
-  @OneToOne(() => Customer, (customer) => customer.linkedInProfile)
-  @JoinColumn()  
+  @Column()
+  customerId: number;
+
+  @OneToOne(() => Customer, { onDelete: 'CASCADE' })
+  @JoinColumn()
   customer: Customer;
 }

@@ -1,13 +1,9 @@
-import fs from 'node:fs/promises';
-import {
-  Controller,
-} from '@nestjs/common';
-import {
-  Crud,
-  CrudController,
-} from '@nestjsx/crud';
+import { Controller } from '@nestjs/common';
 
+import { Crud, CrudController } from '@nestjsx/crud';
 
+import { CreateProxyDto } from './dto/create-proxy.dto';
+import { UpdateProxyDto } from './dto/update-proxy.dto';
 
 import { Proxy } from './entities/proxy.entity';
 import { ProxiesService } from './proxies.service';
@@ -18,6 +14,11 @@ import { ProxiesService } from './proxies.service';
   model: {
     type: Proxy,
   },
+  dto: {
+    create: CreateProxyDto,
+    update: UpdateProxyDto,
+    replace: CreateProxyDto,
+  },
   routes: {
     deleteOneBase: {
       returnDeleted: true,
@@ -26,11 +27,5 @@ import { ProxiesService } from './proxies.service';
 })
 @Controller('proxies')
 export class ProxiesController implements CrudController<Proxy> {
-  constructor(
-    public readonly service: ProxiesService,
-  ) {}
-
-  get base(): CrudController<Proxy> {
-    return this;
-  }
+  constructor(public readonly service: ProxiesService) {}
 }

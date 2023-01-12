@@ -6,9 +6,7 @@ import { Job } from './entities/job.entity';
 
 @Injectable()
 export class JobsService extends TypeOrmCrudService<Job> {
-  constructor(
-    @InjectRepository(Job) jobRepo,
-  ) {
+  constructor(@InjectRepository(Job) jobRepo) {
     super(jobRepo);
   }
 }

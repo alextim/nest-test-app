@@ -6,9 +6,7 @@ import { Proxy } from './entities/proxy.entity';
 
 @Injectable()
 export class ProxiesService extends TypeOrmCrudService<Proxy> {
-  constructor(
-    @InjectRepository(Proxy) proxyRepo,
-  ) {
+  constructor(@InjectRepository(Proxy) proxyRepo) {
     super(proxyRepo);
   }
 }

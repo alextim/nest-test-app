@@ -8,7 +8,6 @@ import { Proxy } from '../../proxies/entities/proxy.entity';
 import { Query } from '../../queries/entities/query.entity';
 import { Customer } from '../../customers/entities/customer.entity';
 
-
 export enum JobStatus {
   Waiting = 'waiting',
   Running = 'running',
@@ -32,7 +31,7 @@ export class Job extends BaseEntity {
 
   @Column({ enum: JobStatus, default: JobStatus.Waiting })
   status: JobStatus;
-  
+
   @ManyToOne(() => User, (user) => user.jobs)
   user: User;
 

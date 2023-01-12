@@ -15,9 +15,6 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { getDataSourceOptions } from './src/lib/orm/datasource.options';
-import { Social1673422211209 } from './migrations/1673422211209-Social';
-
-
 
 config();
  
@@ -35,6 +32,6 @@ const dataSourceOptions = {
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
   /** 2) add reference to generated class here */
-  migrations: [Social1673422211209],
+  migrations: [],
 };
 export default new DataSource(dataSourceOptions);
