@@ -3,6 +3,9 @@ import { User } from './entities/user.entity';
 
 export class UserMapper {
   static toDto(user: User) {
+    if (!user) {
+      return undefined;
+    }
     const dto: UserDto = {
       id: user.id,
       username: user.username,
