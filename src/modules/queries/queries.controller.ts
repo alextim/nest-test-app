@@ -1,5 +1,5 @@
 import { Controller, Get, NotFoundException, Param, ParseIntPipe } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import { Crud, CrudController, CrudRequest, Override, ParsedBody, ParsedRequest } from '@nestjsx/crud';
 import { CreateQueryDto } from './dto/create-query.dto';
 import { UpdateQueryDto } from './dto/update-query.dto';
 
@@ -39,5 +39,17 @@ export class QueriesController implements CrudController<Query> {
       return new NotFoundException('No selectors found');
     }
     return selectors;
+  }
+
+    get base(): CrudController<Query> {
+    return this;
+  }
+
+  @Override()
+  async createOne(
+    @ParsedRequest() req: CrudRequest,
+    @ParsedBody() dto: CreateQueryDto,
+  ) {
+    return this.base.createOneBase(req, dto as any);
   }
 }

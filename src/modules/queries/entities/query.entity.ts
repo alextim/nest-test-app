@@ -18,6 +18,12 @@ export class Query extends BaseEntity {
   @Column()
   startUrl: string;
 
+  @Column({ default: false })
+  isList?: boolean;
+
+  @Column({ nullable: true })
+  itemCount?: number;
+
   @Column()
   requestInterval: number;
 
