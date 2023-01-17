@@ -1,4 +1,12 @@
-import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { WaitUntil } from '../entities/wait-until.enum';
 
@@ -25,7 +33,6 @@ export class CreateQueryDto {
   @IsOptional()
   itemCount?: number;
 
-
   @ApiProperty()
   @IsNumber()
   requestInterval: number;
@@ -47,5 +54,5 @@ export class CreateQueryDto {
   //@MaxLength(100)
   // @IsString()
   @IsNotEmpty()
-  proxy: Proxy;  
+  proxy: Proxy;
 }

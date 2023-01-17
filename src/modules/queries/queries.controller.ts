@@ -1,5 +1,14 @@
-import { Controller, Get, NotFoundException, Param, ParseIntPipe } from '@nestjs/common';
-import { Crud, CrudController, CrudRequest, Override, ParsedBody, ParsedRequest } from '@nestjsx/crud';
+import {
+  Controller,
+} from '@nestjs/common';
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from '@nestjsx/crud';
 import { CreateQueryDto } from './dto/create-query.dto';
 import { UpdateQueryDto } from './dto/update-query.dto';
 
@@ -21,7 +30,7 @@ import { QueriesService } from './queries.service';
     join: {
       proxy: { eager: true, allow: ['id', 'name'] },
     },
-  },  
+  },
   routes: {
     deleteOneBase: {
       returnDeleted: true,
@@ -32,16 +41,7 @@ import { QueriesService } from './queries.service';
 export class QueriesController implements CrudController<Query> {
   constructor(public readonly service: QueriesService) {}
 
-  @Get(':id/selectors')
-  async getSelectors(@Param('id', ParseIntPipe) id: number) {
-    const selectors = await this.service.getSelectors(id);
-    if (!selectors?.length) {
-      return new NotFoundException('No selectors found');
-    }
-    return selectors;
-  }
-
-    get base(): CrudController<Query> {
+  get base(): CrudController<Query> {
     return this;
   }
 

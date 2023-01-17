@@ -17,6 +17,7 @@ import { CustomersModule } from './modules/customers/customers.module';
 import { QueriesModule } from './modules/queries/queries.module';
 import { JobsModule } from './modules/jobs/jobs.module';
 import { SchedulesModule } from './modules/schedules/schedules.module';
+import { SelectorsModule } from './modules/selectors/selectors.module';
 
 @Module({
   providers: [
@@ -41,6 +42,7 @@ import { SchedulesModule } from './modules/schedules/schedules.module';
     QueriesModule,
     JobsModule,
     SchedulesModule,
+    SelectorsModule,
   ],
 })
 export class AppModule {}

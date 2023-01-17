@@ -1,9 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  Unique,
+} from 'typeorm';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
 
+import { Query } from '../../queries/entities/query.entity';
 import { Parser } from './parser.entity';
-import { Query } from './query.entity';
 import { SelectorType } from './selector-type.enum';
 
 @Unique('UQ_selector_name', ['name'])
@@ -45,25 +52,25 @@ export class Selector extends BaseEntity {
    * Selector's tree
    * https://www.slideshare.net/billkarwin/models-for-hierarchical-data
    * https://github.com/typeorm/typeorm/blob/master/docs/tree-entities.md
-   * 
+   *
    * https://stackoverflow.com/questions/67385016/getting-data-in-self-referencing-relation-with-typeorm
-   * 
-   * 
+   *
+   *
    * the best
    * Adjacency Model + Nested Sets Model
    * https://stackoverflow.com/questions/4048151/what-are-the-options-for-storing-hierarchical-data-in-a-relational-database
    * https://dba.stackexchange.com/questions/89051/stored-procedure-to-update-an-adjacency-model-to-nested-sets-model
-   * 
+   *
    * PG
    * https://stackoverflow.com/a/38701519
    */
-  @OneToMany(() => Selector, sel => sel.parent)
+  @OneToMany(() => Selector, (sel) => sel.parent)
   children: Selector[];
 
   @Column({ nullable: true })
   parentId?: number;
 
-  @ManyToOne(() => Selector, sel => sel.children, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Selector, (sel) => sel.children, { onDelete: 'CASCADE' })
   @JoinColumn()
-  parent: Selector;  
+  parent: Selector;
 }

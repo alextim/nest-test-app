@@ -6,7 +6,7 @@ import { Schedule } from '../../schedules/entities/schedule.entity';
 import { Proxy } from '../../proxies/entities/proxy.entity';
 import { Job } from '../../jobs/entities/job.entity';
 
-import { Selector } from './selector.entity';
+import { Selector } from '../../selectors/entities/selector.entity';
 import { WaitUntil } from './wait-until.enum';
 
 @Unique('UQ_query_name', ['name'])

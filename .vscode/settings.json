@@ -1,3 +1,13 @@
 {
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+   "search.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/dist": true,
+    },
+  "editor.formatOnSaveMode": "modificationsIfAvailable",
+  "editor.formatOnSave": true,
+  "prettier.documentSelectors": ["*.{tsx,ts}", "*.{jsx,js}"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+
 }
