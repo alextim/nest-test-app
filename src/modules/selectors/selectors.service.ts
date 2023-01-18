@@ -8,14 +8,13 @@ import { UpdateSelectorDto } from './dto/update-selector.dto';
 import { Selector } from './entities/selector.entity';
 
 @Injectable()
-export class SelectorsService  {
+export class SelectorsService {
   constructor(
     @InjectRepository(Selector)
     private readonly selectorRepo: Repository<Selector>,
     @InjectRepository(Query)
     private readonly queryRepo: Repository<Query>,
-  ) {
-  }
+  ) {}
   async queryExist(queryId: number) {
     return this.queryRepo.exist({ where: { id: queryId } });
   }
@@ -36,10 +35,11 @@ export class SelectorsService  {
   }
 
   async createSelector(sel: CreateSelectorDto) {
-    return this.selectorRepo.create(sel);
+    const entity = this.selectorRepo.create(sel);
+    return this.selectorRepo.save(entity);
   }
 
   async updateSelector(sel: UpdateSelectorDto) {
     return this.selectorRepo.save(sel);
-  }  
+  }
 }

@@ -35,7 +35,7 @@ import {
   Override,
   ParsedBody,
   ParsedRequest,
-} from '@nestjsx/crud';
+} from '@rewiko/crud';
 import { Response, Request } from 'express';
 import etag from 'etag';
 

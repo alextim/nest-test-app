@@ -50,9 +50,9 @@ export class CreateQueryDto {
   @IsNotEmpty()
   waitUntil: WaitUntil;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   //@MaxLength(100)
   // @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   proxy: Proxy;
 }

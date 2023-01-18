@@ -64,4 +64,14 @@ export class CustomNamingStrategy
 
     return `UQ_${table}_${columnsSnakeCase}`;
   }
+
+  /**
+   * Ambiguous Columns When Eager Loading Relation with Relation Id Exposed on Entity #4902
+   *
+   * https://github.com/typeorm/typeorm/issues/4902#issuecomment-542080781
+   *
+   */
+  //public eagerJoinRelationAlias(alias: string, propertyPath: string): string {
+  //  return `r_${alias}_${propertyPath.replace('.', '_')}`;
+  // }
 }

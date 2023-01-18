@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CrudRequest } from '@nestjsx/crud';
-import { TypeOrmCrudService } from '@nestjsx/crud-typeorm';
+import { CrudRequest } from '@rewiko/crud';
+import { TypeOrmCrudService } from '@rewiko/crud-typeorm';
 import type { DeepPartial, FindOptionsWhere } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 

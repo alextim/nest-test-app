@@ -1,6 +1,4 @@
-import {
-  Controller,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import {
   Crud,
   CrudController,
@@ -8,7 +6,7 @@ import {
   Override,
   ParsedBody,
   ParsedRequest,
-} from '@nestjsx/crud';
+} from '@rewiko/crud';
 import { CreateQueryDto } from './dto/create-query.dto';
 import { UpdateQueryDto } from './dto/update-query.dto';
 

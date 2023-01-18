@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import { Crud, CrudController } from '@rewiko/crud';
 
 import { Customer } from './entities/customer.entity';
 import { CustomersService } from './customers.service';

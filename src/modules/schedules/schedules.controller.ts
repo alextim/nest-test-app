@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Crud, CrudController } from '@nestjsx/crud';
+import { Crud, CrudController } from '@rewiko/crud';
 
 import { Schedule } from './entities/schedule.entity';
 import { SchedulesService } from './schedules.service';

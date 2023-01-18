@@ -25,7 +25,7 @@ import {
   MinDate,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CrudValidationGroups } from '@nestjsx/crud';
+import { CrudValidationGroups } from '@rewiko/crud';
 import { Transform } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 

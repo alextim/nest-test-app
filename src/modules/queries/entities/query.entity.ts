@@ -36,7 +36,13 @@ export class Query extends BaseEntity {
   @Column({ enum: WaitUntil, default: WaitUntil.load })
   waitUntil: WaitUntil;
 
-  @ManyToOne(() => Proxy, (proxy) => proxy.queries)
+  @Column({ nullable: true })
+  proxyId?: number;
+
+  @ManyToOne(() => Proxy, (proxy) => proxy.queries, {
+    eager: true,
+    nullable: true,
+  })
   proxy: Proxy;
 
   @OneToMany(() => Selector, (sel) => sel.query, { cascade: true })

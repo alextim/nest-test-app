@@ -15,13 +15,12 @@ import { UpdateSelectorDto } from './dto/update-selector.dto';
 
 import { SelectorsService } from './selectors.service';
 
-
 // @ApiCookieAuth()
 // @UseGuards(SelfGuard)
 @Controller()
 export class SelectorsController {
-  constructor(private readonly service: SelectorsService) { }
-  
+  constructor(private readonly service: SelectorsService) {}
+
   @Get('queries/:queryId/selectors')
   async getSelectors(@Param('queryId', ParseIntPipe) queryId: number) {
     if (!(await this.service.queryExist(queryId))) {
@@ -65,11 +64,9 @@ export class SelectorsController {
 
   @Post('queries/:queryId/selectors')
   async createSelector(
-    @Param() params: string[],
+    @Param('queryId', ParseIntPipe) queryId: number,
     @Body() dto: CreateSelectorDto,
   ) {
-    const [id] = params;
-    const queryId = +id;
     if (!(await this.service.queryExist(queryId))) {
       return new NotFoundException(`Query id=${queryId} not found`);
     }
@@ -91,5 +88,5 @@ export class SelectorsController {
       return new NotFoundException(`Selector id=${id} not found`);
     }
     return selector;
-  }  
+  }
 }

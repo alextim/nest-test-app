@@ -13,8 +13,8 @@ specifiers:
   '@nestjs/terminus': ^9.1.4
   '@nestjs/testing': ^9.2.1
   '@nestjs/typeorm': ^9.0.1
-  '@nestjsx/crud': 5.0.0-alpha.3
-  '@nestjsx/crud-typeorm': 5.0.0-alpha.3
+  '@rewiko/crud': ^5.1.12
+  '@rewiko/crud-typeorm': ^5.1.12
   '@sentry/node': ^7.31.1
   '@types/bcrypt': ^5.0.0
   '@types/etag': ^1.8.1
@@ -22,7 +22,7 @@ specifiers:
   '@types/express-rate-limit': ^6.0.0
   '@types/express-session': ^1.17.5
   '@types/helmet': ^4.0.0
-  '@types/jest': 29.2.5
+  '@types/jest': 29.2.6
   '@types/multer': ^1.4.7
   '@types/node': ^18.11.18
   '@types/nodemailer': ^6.4.7
@@ -66,7 +66,7 @@ specifiers:
   puppeteer: ^19.5.2
   rand-token: ^1.0.1
   reflect-metadata: ^0.1.13
-  rimraf: ^4.1.0
+  rimraf: ^4.1.1
   rxjs: ^7.8.0
   sonic-boom: ^3.2.1
   source-map-support: ^0.5.21
@@ -89,8 +89,8 @@ dependencies:
   '@nestjs/swagger': 6.1.4_4fhhxyztwhblafku3krlstrun4
   '@nestjs/terminus': 9.1.4_z3ebfkorznv4foxvy3pzu64jmm
   '@nestjs/typeorm': 9.0.1_hkapd3a3mi37wyf4vtt5y4i2ye
-  '@nestjsx/crud': 5.0.0-alpha.3_p4ywi7fdcrugq6nsanv77hac4q
-  '@nestjsx/crud-typeorm': 5.0.0-alpha.3
+  '@rewiko/crud': 5.1.12_p4ywi7fdcrugq6nsanv77hac4q
+  '@rewiko/crud-typeorm': 5.1.12
   '@sentry/node': 7.31.1
   '@types/etag': 1.8.1
   bcrypt: 5.1.0
@@ -117,7 +117,7 @@ dependencies:
   pino-http: 8.3.1
   rand-token: 1.0.1
   reflect-metadata: 0.1.13
-  rimraf: 4.1.0
+  rimraf: 4.1.1
   rxjs: 7.8.0
   typeorm: 0.3.11_pg@8.8.0+ts-node@10.9.1
   typeorm-naming-strategies: 4.1.0_typeorm@0.3.11
@@ -131,7 +131,7 @@ devDependencies:
   '@types/express-rate-limit': 6.0.0
   '@types/express-session': 1.17.5
   '@types/helmet': 4.0.0
-  '@types/jest': 29.2.5
+  '@types/jest': 29.2.6
   '@types/multer': 1.4.7
   '@types/node': 18.11.18
   '@types/nodemailer': 6.4.7
@@ -1235,37 +1235,6 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@nestjsx/crud-request/5.0.0-alpha.3:
-    resolution: {integrity: sha512-EFeGgh/sSHhD3px9aj4hyjvOqBepMcRFAi5lrYuSUDmnj/eQOa4dg4orehU8gKrSAmgKNe9r0dx0kel7Zgivzg==}
-    dependencies:
-      '@nestjsx/util': 5.0.0-alpha.3
-      qs: 6.11.0
-    dev: false
-
-  /@nestjsx/crud-typeorm/5.0.0-alpha.3:
-    resolution: {integrity: sha512-9FN4iBELmhhSoVJj8457kaNGFKhm7IA7zJbLJRGuIb0+12WwCOhY0/bhMg1pWgZ1qUYtkYoELyMiMDroPPtARw==}
-    dependencies:
-      '@zmotivat0r/o0': 1.0.2
-    dev: false
-
-  /@nestjsx/crud/5.0.0-alpha.3_p4ywi7fdcrugq6nsanv77hac4q:
-    resolution: {integrity: sha512-LPFtrrE4nGT1vvzM+IpA4CNazO67Tz8gc4lAfSjwujIeOHPGfj3vJKUlcU/ESRUW/t+bLOF3S1tY/N0GQ/SRyg==}
-    peerDependencies:
-      class-transformer: '*'
-      class-validator: '*'
-    dependencies:
-      '@nestjsx/crud-request': 5.0.0-alpha.3
-      '@nestjsx/util': 5.0.0-alpha.3
-      class-transformer: 0.5.1
-      class-validator: 0.14.0
-      deepmerge: 3.3.0
-      pluralize: 8.0.0
-    dev: false
-
-  /@nestjsx/util/5.0.0-alpha.3:
-    resolution: {integrity: sha512-UTYIxtyx80M42gOZ0VIInSiOLn78P6k1BCziiN8gE3FglzivQ1RGvPpmsRwioYEWG27gOgnMwOQnXv8Zbq8dzQ==}
-    dev: false
-
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -1297,6 +1266,37 @@ packages:
       node-fetch: 2.6.8
     transitivePeerDependencies:
       - encoding
+
+  /@rewiko/crud-request/5.1.12:
+    resolution: {integrity: sha512-lnmtoYo2xFn4uCmnG6+F85AWiCa5BvWmmFg2ywOmJm/zXFnxHTDr6MuQneJhqS5QVg+3TDSPoG5VSTvvjnn6dw==}
+    dependencies:
+      '@rewiko/util': 5.1.12
+      qs: 6.11.0
+    dev: false
+
+  /@rewiko/crud-typeorm/5.1.12:
+    resolution: {integrity: sha512-hJeMVS66i3urMpCZKNQaV/dFfrxgtWBI1bwoVSZSB31HuNzv41RtHLBzale82q9yo/HTKzZ+LwMP51MV+JLDNg==}
+    dependencies:
+      '@zmotivat0r/o0': 1.0.2
+    dev: false
+
+  /@rewiko/crud/5.1.12_p4ywi7fdcrugq6nsanv77hac4q:
+    resolution: {integrity: sha512-wG7ROBzdFi/E/fpxYkQ8M3N+0ZO3kzjkLzfAcpZSATUEjR+5Dnh3pzpVO2Bk7dwyswLJOpA0vhSSc+kauU+d2A==}
+    peerDependencies:
+      class-transformer: '*'
+      class-validator: '*'
+    dependencies:
+      '@rewiko/crud-request': 5.1.12
+      '@rewiko/util': 5.1.12
+      class-transformer: 0.5.1
+      class-validator: 0.14.0
+      deepmerge: 3.3.0
+      pluralize: 8.0.0
+    dev: false
+
+  /@rewiko/util/5.1.12:
+    resolution: {integrity: sha512-lf0B6lZGwo0aGmI8MmHTVhhe7DN288aPTzawmfoFLaLXsf8Dxr0WBZu/uTLCqLsCFQ/rOGdwZZN0XrNMclIlJQ==}
+    dev: false
 
   /@sentry/core/7.31.1:
     resolution: {integrity: sha512-quaNU6z8jabmatBTDi28Wpff2yzfWIp/IU4bbi2QOtEiCNT+TQJXqlRTRMu9xLrX7YzyKCL5X2gbit/85lyWUg==}
@@ -1504,8 +1504,8 @@ packages:
       '@types/istanbul-lib-report': 3.0.0
     dev: true
 
-  /@types/jest/29.2.5:
-    resolution: {integrity: sha512-H2cSxkKgVmqNHXP7TC2L/WUorrZu8ZigyRywfVzv6EyBlxj39n4C00hjXYQWsbwqgElaj/CiAeSRmk5GoaKTgw==}
+  /@types/jest/29.2.6:
+    resolution: {integrity: sha512-XEUC/Tgw3uMh6Ho8GkUtQ2lPhY5Fmgyp3TdlkTJs1W9VgNxs+Ow/x3Elh8lHQKqCbZL0AubQuqWjHVT033Hhrw==}
     dependencies:
       expect: 29.3.1
       pretty-format: 29.3.1
@@ -6223,8 +6223,8 @@ packages:
     dependencies:
       glob: 7.2.3
 
-  /rimraf/4.1.0:
-    resolution: {integrity: sha512-ZJdkUR5/dRrRJHdcSKJLrpRn6tVjl9ALxd4yrTCxFsMpjQNzwHF6GLqMsuEzEYIXxHlFPDSk21Vr8VPuFBEz0g==}
+  /rimraf/4.1.1:
+    resolution: {integrity: sha512-Z4Y81w8atcvaJuJuBB88VpADRH66okZAuEm+Jtaufa+s7rZmIz+Hik2G53kGaNytE7lsfXyWktTmfVz0H9xuDg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: false
