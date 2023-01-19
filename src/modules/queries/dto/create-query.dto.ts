@@ -6,7 +6,10 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
+
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { WaitUntil } from '../entities/wait-until.enum';
 
@@ -14,13 +17,17 @@ import { Proxy } from '../../proxies/entities/proxy.entity';
 
 export class CreateQueryDto {
   @ApiProperty()
+  @MaxLength(20)
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }) => value?.trim())
   name: string;
 
   @ApiProperty()
+  @MaxLength(200)
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }) => value?.trim())
   startUrl: string;
 
   @ApiPropertyOptional()

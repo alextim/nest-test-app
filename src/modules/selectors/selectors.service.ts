@@ -39,7 +39,11 @@ export class SelectorsService {
     return this.selectorRepo.save(entity);
   }
 
-  async updateSelector(sel: UpdateSelectorDto) {
-    return this.selectorRepo.save(sel);
+  async updateSelector(id: number, sel: UpdateSelectorDto) {
+    const result = await this.selectorRepo.update(id, sel);
+    if (!result.affected) {
+      return undefined;
+    }
+    return this.getSelector(id);
   }
 }

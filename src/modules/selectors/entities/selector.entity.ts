@@ -22,7 +22,7 @@ export class Selector extends BaseEntity {
   name: string;
 
   @Column({
-    length: 64,
+    length: 200,
   })
   selector: string;
 

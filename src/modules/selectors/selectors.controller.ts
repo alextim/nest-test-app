@@ -19,7 +19,20 @@ import { SelectorsService } from './selectors.service';
 // @UseGuards(SelfGuard)
 @Controller()
 export class SelectorsController {
-  constructor(private readonly service: SelectorsService) {}
+  constructor(private readonly service: SelectorsService) { }
+  
+  @Patch('selectors/:id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateSelectorDto,
+  ) {
+    console.log('update', id, dto.parentId)
+    const selector = await this.service.updateSelector(id, dto);
+    if (!selector) {
+      return new NotFoundException(`Selector id=${id} not found`);
+    }
+    return selector;
+  }    
 
   @Get('queries/:queryId/selectors')
   async getSelectors(@Param('queryId', ParseIntPipe) queryId: number) {
@@ -83,7 +96,7 @@ export class SelectorsController {
     if (!(await this.service.queryExist(queryId))) {
       return new NotFoundException(`Query id=${queryId} not found`);
     }
-    const selector = await this.service.updateSelector(dto);
+    const selector = await this.service.updateSelector(id, dto);
     if (!selector) {
       return new NotFoundException(`Selector id=${id} not found`);
     }

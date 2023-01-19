@@ -12,10 +12,10 @@ import { WaitUntil } from './wait-until.enum';
 @Unique('UQ_query_name', ['name'])
 @Entity()
 export class Query extends BaseEntity {
-  @Column()
+  @Column({ length: 20 })
   name: string;
 
-  @Column()
+  @Column({ length: 200 })
   startUrl: string;
 
   @Column({ default: false })
