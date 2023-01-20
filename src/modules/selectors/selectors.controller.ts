@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -12,6 +13,7 @@ import {
 
 import { CreateSelectorDto } from './dto/create-selector.dto';
 import { UpdateSelectorDto } from './dto/update-selector.dto';
+import { UpdateTreeDto } from './dto/update-tree.dto';
 
 import { SelectorsService } from './selectors.service';
 
@@ -19,20 +21,20 @@ import { SelectorsService } from './selectors.service';
 // @UseGuards(SelfGuard)
 @Controller()
 export class SelectorsController {
-  constructor(private readonly service: SelectorsService) { }
-  
+  constructor(private readonly service: SelectorsService) {}
+
   @Patch('selectors/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateSelectorDto,
   ) {
-    console.log('update', id, dto.parentId)
+    console.log('update', id, dto.parentId);
     const selector = await this.service.updateSelector(id, dto);
     if (!selector) {
       return new NotFoundException(`Selector id=${id} not found`);
     }
     return selector;
-  }    
+  }
 
   @Get('queries/:queryId/selectors')
   async getSelectors(@Param('queryId', ParseIntPipe) queryId: number) {
@@ -101,5 +103,17 @@ export class SelectorsController {
       return new NotFoundException(`Selector id=${id} not found`);
     }
     return selector;
+  }
+
+  @HttpCode(200)
+  @Post('queries/:queryId/selectors/updateTree')
+  async updateTree(
+    @Param('queryId', ParseIntPipe) queryId: number,
+    @Body() { items }: UpdateTreeDto,
+  ) {
+    if (!(await this.service.queryExist(queryId))) {
+      return new NotFoundException(`Query id=${queryId} not found`);
+    }
+    await this.service.updateTree(queryId, items);
   }
 }

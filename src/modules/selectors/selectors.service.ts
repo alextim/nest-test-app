@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Query } from '../queries/entities/query.entity';
 import { CreateSelectorDto } from './dto/create-selector.dto';
 import { UpdateSelectorDto } from './dto/update-selector.dto';
+import { TreeItem } from './dto/update-tree.dto';
 
 import { Selector } from './entities/selector.entity';
 
@@ -45,5 +46,43 @@ export class SelectorsService {
       return undefined;
     }
     return this.getSelector(id);
+  }
+
+  async updateTree(queryId: number, items: TreeItem[]) {
+    return Promise.all(
+      items.map(async ([id, parentId]) => {
+        const selector = await this.selectorRepo.findOne({ where: { id } });
+        if (!selector) {
+          return Promise.reject(
+            new NotFoundException(`Selector id=${id} not found`),
+          );
+        }
+        if (selector.parentId !== parentId) {
+          if (selector.queryId !== queryId) {
+            return Promise.reject(
+              new NotFoundException(
+                `Asked queryId=${queryId}. Selector id=${id} belongs to another query with id=${selector.queryId}`,
+              ),
+            );
+          }
+          if (parentId) {
+            if (!(await this.selectorRepo.exist({ where: { id: parentId } }))) {
+              return Promise.reject(
+                new NotFoundException(
+                  `Parent selector with id=${parentId} not found`,
+                ),
+              );
+            }
+          }
+          const result = await this.selectorRepo.update(id, { parentId });
+          if (result.affected !== 1) {
+            return Promise.reject(
+              new NotFoundException(`Selector id=${id} not found`),
+            );
+          }
+        }
+        return Promise.resolve();
+      }),
+    );
   }
 }

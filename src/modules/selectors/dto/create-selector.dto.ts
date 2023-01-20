@@ -44,5 +44,5 @@ export class CreateSelectorDto {
   @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
-  parentId?: number;  
+  parentId?: number;
 }
