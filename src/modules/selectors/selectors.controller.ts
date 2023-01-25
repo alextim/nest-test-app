@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -116,4 +117,35 @@ export class SelectorsController {
     }
     await this.service.updateTree(queryId, items);
   }
+
+  @Get('queries/:queryId/selectors/:selectorId/parsers')
+  async getParsers(
+    @Param('queryId', ParseIntPipe) queryId: number,
+    @Param('selectorId', ParseIntPipe) selectorId: number,
+  ) {
+    const err = await this.service.validateIdParams(queryId, selectorId);
+    if (err) {
+      return err;
+    }    
+    return this.service.getParsers(selectorId);
+  }
+  
+  @Get('queries/:queryId/selectors/:selectorId/parsers/:parserId')
+  async getParser(
+    @Param('queryId', ParseIntPipe) queryId: number,
+    @Param('selectorId', ParseIntPipe) selectorId: number,
+    @Param('parserId', ParseIntPipe) parserId: number,
+  ) {
+    const err = await this.service.validateIdParams(queryId, selectorId);
+    if (err) {
+      return err;
+    }      
+    const parser = await this.service.getParser(parserId);
+    if (!parser) {
+      return new NotFoundException(`Parser id=${parserId} not found`);      
+    }
+    return parser;
+  }
+
+
 }

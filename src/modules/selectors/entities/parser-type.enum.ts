@@ -1,7 +1,6 @@
 export enum ParserType {
-  RegexMatch = 'match',
-  Replace = 'replace',
-  Addition = 'addition',
-  StripHTML = 'html',
-  RemoveWhitespaces = 'spaces',
+  ReplaceText = 'replaceText',
+  AddText = 'addText',
+  StripHTML = 'stripHtml',
+  RemoveWhitespaces = 'removeWhitespaces',
 }
