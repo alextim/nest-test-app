@@ -7,7 +7,7 @@ import { Selector } from './selector.entity';
 
 @Entity()
 export class Parser extends BaseEntity {
-  @Column({ enum: ParserType, default: ParserType.Replace })
+  @Column({ enum: ParserType, default: ParserType.ReplaceText })
   parserType: ParserType;
 
   /**
