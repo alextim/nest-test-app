@@ -1,12 +1,21 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { Query } from '../queries/entities/query.entity';
+
+import { CreateParserDto } from './dto/create-parser.dto';
 import { CreateSelectorDto } from './dto/create-selector.dto';
+import { UpdateParserDto } from './dto/update-parser.dto';
 import { UpdateSelectorDto } from './dto/update-selector.dto';
 import { TreeItem } from './dto/update-tree.dto';
-import { Parser } from './entities/parser.entity';
 
+import { Parser } from './entities/parser.entity';
 import { Selector } from './entities/selector.entity';
 
 @Injectable()
@@ -17,7 +26,7 @@ export class SelectorsService {
     @InjectRepository(Query)
     private readonly queryRepo: Repository<Query>,
     @InjectRepository(Parser)
-    private readonly parserRepo: Repository<Parser>,    
+    private readonly parserRepo: Repository<Parser>,
   ) {}
   async queryExist(queryId: number) {
     return this.queryRepo.exist({ where: { id: queryId } });
@@ -39,7 +48,15 @@ export class SelectorsService {
   }
 
   async deleteSelector(id: number) {
-    return this.selectorRepo.delete(id);
+    const selector = await this.selectorRepo.findOne({ where: { id } });
+    if (!selector) {
+      return undefined;
+    }
+    const result = await this.selectorRepo.delete(id);
+    if (!result.affected) {
+      throw new HttpException(`Failed to delete selector id=${id}`, 500);
+    }
+    return selector;
   }
 
   async createSelector(sel: CreateSelectorDto) {
@@ -104,7 +121,9 @@ export class SelectorsService {
     }
 
     if (selector.queryId !== queryId) {
-      return new BadRequestException(`Asked query id=${queryId}. Selector id=${selectorId} belongs to anther query id=${selector.queryId}`);
+      return new BadRequestException(
+        `Asked query id=${queryId}. Selector id=${selectorId} belongs to anther query id=${selector.queryId}`,
+      );
     }
     return undefined;
   }
@@ -115,5 +134,30 @@ export class SelectorsService {
 
   async getParser(parserId: number) {
     return this.parserRepo.findOne({ where: { id: parserId } });
-  }  
+  }
+
+  async deleteParser(parserId: number) {
+    const parser = await this.parserRepo.findOne({ where: { id: parserId } });
+    if (!parser) {
+      return undefined;
+    }
+    const result = await this.parserRepo.delete(parserId);
+    if (!result.affected) {
+      throw new HttpException(`Failed to delete parser id=${parserId}`, 500);
+    }
+    return parser;
+  }
+
+  async createParser(p: CreateParserDto) {
+    const entity = this.parserRepo.create(p);
+    return this.parserRepo.save(entity);
+  }
+
+  async updateParser(id: number, p: UpdateParserDto) {
+    const result = await this.parserRepo.update(id, p);
+    if (!result.affected) {
+      return undefined;
+    }
+    return this.getParser(id);
+  }
 }

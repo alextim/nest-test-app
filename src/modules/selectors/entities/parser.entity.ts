@@ -11,22 +11,7 @@ export class Parser extends BaseEntity {
   parserType: ParserType;
 
   /**
-   * RegexMatch
-   */
-  @Column({ nullable: true })
-  regex?: string;
-
-  @Column({ nullable: true })
-  matchGroup?: string;
-
-  @Column({ default: false, nullable: true })
-  multiply?: boolean;
-
-  @Column({ default: false, nullable: true })
-  separator?: boolean;
-
-  /**
-   * replace
+   * replaceText
    */
   @Column({ default: false, nullable: true })
   isRegex?: boolean;
@@ -44,7 +29,7 @@ export class Parser extends BaseEntity {
   replacement?: string;
 
   /**
-   * Addition
+   * add
    */
 
   @Column({ length: 64, nullable: true })

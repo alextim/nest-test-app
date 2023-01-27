@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -12,8 +11,12 @@ import {
   Post,
 } from '@nestjs/common';
 
-import { CreateSelectorDto } from './dto/create-selector.dto';
+import { CreateParserDto } from './dto/create-parser.dto';
 import { UpdateSelectorDto } from './dto/update-selector.dto';
+
+import { CreateSelectorDto } from './dto/create-selector.dto';
+import { UpdateParserDto } from './dto/update-parser.dto';
+
 import { UpdateTreeDto } from './dto/update-tree.dto';
 
 import { SelectorsService } from './selectors.service';
@@ -72,10 +75,11 @@ export class SelectorsController {
     if (!(await this.service.queryExist(queryId))) {
       return new NotFoundException(`Query id=${queryId} not found`);
     }
-    const result = await this.service.deleteSelector(id);
-    if (!result.affected) {
+    const deletedRecord = await this.service.deleteSelector(id);
+    if (!deletedRecord) {
       return new NotFoundException(`Selector id=${id} not found`);
     }
+    return deletedRecord;
   }
 
   @Post('queries/:queryId/selectors')
@@ -126,10 +130,10 @@ export class SelectorsController {
     const err = await this.service.validateIdParams(queryId, selectorId);
     if (err) {
       return err;
-    }    
+    }
     return this.service.getParsers(selectorId);
   }
-  
+
   @Get('queries/:queryId/selectors/:selectorId/parsers/:parserId')
   async getParser(
     @Param('queryId', ParseIntPipe) queryId: number,
@@ -139,13 +143,61 @@ export class SelectorsController {
     const err = await this.service.validateIdParams(queryId, selectorId);
     if (err) {
       return err;
-    }      
+    }
     const parser = await this.service.getParser(parserId);
     if (!parser) {
-      return new NotFoundException(`Parser id=${parserId} not found`);      
+      return new NotFoundException(`Parser id=${parserId} not found`);
     }
     return parser;
   }
 
+  @Delete('queries/:queryId/selectors/:selectorId/parsers/:parserId')
+  async deleteParser(
+    @Param('queryId', ParseIntPipe) queryId: number,
+    @Param('selectorId', ParseIntPipe) selectorId: number,
+    @Param('parserId', ParseIntPipe) parserId: number,
+  ) {
+    const err = await this.service.validateIdParams(queryId, selectorId);
+    if (err) {
+      return err;
+    }
+    const deletedRecord = await this.service.deleteParser(parserId);
+    if (!deletedRecord) {
+      return new NotFoundException(`Parser id=${parserId} not found`);
+    }
+    return deletedRecord;
+  }
 
+  @Post('queries/:queryId/selectors/:selectorId/parsers')
+  async createParser(
+    @Param('queryId', ParseIntPipe) queryId: number,
+    @Param('selectorId', ParseIntPipe) selectorId: number,
+    @Param('parserId', ParseIntPipe) parserId: number,
+    @Body() dto: CreateParserDto,
+  ) {
+    const err = await this.service.validateIdParams(queryId, selectorId);
+    if (err) {
+      return err;
+    }
+    const parser = await this.service.createParser(dto);
+    return parser;
+  }
+
+  @Patch('queries/:queryId/selectors/:selectorId/parsers/:parserId')
+  async updateParser(
+    @Param('queryId', ParseIntPipe) queryId: number,
+    @Param('selectorId', ParseIntPipe) selectorId: number,
+    @Param('parserId', ParseIntPipe) parserId: number,
+    @Body() dto: UpdateParserDto,
+  ) {
+    const err = await this.service.validateIdParams(queryId, selectorId);
+    if (err) {
+      return err;
+    }
+    const parser = await this.service.updateParser(parserId, dto);
+    if (!parser) {
+      return new NotFoundException(`Parser id=${parserId} not found`);
+    }
+    return parser;
+  }
 }
