@@ -10,6 +10,9 @@ export class Parser extends BaseEntity {
   @Column({ enum: ParserType, default: ParserType.ReplaceText })
   parserType: ParserType;
 
+  @Column({ nullable: true })
+  sortOrder?: number;
+
   /**
    * replaceText
    */

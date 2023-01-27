@@ -172,7 +172,6 @@ export class SelectorsController {
   async createParser(
     @Param('queryId', ParseIntPipe) queryId: number,
     @Param('selectorId', ParseIntPipe) selectorId: number,
-    @Param('parserId', ParseIntPipe) parserId: number,
     @Body() dto: CreateParserDto,
   ) {
     const err = await this.service.validateIdParams(queryId, selectorId);

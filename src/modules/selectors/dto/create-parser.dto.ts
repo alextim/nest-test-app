@@ -17,6 +17,11 @@ export class CreateParserDto {
   @IsNotEmpty()
   parserType: ParserType;
 
+  @ApiPropertyOptional()
+  @IsNumber()
+  @IsOptional()
+  sortOrder?: number;
+
   /**
    * replaceText
    */
