@@ -18,6 +18,7 @@ import { QueriesModule } from './modules/queries/queries.module';
 import { JobsModule } from './modules/jobs/jobs.module';
 import { SchedulesModule } from './modules/schedules/schedules.module';
 import { SelectorsModule } from './modules/selectors/selectors.module';
+import { ParsersModule } from './modules/parsers/parsers.module';
 
 @Module({
   providers: [
@@ -43,6 +44,7 @@ import { SelectorsModule } from './modules/selectors/selectors.module';
     JobsModule,
     SchedulesModule,
     SelectorsModule,
+    ParsersModule,
   ],
 })
 export class AppModule {}

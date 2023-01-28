@@ -10,7 +10,8 @@ import {
 import { BaseEntity } from '../../../core/entities/BaseEntity';
 
 import { Query } from '../../queries/entities/query.entity';
-import { Parser } from './parser.entity';
+import { Parser } from '../../parsers/entities/parser.entity';
+
 import { SelectorType } from './selector-type.enum';
 
 @Unique('UQ_selector_name', ['name'])

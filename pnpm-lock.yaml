@@ -63,7 +63,7 @@ specifiers:
   pino-http: ^8.3.1
   pino-pretty: ^9.1.1
   prettier: ^2.8.3
-  puppeteer: ^19.6.1
+  puppeteer: ^19.6.2
   rand-token: ^1.0.1
   reflect-metadata: ^0.1.13
   rimraf: ^4.1.2
@@ -150,7 +150,7 @@ devDependencies:
   jest: 29.4.1_zfha7dvnw4nti6zkbsmhmn6xo4
   pino-pretty: 9.1.1
   prettier: 2.8.3
-  puppeteer: 19.6.1
+  puppeteer: 19.6.2
   sonic-boom: 3.2.1
   source-map-support: 0.5.21
   supertest: 6.3.3
@@ -6015,8 +6015,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /puppeteer-core/19.6.1:
-    resolution: {integrity: sha512-TdbqPYGHRgaqO1XPOM5ThE7uSs5NsYraOUU546okJz7jR9He5wnGuFd6LppoeWt8a4eM5RgzmICxeDUD5QwQtA==}
+  /puppeteer-core/19.6.2:
+    resolution: {integrity: sha512-il7uK658MNC1FlxPABvcnv1RdpDa9CaBFHzvtEsl+9Y4tbAJKZurkegpcvWeIWcRYGiuBIVo+t+ZSh3G82CCjw==}
     engines: {node: '>=14.1.0'}
     dependencies:
       cross-fetch: 3.1.5
@@ -6036,8 +6036,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer/19.6.1:
-    resolution: {integrity: sha512-gcqNilThyBPrUMvo2UZNG4KVoMjhCfCV7/84mTVk3oo0k65iO7hEKrB4waiJ15O0MHQpM79+XBHavRgBbRXUWQ==}
+  /puppeteer/19.6.2:
+    resolution: {integrity: sha512-Y5OAXXwXLfJYbl0dEFg8JKIhvCGxn+UYaBW9yra9ErmIhkVroDnYusM6oYxJCt/YIfC2pQWhvhxoZyf/E5fV6w==}
     engines: {node: '>=14.1.0'}
     requiresBuild: true
     dependencies:
@@ -6045,7 +6045,7 @@ packages:
       https-proxy-agent: 5.0.1
       progress: 2.0.3
       proxy-from-env: 1.1.0
-      puppeteer-core: 19.6.1
+      puppeteer-core: 19.6.2
     transitivePeerDependencies:
       - bufferutil
       - encoding

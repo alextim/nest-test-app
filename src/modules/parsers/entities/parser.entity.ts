@@ -1,9 +1,8 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
+import { Selector } from '../../selectors/entities/selector.entity';
 import { ParserType } from './parser-type.enum';
-
-import { Selector } from './selector.entity';
 
 @Entity()
 export class Parser extends BaseEntity {

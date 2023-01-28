@@ -23,7 +23,7 @@ export class CreateParserDto {
   sortOrder?: number;
 
   /**
-   * replaceText
+   * Replace text
    */
   @ApiPropertyOptional()
   @IsBoolean()
@@ -45,7 +45,7 @@ export class CreateParserDto {
   replacement?: string;
 
   /**
-   * addText
+   * Add text
    */
   @ApiPropertyOptional()
   @IsString()
@@ -75,7 +75,7 @@ export class CreateParserDto {
   decodeHtmlEntities?: boolean;
 
   /**
-   * RemoveWhitespaces
+   * Remove whitespaces
    */
   @ApiPropertyOptional()
   @IsBoolean()

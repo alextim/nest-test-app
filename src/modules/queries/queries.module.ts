@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { QueriesService } from './queries.service';
-import { QueriesController } from './queries.controller';
+import { Selector } from '../selectors/entities/selector.entity';
+import { Parser } from '../parsers/entities/parser.entity';
 
 import { Query } from './entities/query.entity';
-import { Selector } from '../selectors/entities/selector.entity';
-import { Parser } from '../selectors/entities/parser.entity';
+import { QueriesService } from './queries.service';
+import { QueriesController } from './queries.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Query, Parser, Selector])],
