@@ -8,7 +8,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common';
 
 import { CreateParserDto } from './dto/create-parser.dto';
