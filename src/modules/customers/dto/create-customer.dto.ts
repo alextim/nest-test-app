@@ -1,28 +1,28 @@
 import {
+  IsNotEmpty,
   IsObject,
-  IsOptional,
   IsString,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { CreateLinkedInProfileDto } from './linked-in-profile.dto';
 
 export class CreateCustomerDto {
-  @ApiPropertyOptional()
+  @ApiProperty()
   @MaxLength(40)
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   @Transform(({ value }) => value?.trim())
-  public firstName?: string;
+  public firstName: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
   @MaxLength(40)
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   @Transform(({ value }) => value?.trim())
-  public lastName?: string;
+  public lastName: string;
 
   @ApiProperty()
   @IsObject()
