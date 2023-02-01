@@ -44,72 +44,75 @@ export class Schedule extends BaseEntity {
   @Column()
   cronEnabled?: boolean;
 
-  @Column({
-    nullable: true,
-  })
-  timezoneId?: number;
-
+  @Column({ default: 0 })
+  timezoneId: number;
   @ManyToOne(() => Timezone, (tz) => tz.schedules, { onDelete: 'CASCADE' })
   timezone: Timezone;
 
   @Column({
     enum: SchedulerType,
-    nullable: true,
+    default: SchedulerType.Daily,
   })
-  schedulerType?: SchedulerType;
+  schedulerType: SchedulerType;
 
   /**
    * daily
    */
-  @Column('boolean', { array: true, nullable: true })
-  dailyWeekdays?: DailyWeekdays;
+  @Column('boolean', {
+    array: true,
+    default: [true, true, true, true, true, true, true],
+  })
+  dailyWeekdays: DailyWeekdays;
 
-  @Column('time', { nullable: true })
-  dailyTime?: Date;
+  @Column('time', { default: '14:30' })
+  dailyTime: string;
 
   /**
    * interval
    */
-  @Column({
-    length: 4,
-    nullable: true,
-  })
-  interval?: string;
+  @Column('smallint', { default: 12 })
+  interval: number;
 
   @Column({
     enum: IntervalType,
-    nullable: true,
+    default: IntervalType.Hour,
   })
-  intervalType?: IntervalType;
+  intervalType: IntervalType;
 
   /**
    * custom
    */
   @Column({
-    nullable: true,
+    length: 40,
+    default: '*',
   })
-  minute?: string;
+  minute: string;
 
   @Column({
-    nullable: true,
+    length: 40,
+    default: '*',
   })
   @Column({
-    nullable: true,
+    length: 40,
+    default: '*',
   })
-  hour?: string;
+  hour: string;
 
   @Column({
-    nullable: true,
+    length: 40,
+    default: '*',
   })
-  dayOfMonth?: string;
+  dayOfMonth: string;
 
   @Column({
-    nullable: true,
+    length: 40,
+    default: '*',
   })
-  month?: string;
+  month: string;
 
   @Column({
-    nullable: true,
+    length: 40,
+    default: '*',
   })
-  dayOfWeek?: string;
+  dayOfWeek: string;
 }

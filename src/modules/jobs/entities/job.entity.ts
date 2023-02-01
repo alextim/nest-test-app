@@ -9,8 +9,6 @@ import { Customer } from '../../customers/entities/customer.entity';
 
 import { JobStatus } from './job-status.enum';
 
-
-
 @Entity()
 export class Job extends BaseEntity {
   @Column()
@@ -41,7 +39,7 @@ export class Job extends BaseEntity {
   query: Query;
 
   @Column()
-  customerId: number;  
+  customerId: number;
   @ManyToOne(() => Customer, (customer) => customer.jobs)
   customer: Customer;
 }

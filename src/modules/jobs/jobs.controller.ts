@@ -29,8 +29,7 @@ import { JobsService } from './jobs.service';
     deleteOneBase: {
       returnDeleted: true,
     },
-  },  
-
+  },
 })
 @Controller('jobs')
 export class JobsController implements CrudController<Job> {

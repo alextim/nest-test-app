@@ -15,6 +15,7 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { getDataSourceOptions } from './src/lib/orm/datasource.options';
+import { SeedTimezone2617378125500 } from './seed/SeedTimezone2617378125500';
 
 config();
  
@@ -32,6 +33,6 @@ const dataSourceOptions = {
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
   /** 2) add reference to generated class here */
-  migrations: [],
+  migrations: [SeedTimezone2617378125500],
 };
 export default new DataSource(dataSourceOptions);

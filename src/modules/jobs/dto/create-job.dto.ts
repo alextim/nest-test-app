@@ -1,13 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 import { JobStatus } from '../entities/job-status.enum';
-
 
 export class CreateJobDto {
   @ApiProperty()
@@ -48,5 +42,5 @@ export class CreateJobDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  customerId: number;  
+  customerId: number;
 }
