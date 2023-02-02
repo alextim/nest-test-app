@@ -1,4 +1,10 @@
-import { ValidationOptions, registerDecorator } from 'class-validator';
+import type {
+  ValidationOptions,
+  ValidatorConstraintInterface,
+} from 'class-validator';
+import { registerDecorator } from 'class-validator';
+
+const acceptMimeTypes = ['image/avif', 'image/jpeg', 'image/png', 'image/webp'];
 
 export function IsImageFile(options?: ValidationOptions) {
   return (object, propertyName: string) => {
@@ -6,18 +12,20 @@ export function IsImageFile(options?: ValidationOptions) {
       target: object.constructor,
       propertyName,
       options,
-      validator: {
-        validate(mimeType) {
-          const acceptMimeTypes = [
-            'image/avif',
-            'image/jpeg',
-            'image/png',
-            'image/webp',
-          ];
-          const fileType = acceptMimeTypes.find((type) => type === mimeType);
-          return !fileType;
-        },
-      },
+      validator: MimeTypeValidator,
     });
   };
+}
+
+class MimeTypeValidator implements ValidatorConstraintInterface {
+  validate(mimeType: string) {
+    const fileType = acceptMimeTypes.find((type) => type === mimeType);
+    return !fileType;
+  }
+
+  defaultMessage() {
+    return `$property not valid mime. Accepts ${acceptMimeTypes
+      .map((m) => m.split('/')[1])
+      .join(', ')}`;
+  }
 }

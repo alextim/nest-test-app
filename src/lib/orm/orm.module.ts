@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
 import { getDataSourceOptions } from './datasource.options';
 
 @Module({
@@ -22,6 +23,9 @@ import { getDataSourceOptions } from './datasource.options';
         // logger settings
         ...(configService.get('typeorm') as any),
       }),
+      // dataSource receives the configured DataSourceOptions
+      // and returns a Promise<DataSource>.
+      //dataSourceFactory: async (options) => new DataSource(options).initialize(),
       inject: [ConfigService],
     }),
   ],

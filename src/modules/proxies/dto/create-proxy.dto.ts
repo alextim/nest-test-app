@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateProxyDto {
   @ApiProperty()
@@ -34,7 +34,7 @@ export class CreateProxyDto {
   region?: string;
 
   @ApiPropertyOptional()
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   parallelScrapingJobLimit?: number;
 
@@ -45,7 +45,7 @@ export class CreateProxyDto {
   host?: string;
 
   @ApiPropertyOptional()
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   port?: number;
 }

@@ -1,21 +1,21 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsInt, IsOptional } from 'class-validator';
 
 import { JobStatus } from '../entities/job-status.enum';
 
 export class CreateJobDto {
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   requestInterval: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   pageLoadDelay: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   timeout: number;
 
@@ -25,22 +25,22 @@ export class CreateJobDto {
   status: JobStatus;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   userId: number;
 
   @ApiPropertyOptional()
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   proxyId?: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   queryId: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   customerId: number;
 }

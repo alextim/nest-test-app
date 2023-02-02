@@ -19,6 +19,7 @@ import { JobsModule } from './modules/jobs/jobs.module';
 import { SchedulesModule } from './modules/schedules/schedules.module';
 import { SelectorsModule } from './modules/selectors/selectors.module';
 import { ParsersModule } from './modules/parsers/parsers.module';
+import { ValidatorModule } from './validator.module';
 
 @Module({
   providers: [
@@ -45,6 +46,7 @@ import { ParsersModule } from './modules/parsers/parsers.module';
     SchedulesModule,
     SelectorsModule,
     ParsersModule,
+    ValidatorModule,
   ],
 })
 export class AppModule {}

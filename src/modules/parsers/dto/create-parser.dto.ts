@@ -4,7 +4,7 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
+  IsInt,
   IsOptional,
   IsString,
   MaxLength,
@@ -18,7 +18,7 @@ export class CreateParserDto {
   parserType: ParserType;
 
   @ApiPropertyOptional()
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   sortOrder?: number;
 
@@ -88,7 +88,7 @@ export class CreateParserDto {
   removeNewlines?: boolean;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
   selectorId: number;
 }

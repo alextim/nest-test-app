@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsInt, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
@@ -34,7 +34,7 @@ export class Proxy extends BaseEntity {
   @Column({ length: 2, nullable: true })
   region?: string;
 
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   @Column({ default: 0, nullable: true })
   parallelScrapingJobLimit?: number;
@@ -44,7 +44,7 @@ export class Proxy extends BaseEntity {
   @Column({ nullable: true })
   host?: string;
 
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   @Column({ nullable: true })
   port?: number;

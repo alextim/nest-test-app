@@ -4,11 +4,12 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
+  IsInt,
   IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
+import { QueryExists } from 'src/decorators/query-exists';
 import { SelectorType } from '../entities/selector-type.enum';
 
 export class CreateSelectorDto {
@@ -37,12 +38,13 @@ export class CreateSelectorDto {
   multiply?: boolean;
 
   @ApiProperty()
-  @IsNumber()
+  @QueryExists()
+  @IsInt()
   @IsNotEmpty()
   queryId: number;
 
   @ApiPropertyOptional()
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   parentId?: number;
 }

@@ -3,7 +3,6 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
@@ -41,15 +40,15 @@ export class CreateQueryDto {
   itemCount?: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   requestInterval: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   pageLoadDelay: number;
 
   @ApiProperty()
-  @IsNumber()
+  @IsInt()
   timeout: number;
 
   @ApiProperty()

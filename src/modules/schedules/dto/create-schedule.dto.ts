@@ -5,56 +5,74 @@ import {
   IsArray,
   IsBoolean,
   IsEnum,
+  IsInt,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
+  Min,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { IsValidTimeInterval } from '../../../decorators/is-valid-time-interval.decorator';
+import { IsCron } from '../../../decorators/is-cron.decorator';
+import { UserExists } from '../../../decorators/user-exists';
+import { QueryExists } from '../../../decorators/query-exists';
+import { CustomerExists } from '../../../decorators/customer-exists';
 
 import {
   DailyWeekdays,
   IntervalType,
   SchedulerType,
 } from '../entities/schedule.types';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ProxyExists } from 'src/decorators/proxy-exists';
 
 export class CreateScheduleDto {
   @ApiProperty()
-  @IsNumber()
+  @Min(500)
+  @IsInt()
+  @Type(() => Number)
   @IsNotEmpty()
   requestInterval: number;
 
   @ApiProperty()
-  @IsNumber()
+  @Min(500)
+  @IsInt()
+  @Type(() => Number)
   @IsNotEmpty()
   pageLoadDelay: number;
 
-  @IsNumber()
+  @ApiProperty()
+  @IsInt()
+  @Type(() => Number)
   @IsNotEmpty()
   timeout: number;
 
   @ApiProperty()
-  @IsNumber()
+  @QueryExists()
+  @IsInt()
   @IsNotEmpty()
   queryId: number;
 
   @ApiPropertyOptional()
-  @IsNumber()
+  @ProxyExists()
+  @IsInt()
   @IsOptional()
   proxyId?: number;
 
   @ApiProperty()
-  @IsNumber()
+  @CustomerExists()
+  @IsInt()
   @IsNotEmpty()
   customerId: number;
 
-  @IsNumber()
+  @ApiProperty()
+  @UserExists()
+  @IsInt()
   @IsNotEmpty()
   userId: number;
 
@@ -63,14 +81,15 @@ export class CreateScheduleDto {
   @IsOptional()
   cronEnabled?: boolean;
 
-  @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  timezoneId: number;
+  @ApiPropertyOptional()
+  @IsInt()
+  @IsOptional()
+  timezoneId?: number;
 
   @ApiProperty()
   @IsEnum(SchedulerType)
   @IsNotEmpty()
+  @ValidateIf(({ cronEnabled }) => cronEnabled)
   schedulerType: SchedulerType;
 
   /**
@@ -83,16 +102,18 @@ export class CreateScheduleDto {
   @ArrayNotEmpty()
   @IsArray()
   @IsNotEmpty()
+  @ValidateIf(({ schedulerType }) => schedulerType === SchedulerType.Daily)
   dailyWeekdays: DailyWeekdays;
 
   @ApiProperty()
   @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, {
-    message: "Doen't match HH:MM",
+    message: "Doesn't match HH:MM",
   })
   @IsString()
   @MinLength(5)
   @MaxLength(5)
   @IsNotEmpty()
+  @ValidateIf(({ schedulerType }) => schedulerType === SchedulerType.Daily)
   dailyTime: string;
 
   /**
@@ -100,50 +121,26 @@ export class CreateScheduleDto {
    */
   @ApiProperty()
   @IsValidTimeInterval()
-  @IsNumber()
+  @IsInt()
   @IsNotEmpty()
+  @ValidateIf(({ schedulerType }) => schedulerType === SchedulerType.Interval)
   interval: number;
 
   @ApiProperty()
   @IsEnum(IntervalType)
   @IsNotEmpty()
+  @ValidateIf(({ schedulerType }) => schedulerType === SchedulerType.Interval)
   intervalType: IntervalType;
 
   /**
    * custom
    */
   @ApiProperty()
-  @MaxLength(40)
+  @IsCron()
+  @MaxLength(200)
   @IsString()
   @IsNotEmpty()
+  @ValidateIf(({ schedulerType }) => schedulerType === SchedulerType.Custom)
   @Transform(({ value }) => value?.trim())
-  minute: string;
-
-  @ApiProperty()
-  @MaxLength(40)
-  @IsString()
-  @IsNotEmpty()
-  @Transform(({ value }) => value?.trim())
-  hour: string;
-
-  @ApiProperty()
-  @MaxLength(40)
-  @IsString()
-  @IsNotEmpty()
-  @Transform(({ value }) => value?.trim())
-  dayOfMonth: string;
-
-  @ApiProperty()
-  @MaxLength(40)
-  @IsString()
-  @IsNotEmpty()
-  @Transform(({ value }) => value?.trim())
-  month: string;
-
-  @ApiProperty()
-  @MaxLength(40)
-  @IsString()
-  @IsNotEmpty()
-  @Transform(({ value }) => value?.trim())
-  dayOfWeek: string;
+  cron: string;
 }
