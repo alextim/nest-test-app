@@ -7,9 +7,7 @@ import { registerDecorator } from 'class-validator';
 
 import { IntervalType } from '../modules/schedules/entities/schedule.types';
 import { Schedule } from '../modules/schedules/entities/schedule.entity';
-
-const acceptedHours = [1, 2, 3, 4, 6, 12];
-const acceptedMinutes = [1, 2, 3, 4, 5, 10, 15, 20, 30];
+import { acceptedHours, acceptedMinutes } from './time-intervals';
 
 export function IsValidTimeInterval(options?: ValidationOptions) {
   return (object, propertyName: string) => {

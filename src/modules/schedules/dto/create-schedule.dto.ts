@@ -1,7 +1,5 @@
 import {
   ArrayMaxSize,
-  ArrayMinSize,
-  ArrayNotEmpty,
   IsArray,
   IsBoolean,
   IsEnum,
@@ -10,12 +8,13 @@ import {
   IsOptional,
   IsString,
   Matches,
+  Max,
   MaxLength,
   Min,
   MinLength,
   ValidateIf,
 } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { IsValidTimeInterval } from '../../../decorators/is-valid-time-interval.decorator';
@@ -24,31 +23,24 @@ import { UserExists } from '../../../decorators/user-exists';
 import { QueryExists } from '../../../decorators/query-exists';
 import { CustomerExists } from '../../../decorators/customer-exists';
 
-import {
-  DailyWeekdays,
-  IntervalType,
-  SchedulerType,
-} from '../entities/schedule.types';
+import { IntervalType, SchedulerType } from '../entities/schedule.types';
 import { ProxyExists } from 'src/decorators/proxy-exists';
 
 export class CreateScheduleDto {
   @ApiProperty()
   @Min(500)
   @IsInt()
-  @Type(() => Number)
   @IsNotEmpty()
   requestInterval: number;
 
   @ApiProperty()
   @Min(500)
   @IsInt()
-  @Type(() => Number)
   @IsNotEmpty()
   pageLoadDelay: number;
 
   @ApiProperty()
   @IsInt()
-  @Type(() => Number)
   @IsNotEmpty()
   timeout: number;
 
@@ -96,14 +88,14 @@ export class CreateScheduleDto {
    * daily
    */
   @ApiProperty()
-  @IsBoolean({ each: true })
-  @ArrayMinSize(7)
+  @Max(6, { each: true })
+  @Min(0, { each: true })
+  @IsInt({ each: true })
   @ArrayMaxSize(7)
-  @ArrayNotEmpty()
   @IsArray()
   @IsNotEmpty()
   @ValidateIf(({ schedulerType }) => schedulerType === SchedulerType.Daily)
-  dailyWeekdays: DailyWeekdays;
+  dailyWeekdays: number[];
 
   @ApiProperty()
   @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, {

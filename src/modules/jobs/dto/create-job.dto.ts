@@ -1,6 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsInt, IsOptional } from 'class-validator';
 
+import { CustomerExists } from '../../../decorators/customer-exists';
+import { ProxyExists } from '../../../decorators/proxy-exists';
+import { QueryExists } from '../../../decorators/query-exists';
+import { UserExists } from '../../../decorators/user-exists';
+
 import { JobStatus } from '../entities/job-status.enum';
 
 export class CreateJobDto {
@@ -25,22 +30,26 @@ export class CreateJobDto {
   status: JobStatus;
 
   @ApiProperty()
+  @QueryExists()
   @IsInt()
   @IsNotEmpty()
-  userId: number;
+  queryId: number;
 
   @ApiPropertyOptional()
+  @ProxyExists()
   @IsInt()
   @IsOptional()
   proxyId?: number;
 
   @ApiProperty()
-  @IsInt()
-  @IsNotEmpty()
-  queryId: number;
-
-  @ApiProperty()
+  @CustomerExists()
   @IsInt()
   @IsNotEmpty()
   customerId: number;
+
+  @ApiProperty()
+  @UserExists()
+  @IsInt()
+  @IsNotEmpty()
+  userId: number;
 }

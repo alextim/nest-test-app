@@ -8,7 +8,7 @@ import { Query } from '../../queries/entities/query.entity';
 import { Customer } from '../../customers/entities/customer.entity';
 
 import { Timezone } from './timezone.entity';
-import { DailyWeekdays, IntervalType, SchedulerType } from './schedule.types';
+import { IntervalType, SchedulerType } from './schedule.types';
 
 @Entity()
 export class Schedule extends BaseEntity {
@@ -58,11 +58,11 @@ export class Schedule extends BaseEntity {
   /**
    * daily
    */
-  @Column('boolean', {
+  @Column('smallint', {
     array: true,
     nullable: true,
   })
-  dailyWeekdays?: DailyWeekdays;
+  dailyWeekdays?: number[];
 
   @Column('time', { nullable: true })
   dailyTime?: string;

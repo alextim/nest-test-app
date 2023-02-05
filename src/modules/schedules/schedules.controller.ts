@@ -20,7 +20,7 @@ import { SchedulesService } from './schedules.service';
   },
   query: {
     join: {
-      customer: { eager: true, allow: ['id', 'email'] },
+      customer: { eager: true, allow: ['id', 'firstName', 'lastName'] },
       timezone: { eager: true, allow: ['id', 'code', 'name'] },
       proxy: { eager: true, allow: ['id', 'name'] },
     },

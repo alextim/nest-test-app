@@ -20,7 +20,7 @@ import { JobsService } from './jobs.service';
   query: {
     join: {
       user: { eager: true, allow: ['id', 'email'] },
-      customer: { eager: true, allow: ['id', 'email'] },
+      customer: { eager: true, allow: ['id', 'firstName', 'lastName'] },
       query: { eager: true, allow: ['id', 'name'] },
       proxy: { eager: true, allow: ['id', 'name'] },
     },

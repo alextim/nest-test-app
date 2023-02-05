@@ -8,13 +8,3 @@ export enum IntervalType {
   Minute = 'minute',
   Hour = 'hour',
 }
-
-export type DailyWeekdays = [
-  boolean,
-  boolean,
-  boolean,
-  boolean,
-  boolean,
-  boolean,
-  boolean,
-];
