@@ -1,4 +1,4 @@
-import { Timezone } from '../src/modules/schedules/entities/timezone.entity';
+import { Timezone } from '../src/modules/timezones/entities/timezone.entity';
 
 import { timezones } from './timezones.data';
 

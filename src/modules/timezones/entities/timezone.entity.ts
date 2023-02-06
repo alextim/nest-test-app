@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
-import { Schedule } from './schedule.entity';
+import { Schedule } from '../../schedules/entities/schedule.entity';
 
 @Unique('UQ_timezone_code', ['code'])
 @Unique('UQ_timezone_name', ['name'])

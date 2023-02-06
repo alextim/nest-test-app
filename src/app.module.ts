@@ -19,6 +19,7 @@ import { JobsModule } from './modules/jobs/jobs.module';
 import { SchedulesModule } from './modules/schedules/schedules.module';
 import { SelectorsModule } from './modules/selectors/selectors.module';
 import { ParsersModule } from './modules/parsers/parsers.module';
+import { TimezonesModule } from './modules/timezones/timezones.module';
 import { ValidatorModule } from './validator.module';
 
 @Module({
@@ -46,6 +47,7 @@ import { ValidatorModule } from './validator.module';
     SchedulesModule,
     SelectorsModule,
     ParsersModule,
+    TimezonesModule,
     ValidatorModule,
   ],
 })

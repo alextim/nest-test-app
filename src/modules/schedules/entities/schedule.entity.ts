@@ -7,7 +7,7 @@ import { Proxy } from '../../proxies/entities/proxy.entity';
 import { Query } from '../../queries/entities/query.entity';
 import { Customer } from '../../customers/entities/customer.entity';
 
-import { Timezone } from './timezone.entity';
+import { Timezone } from '../../timezones/entities/timezone.entity';
 import { IntervalType, SchedulerType } from './schedule.types';
 
 @Entity()

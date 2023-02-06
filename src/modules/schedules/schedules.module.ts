@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SchedulesService } from './schedules.service';
 import { SchedulesController } from './schedules.controller';
 import { Schedule } from './entities/schedule.entity';
-import { Timezone } from './entities/timezone.entity';
+import { Timezone } from '../timezones/entities/timezone.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Schedule, Timezone])],
