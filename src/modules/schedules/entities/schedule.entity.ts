@@ -42,7 +42,7 @@ export class Schedule extends BaseEntity {
   user: User;
 
   @Column({ nullable: true })
-  cronEnabled?: boolean;
+  schedulerEnabled?: boolean;
 
   @Column({ nullable: true })
   timezoneId?: number;

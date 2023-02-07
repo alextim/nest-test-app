@@ -71,7 +71,7 @@ export class CreateScheduleDto {
   @ApiPropertyOptional()
   @IsBoolean()
   @IsOptional()
-  cronEnabled?: boolean;
+  schedulerEnabled?: boolean;
 
   @ApiPropertyOptional()
   @IsInt()
@@ -81,7 +81,7 @@ export class CreateScheduleDto {
   @ApiProperty()
   @IsEnum(SchedulerType)
   @IsNotEmpty()
-  @ValidateIf(({ cronEnabled }) => cronEnabled)
+  @ValidateIf(({ schedulerEnabled }) => schedulerEnabled)
   schedulerType: SchedulerType;
 
   /**
