@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../../core/entities/BaseEntity';
 import { Job } from '../../jobs/entities/job.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
+import { Post } from '../../posts/entities/post.entity';
 
 import { LinkedInProfile } from './linked-in-profile.entity';
 
@@ -19,6 +20,9 @@ export class Customer extends BaseEntity {
 
   @OneToMany(() => Job, (job) => job.customer)
   jobs: Job[];
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   @OneToOne(() => LinkedInProfile, (profile) => profile.customer, {
     cascade: true,

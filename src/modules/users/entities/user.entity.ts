@@ -24,9 +24,9 @@ import {
   MaxLength,
   MinDate,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { CrudValidationGroups } from '@rewiko/crud';
-import { Transform } from 'class-transformer';
 import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
@@ -34,6 +34,8 @@ import { Token } from '../../profile/entities/token.entity';
 import { LocalFile } from '../../local-files/entities/local-file.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
 import { Job } from '../../jobs/entities/job.entity';
+import { Post } from '../../posts/entities/post.entity';
+
 import { Role } from './role.enum';
 
 const { CREATE, UPDATE } = CrudValidationGroups;
@@ -212,6 +214,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Job, (job) => job.user)
   jobs: Job[];
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   constructor(user?: Partial<User>) {
     super();

@@ -21,6 +21,7 @@ import { SelectorsModule } from './modules/selectors/selectors.module';
 import { ParsersModule } from './modules/parsers/parsers.module';
 import { TimezonesModule } from './modules/timezones/timezones.module';
 import { ValidatorModule } from './validator.module';
+import { PostsModule } from './modules/posts/posts.module';
 
 @Module({
   providers: [
@@ -49,6 +50,7 @@ import { ValidatorModule } from './validator.module';
     ParsersModule,
     TimezonesModule,
     ValidatorModule,
+    PostsModule,
   ],
 })
 export class AppModule {}
