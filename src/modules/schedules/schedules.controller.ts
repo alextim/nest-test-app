@@ -23,6 +23,8 @@ import { SchedulesService } from './schedules.service';
       customer: { eager: true, allow: ['id', 'firstName', 'lastName'] },
       timezone: { eager: true, allow: ['id', 'code', 'name'] },
       proxy: { eager: true, allow: ['id', 'name'] },
+      query: { eager: true, allow: ['id', 'name'] },
+      user: { eager: true, allow: ['id', 'email'] },
     },
   },
   routes: {
