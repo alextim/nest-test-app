@@ -28,6 +28,29 @@ import { ProxyExists } from 'src/decorators/proxy-exists';
 
 export class CreateScheduleDto {
   @ApiProperty()
+  @UserExists()
+  @IsInt()
+  @IsNotEmpty()
+  userId: number;
+
+  @ApiProperty()
+  @QueryExists()
+  @IsInt()
+  @IsNotEmpty()
+  queryId: number;
+
+  @ApiProperty()
+  @CustomerExists()
+  @IsInt()
+  @IsNotEmpty()
+  customerId: number;
+
+  @ApiPropertyOptional()
+  @IsBoolean()
+  @IsOptional()
+  schedulerEnabled?: boolean;
+
+  @ApiProperty()
   @Min(500)
   @IsInt()
   @IsNotEmpty()
@@ -44,34 +67,11 @@ export class CreateScheduleDto {
   @IsNotEmpty()
   timeout: number;
 
-  @ApiProperty()
-  @QueryExists()
-  @IsInt()
-  @IsNotEmpty()
-  queryId: number;
-
   @ApiPropertyOptional()
   @ProxyExists()
   @IsInt()
   @IsOptional()
   proxyId?: number;
-
-  @ApiProperty()
-  @CustomerExists()
-  @IsInt()
-  @IsNotEmpty()
-  customerId: number;
-
-  @ApiProperty()
-  @UserExists()
-  @IsInt()
-  @IsNotEmpty()
-  userId: number;
-
-  @ApiPropertyOptional()
-  @IsBoolean()
-  @IsOptional()
-  schedulerEnabled?: boolean;
 
   @ApiPropertyOptional()
   @IsInt()

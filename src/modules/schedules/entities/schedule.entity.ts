@@ -13,6 +13,24 @@ import { IntervalType, SchedulerType } from './schedule.types';
 @Entity()
 export class Schedule extends BaseEntity {
   @Column()
+  userId: number;
+  @ManyToOne(() => User, (user) => user.schedules)
+  user: User;
+
+  @Column()
+  queryId: number;
+  @ManyToOne(() => Query, (q) => q.schedules)
+  query: Query;
+
+  @Column()
+  customerId: number;
+  @ManyToOne(() => Customer, (customer) => customer.schedules)
+  customer: Customer;
+
+  @Column({ nullable: true })
+  schedulerEnabled?: boolean;
+
+  @Column()
   requestInterval: number;
 
   @Column()
@@ -21,28 +39,10 @@ export class Schedule extends BaseEntity {
   @Column()
   timeout: number;
 
-  @Column()
-  queryId: number;
-  @ManyToOne(() => Query, (q) => q.schedules)
-  query: Query;
-
   @Column({ nullable: true })
   proxyId?: number;
   @ManyToOne(() => Proxy, (proxy) => proxy.schedules)
   proxy: Proxy;
-
-  @Column()
-  customerId: number;
-  @ManyToOne(() => Customer, (customer) => customer.schedules)
-  customer: Customer;
-
-  @Column()
-  userId: number;
-  @ManyToOne(() => User, (user) => user.schedules)
-  user: User;
-
-  @Column({ nullable: true })
-  schedulerEnabled?: boolean;
 
   @Column({ nullable: true })
   timezoneId?: number;
