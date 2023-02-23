@@ -12,6 +12,7 @@ import {
   Length,
   Matches,
   MaxLength,
+  MinLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
@@ -31,6 +32,8 @@ export class CreateUserDto {
 
   @ApiProperty()
   @IsEmail()
+  @MaxLength(254)
+  @MinLength(3)
   @IsNotEmpty()
   @Transform(({ value }) => value?.trim().toLowerCase())
   public email: string;

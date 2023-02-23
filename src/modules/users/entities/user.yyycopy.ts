@@ -8,9 +8,25 @@ import {
   JoinColumn,
   OneToOne,
 } from 'typeorm';
-
+import {
+  ArrayNotEmpty,
+  ArrayUnique,
+  IsArray,
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+  MaxLength,
+  MinDate,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
-
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { CrudValidationGroups } from '@rewiko/crud';
 import { hash, compare } from 'bcrypt';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
@@ -21,6 +37,8 @@ import { Job } from '../../jobs/entities/job.entity';
 import { Post } from '../../posts/entities/post.entity';
 
 import { Role } from './role.enum';
+
+const { CREATE, UPDATE } = CrudValidationGroups;
 
 const HASH_ROUNDS = 8;
 
@@ -43,30 +61,75 @@ export class User extends BaseEntity {
   static readonly PASSWORD_PATTERN_MESSAGE =
     'Password must contain at least 1 lowercase, 1 uppercase, 1 digit and 1 special char';
 
+  @ApiPropertyOptional()
+  @Length(User.USERNAME_MIN_LENGTH, User.USERNAME_MAX_LENGTH, {
+    always: true,
+    message: User.USERNAME_LENGTH_MESSAGE,
+  })
+  @IsString({ always: true })
+  @IsOptional({ always: true })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({ length: User.USERNAME_MAX_LENGTH, nullable: true })
   public username?: string;
 
+  @ApiPropertyOptional()
+  @IsEmail({}, { always: true })
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
   @Transform(({ value }) => value?.trim().toLowerCase(), { toClassOnly: true })
   @Column({ length: 254 })
   public email: string;
 
+  @ApiPropertyOptional()
+  @Matches(User.PASSWORD_PATTERN, {
+    message: User.PASSWORD_PATTERN_MESSAGE,
+  })
+  @Length(User.PASSWORD_MIN_LENGTH, User.PASSWORD_MAX_LENGTH, {
+    message: User.PASSWORD_LENGTH_MESSAGE,
+  })
+  @IsOptional({ always: true })
   @Transform(({ value }) => value?.trim(), { toClassOnly: true })
   @Column({ length: User.PASSWORD_MAX_LENGTH, nullable: true })
   public password?: string;
 
+  @ApiPropertyOptional()
+  @IsBoolean()
+  @IsOptional({ always: true })
   @Column({ default: false })
   public isRegisteredWithGoogle?: boolean;
 
+  @ApiPropertyOptional()
+  @IsString()
+  @Length(21, 21, { always: true })
+  @IsOptional({ always: true })
+  @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({ length: 21, nullable: true })
   public googleId?: string;
 
+  @ApiPropertyOptional()
+  @IsBoolean()
+  @IsOptional({ always: true })
   @Column({ default: false })
   public isRegisteredWithFacebook?: boolean;
 
+  @ApiPropertyOptional()
+  @IsString()
+  @Length(21, 21, { always: true })
+  @IsOptional({ always: true })
+  @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({ length: 21, nullable: true })
   public facebookId?: string;
 
+  @ApiProperty({
+    isArray: true,
+    enum: Role,
+  })
+  @IsEnum(Role, { always: true, each: true })
+  @ArrayUnique({ always: true })
+  @ArrayNotEmpty({ always: true })
+  @IsArray({ always: true, message: 'The roles must be an array' })
+  @IsOptional({ groups: [UPDATE] })
+  @IsNotEmpty({ groups: [CREATE] })
   @Transform(
     ({ value }) => {
       if (!value || Array.isArray(value) || typeof value !== 'string') {
@@ -87,14 +150,26 @@ export class User extends BaseEntity {
   })
   public roles: Role[];
 
+  @ApiPropertyOptional()
+  @MaxLength(40, { always: true })
+  @IsString({ always: true })
+  @IsOptional({ always: true })
   @Transform(({ value }) => (value ? value.trim() : undefined))
   @Column({ length: 40, nullable: true })
   public firstName?: string;
 
+  @ApiPropertyOptional()
+  @MaxLength(40, { always: true })
+  @IsString({ always: true })
+  @IsOptional({ always: true })
   @Transform(({ value }) => (value ? value.trim() : undefined))
   @Column({ length: 40, nullable: true })
   public lastName?: string;
 
+  @ApiPropertyOptional()
+  @MaxLength(20, { always: true })
+  @IsString({ always: true })
+  @IsOptional({ always: true })
   @Transform(({ value }) => (value ? value.trim() : undefined))
   @Column({ length: 20, nullable: true })
   public phone?: string;
@@ -110,6 +185,11 @@ export class User extends BaseEntity {
   @JoinColumn()
   avatar: LocalFile;
 
+  @ApiPropertyOptional()
+  @IsDate({ always: true })
+  @MinDate(new Date(), { always: true })
+  @Transform(({ value }) => value && new Date(value))
+  @IsOptional({ always: true })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({
     type: 'timestamptz',
@@ -117,6 +197,11 @@ export class User extends BaseEntity {
   })
   public verificationCodeSentAt?: Date;
 
+  @ApiPropertyOptional()
+  @IsDate({ always: true })
+  @MinDate(new Date(), { always: true })
+  @Transform(({ value }) => value && new Date(value))
+  @IsOptional({ always: true })
   @Transform(({ value }) => value || undefined, { toPlainOnly: true })
   @Column({ type: 'timestamptz', nullable: true })
   public verifiedAt?: Date;
