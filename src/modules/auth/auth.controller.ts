@@ -11,7 +11,11 @@ import {
 } from '@nestjs/common';
 // import { ConfigService } from '@nestjs/config';
 
-import type { Response, Request, NextFunction /*, CookieOptions */} from 'express';
+import type {
+  Response,
+  Request,
+  NextFunction /*, CookieOptions */,
+} from 'express';
 
 import { ExcludeNullInterceptor } from '../../interceptors/exclude-null';
 // import { getCookieOptions } from '../../lib/config/configs/cookie.config';
@@ -51,7 +55,7 @@ export class AuthController {
         return next(err);
       }
       res.end();
-        /*
+      /*
       req.session.destroy((err) => {
         if (err) {
           return next(err);

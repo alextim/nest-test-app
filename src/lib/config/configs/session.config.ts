@@ -30,9 +30,8 @@ export const getSessionOptions = (
   store = new RedisStore({ client: redisClient });
   */
 
-
   let store: Store;
-  
+
   if (configService.get<boolean>('isDev')) {
     store = new session.MemoryStore();
   } else {
@@ -40,7 +39,7 @@ export const getSessionOptions = (
       pg,
       conString: getConnectionString(configService),
       tableName: 'session',
-      schemaName: 'public'
+      schemaName: 'public',
     });
   }
 

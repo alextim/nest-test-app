@@ -11,7 +11,7 @@ import {
 
 import { Transform } from 'class-transformer';
 
-import { hash, compare } from 'bcrypt';
+import { hash, compare } from '../../../shared/hash';
 
 import { BaseEntity } from '../../../core/entities/BaseEntity';
 import { Token } from '../../profile/entities/token.entity';
@@ -21,8 +21,6 @@ import { Job } from '../../jobs/entities/job.entity';
 import { Post } from '../../posts/entities/post.entity';
 
 import { Role } from './role.enum';
-
-const HASH_ROUNDS = 8;
 
 @Unique('UQ_user_username', ['username'])
 @Unique('UQ_user_email', ['email'])
@@ -138,10 +136,6 @@ export class User extends BaseEntity {
     Object.assign(this, user);
   }
 
-  public static async hash(s: string) {
-    return hash(s, HASH_ROUNDS);
-  }
-
   public static isAdmin(user: User) {
     return user.roles.some((role) => role === Role.ADMIN);
   }
@@ -157,7 +151,7 @@ export class User extends BaseEntity {
   @BeforeUpdate()
   public async hashPassword() {
     if (this.password && !this.isHashed) {
-      this.password = await User.hash(this.password);
+      this.password = await hash(this.password);
       this.isHashed = true;
     }
   }
