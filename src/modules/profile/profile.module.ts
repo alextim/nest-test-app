@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { MailModule } from '../../mail/mail.module';
@@ -12,12 +11,7 @@ import { TokensService } from './tokens.service';
 import { Token } from './entities/token.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Token]),
-    UsersModule,
-    MailModule,
-    ConfigModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Token]), UsersModule, MailModule],
   providers: [ProfileService, TokensService],
   controllers: [ProfileController],
   exports: [ProfileService, TokensService],

@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-mongo-starter",
+  "name": "nestjs-pg-starter",
   "version": "0.0.1",
   "description": "bla bla",
   "author": "",
@@ -14,6 +14,7 @@
     "start:dev": "SET NODE_ENV=development&& nest start --watch",
     "start:debug": "SET NODE_ENV=development&& nest start --debug --watch",
     "start:prod": "SET NODE_ENV=production&& node dist/src/main",
+    "start:staging": "SET NODE_ENV=staging&& node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test,seed}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"seed/**/*.ts\"",
     "typeorm": "ts-node ./node_modules/typeorm/cli",

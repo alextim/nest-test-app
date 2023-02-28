@@ -1,13 +1,13 @@
+import { resolve } from 'node:path';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { resolve } from 'path';
 
 @Module({
   imports: [
     ServeStaticModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      useFactory: async (configService: ConfigService) => {
         const publicDir = resolve(
           __dirname,
           configService.get<string>('server.publicDir'),

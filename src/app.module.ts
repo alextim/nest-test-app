@@ -4,6 +4,7 @@ import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { NestConfigModule } from './lib/config/config.module';
 import { NestPinoModule } from './lib/pino/pino.module';
 import { OrmModule } from './lib/orm/orm.module';
+
 import { NestServeStaticModule } from './lib/serve-static/serve-static.module';
 
 import { AuthModule } from './modules/auth/auth.module';

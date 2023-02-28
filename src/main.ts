@@ -41,6 +41,11 @@ async function bootstrap() {
   setup(app);
 
   const configService = app.get(ConfigService);
+  NestLogger.log(
+    `Application is starting in environment "${configService.get<string>(
+      'NODE_ENV',
+    )}"`,
+  );
 
   setupSwagger(app);
 
@@ -49,9 +54,9 @@ async function bootstrap() {
 
   await app.listen(port, host, undefined);
   NestLogger.log(
-    `Application is running on ${await app.getUrl()} in environment ${configService.get<string>(
+    `Application is running on ${await app.getUrl()} in "${configService.get<string>(
       'NODE_ENV',
-    )}`,
+    )}" environment`,
   );
 }
 

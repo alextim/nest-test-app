@@ -1,19 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { getDataSourceOptions } from './datasource.options';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
         ...getDataSourceOptions(configService),
+
         // entities: ['dist/**/*.entity.{ts,js}'],
         entities: [],
         autoLoadEntities: true,
+
         migrations: ['dist/migrations/**/*.{ts,js}'],
         subscribers: ['dist/subscriber/**/*.{ts,js}'],
 
@@ -22,13 +23,13 @@ import { getDataSourceOptions } from './datasource.options';
 
         // logger settings
         ...(configService.get('typeorm') as any),
+        password: 'admin',
       }),
       // dataSource receives the configured DataSourceOptions
       // and returns a Promise<DataSource>.
       //dataSourceFactory: async (options) => new DataSource(options).initialize(),
-      inject: [ConfigService],
     }),
   ],
-  exports: [TypeOrmModule],
+  // exports: [TypeOrmModule],
 })
 export class OrmModule {}

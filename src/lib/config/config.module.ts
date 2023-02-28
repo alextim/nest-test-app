@@ -1,16 +1,10 @@
-import { Global, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { getEnvPath } from '../../shared/getEnvPath';
+
 import { validate } from './env.validation';
 
-const getEnvPath = (): string => {
-  const env = process.env.NODE_ENV;
-  if (!env || env === 'production') {
-    return '.env';
-  }
-  return `.env.${env}`;
-};
-
-@Global()
+// @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({

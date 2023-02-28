@@ -1,6 +1,7 @@
+import path from 'node:path';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
-import path from 'node:path';
+import { Logger as NestLogger } from '@nestjs/common';
 
 import { EnvironmentVariables } from './EnvironmentVariables';
 
@@ -49,6 +50,7 @@ export function validate(config: Record<string, unknown>) {
     NODE_ENV: env.NODE_ENV,
 
     isProd: env.NODE_ENV === 'production',
+    isStaging: env.NODE_ENV === 'staging',
     isDev: env.NODE_ENV === 'development',
     isTest: env.NODE_ENV === 'test',
 
@@ -142,6 +144,8 @@ export function validate(config: Record<string, unknown>) {
         }
       : undefined,
   };
+
+  NestLogger.debug('appConfig:', appConfig);
 
   return appConfig;
 }

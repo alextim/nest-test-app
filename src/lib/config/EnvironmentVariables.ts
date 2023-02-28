@@ -16,6 +16,7 @@ import {
 export enum Environment {
   Dev = 'development',
   Prod = 'production',
+  Staging = 'staging',
   Test = 'test',
 }
 

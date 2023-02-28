@@ -1,26 +1,35 @@
 import path from 'node:path';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
-import type { Params } from 'nestjs-pino';
 import pino from 'pino';
 import type { SonicBoom } from 'sonic-boom';
 
 @Module({
   imports: [
-    ConfigModule,
     LoggerModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService): Params => {
+      useFactory: async (configService: ConfigService) => {
         let stream: SonicBoom;
         let transport: pino.TransportSingleOptions<Record<string, any>>;
 
-        if (configService.get<boolean>('isProd')) {
+        if (configService.get<boolean>('isDev')) {
+          transport = {
+            target: 'pino-pretty',
+            options: {
+              colorize: true,
+              levelFirst: true,
+              singleLine: true,
+              translateTime: 'HH:MM:ss',
+            },
+          };
+        } else {
           let dest: string;
+
           if (configService.get<boolean>('log.toFile')) {
             dest = path.join(
               configService.get<string>('log.dir'),
-              configService.get<string>('log.filename'),
+              configService.get<string>('log.fileName'),
             );
           }
 
@@ -31,16 +40,6 @@ import type { SonicBoom } from 'sonic-boom';
             sync: false, // Asynchronous logging
             mkdir: true,
           });
-        } else {
-          transport = {
-            target: 'pino-pretty',
-            options: {
-              colorize: true,
-              levelFirst: true,
-              singleLine: true,
-              translateTime: 'HH:MM:ss',
-            },
-          };
         }
 
         return {

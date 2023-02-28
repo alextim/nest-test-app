@@ -9,12 +9,12 @@ import {
   UseInterceptors,
   Get,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+// import { ConfigService } from '@nestjs/config';
 
-import type { Response, Request, NextFunction, CookieOptions } from 'express';
+import type { Response, Request, NextFunction /*, CookieOptions */} from 'express';
 
 import { ExcludeNullInterceptor } from '../../interceptors/exclude-null';
-import { getCookieOptions } from '../../lib/config/configs/cookie.config';
+// import { getCookieOptions } from '../../lib/config/configs/cookie.config';
 
 import RequestWithUser from './interfaces/requestWithUser.interface';
 import { CookieAuthGuard } from './guards/cookie-auth.guard';
@@ -23,7 +23,7 @@ import { LoginGuard } from './guards/login.guard';
 @Controller('auth')
 // @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(private readonly configService: ConfigService) {}
+  // constructor(private readonly configService: ConfigService) {}
 
   @HttpCode(200)
   @UseInterceptors(ExcludeNullInterceptor)
@@ -45,11 +45,13 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
     @Next() next: NextFunction,
-  ): Promise<void> {
+  ) {
     req.logOut((err) => {
       if (err) {
         return next(err);
       }
+      res.end();
+        /*
       req.session.destroy((err) => {
         if (err) {
           return next(err);
@@ -66,6 +68,7 @@ export class AuthController {
 
         res.end();
       });
+      */
     });
   }
 
