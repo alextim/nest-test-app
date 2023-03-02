@@ -6,7 +6,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf dist && npm run typeorm:seed",
+    "t1": "ts-node ./node_modules/typeorm/cli migration:run -d ./seed/typeorm-seed.config.ts",
+    "prebuild": "rimraf dist && npm run t1",
     "build": "nest build",
     "mongo-start": "docker run -d -p 27017:27017 --name mongo-dev mongo:5",
     "mongo-stop": "docker rm -f mongo-dev",
