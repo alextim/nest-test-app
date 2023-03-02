@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-
+import 'multer';
 export class MediaUploadDto {
   @ApiProperty({
     type: 'string',

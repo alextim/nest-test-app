@@ -5,6 +5,7 @@ import {
   PipeTransform,
   BadRequestException,
 } from '@nestjs/common';
+import 'multer';
 
 @Injectable()
 export class ParseFile implements PipeTransform {

@@ -37,6 +37,7 @@ import {
   ParsedRequest,
 } from '@rewiko/crud';
 import { Response, Request } from 'express';
+import 'multer';
 import etag from 'etag';
 
 import LocalFilesInterceptor from '../local-files/local-files.interceptor';

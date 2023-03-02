@@ -1,3 +1,5 @@
+import { createReadStream } from 'node:fs';
+import { join } from 'node:path';
 import {
   Controller,
   Get,
@@ -20,8 +22,8 @@ import {
 } from '@nestjs/swagger';
 
 import type { Response } from 'express';
-import { createReadStream } from 'node:fs';
-import { join } from 'node:path';
+import 'multer';
+
 
 import { MediaUploadDto } from './dto/media-upload.dto';
 import LocalFilesInterceptor from './local-files.interceptor';
