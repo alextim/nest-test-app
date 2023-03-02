@@ -16,8 +16,8 @@ import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { getDataSourceOptions } from './src/lib/orm/datasource.options';
 
-// import { SeedTimezone2617378125500 } from './seed/SeedTimezone2617378125500';
-import { SeedSession2617378125501 } from './seed/SeedSession2617378125501';
+import { SeedTimezone2617378125500 } from './seed/timezone/SeedTimezone2617378125500';
+// import { SeedSession2617378125501 } from './seed/SeedSession2617378125501';
 
 config();
  
@@ -36,8 +36,8 @@ const dataSourceOptions = {
   autoLoadEntities: true,
   /** 2) add reference to generated class here */
   migrations: [
-    // SeedTimezone2617378125500
-    SeedSession2617378125501
+    SeedTimezone2617378125500
+    // SeedSession2617378125501
   ],
 };
 export default new DataSource(dataSourceOptions);

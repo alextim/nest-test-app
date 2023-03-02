@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CrudRequest } from '@rewiko/crud';
+import type { CrudRequest } from '@rewiko/crud';
 import { TypeOrmCrudService } from '@rewiko/crud-typeorm';
 import type { DeepPartial, FindOptionsWhere } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 
+import { hash } from '../../shared/hash';
 import { LocalFileDto } from '../local-files/dto/local-file.dto';
 import LocalFilesService from '../local-files/local-files.service';
-import { UpdateUserDto } from './dto/update-user.dto';
 
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -62,7 +63,7 @@ export class UsersService extends TypeOrmCrudService<User> {
   }
 
   async updatePassword(user: User, plainPassword: string) {
-    const hashedPassword = await User.hash(plainPassword);
+    const hashedPassword = await hash(plainPassword);
     await this.repo.update({ id: user.id }, { password: hashedPassword });
   }
 

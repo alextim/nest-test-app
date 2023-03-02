@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-import { Timezone } from '../src/modules/timezones/entities/timezone.entity';
+import { Timezone } from '../../src/modules/timezones/entities/timezone.entity';
 import { timezones } from './timezones.data';
 
 export class SeedTimezone2617378125500 implements MigrationInterface {
