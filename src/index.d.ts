@@ -1,8 +1,5 @@
 declare global {
-  namespace Express {
-    namespace Multer {
-      /** Object containing file metadata and access information. */
-      interface File {
+      interface ExpressMulterFile {
         /** Name of the form field associated with this file. */
         fieldname: string;
         /** Name of the file on the uploader's computer. */
@@ -32,5 +29,3 @@ declare global {
         buffer: Buffer;
       }
     }
-  }
-}
