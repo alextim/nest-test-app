@@ -19,6 +19,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
-    // "preserveSymlinks": true
+    // "preserveSymlinks": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   }
 }
