@@ -24,12 +24,15 @@ import { TimezonesModule } from './modules/timezones/timezones.module';
 import { ValidatorModule } from './validator.module';
 import { PostsModule } from './modules/posts/posts.module';
 
+import { AppService } from './app.service';
+
 @Module({
   providers: [
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
+    AppService,
   ],
   imports: [
     NestConfigModule,
