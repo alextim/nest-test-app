@@ -98,13 +98,7 @@ export function validate(config: Record<string, unknown>) {
         : '*',
     },
 
-    db: {
-      host: env.DB_HOST,
-      port: env.DB_PORT,
-      database: env.DB_NAME,
-      username: env.DB_USERNAME,
-      password: env.DB_PASSWORD,
-    },
+    databaseUrl: env.DATABASE_URL,
 
     typeorm: {
       // advanced-console, simple-console, file, debug

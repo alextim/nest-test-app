@@ -26,11 +26,7 @@ const configService = new ConfigService();
 const dataSourceOptions = {
   ...getDataSourceOptions(configService) as any,
 
-  host: configService.get<string>('DB_HOST'),
-  port: configService.get<number>('DB_PORT'),
-  database: configService.get<string>('DB_NAME'),
-  username: configService.get<string>('DB_USERNAME'),
-  password: configService.get<string>('DB_PASSWORD'),  
+  url: configService.get<string>('DATABASE_URL'),  
 
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,

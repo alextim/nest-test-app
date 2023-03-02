@@ -110,26 +110,9 @@ export class EnvironmentVariables {
   CORS_ALLOWED_ORIGINS?: string;
 
   // DB
-  @IsFQDN({ require_tld: false, allow_numeric_tld: true })
-  @IsNotEmpty()
-  DB_HOST: string;
-
-  @IsInt()
-  @IsPositive()
-  @IsNotEmpty()
-  DB_PORT: number;
-
   @IsString()
   @IsNotEmpty()
-  DB_NAME: string;
-
-  @IsString()
-  @IsNotEmpty()
-  DB_USERNAME: string;
-
-  @IsString()
-  @IsOptional()
-  DB_PASSWORD?: string;
+  DATABASE_URL: string;
 
   /* typeorm */
   @IsOptional()

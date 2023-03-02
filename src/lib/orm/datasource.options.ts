@@ -8,6 +8,6 @@ export const getDataSourceOptions = (
 ): DataSourceOptions => ({
   type: 'postgres',
   schema: 'public',
-  ...configService.get<PostgresConnectionOptions>('db'),
+  url: configService.get<string>('databaseUrl'),
   namingStrategy: new CustomNamingStrategy(),
 });

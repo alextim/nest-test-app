@@ -9,12 +9,7 @@ import pg from 'pg';
 import { getCookieOptions } from './cookie.config';
 
 const getConnectionString = (configService: ConfigService) => {
-  const host = configService.get<string>('db.host');
-  const port = configService.get<number>('db.port');
-  const database = configService.get<string>('db.database');
-  const username = configService.get<string>('db.username');
-  const password = configService.get<string>('db.password');
-  return `postgresql://${username}:${password}@${host}:${port}/${database}`;
+  return configService.get<string>('databaseUrl');
 };
 
 export const getSessionOptions = (
