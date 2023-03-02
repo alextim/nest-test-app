@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf dist && npm typeorm:seed",
+    "prebuild": "rimraf dist && npm run typeorm:seed",
     "build": "nest build",
     "mongo-start": "docker run -d -p 27017:27017 --name mongo-dev mongo:5",
     "mongo-stop": "docker rm -f mongo-dev",
