@@ -20,8 +20,5 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     // "preserveSymlinks": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ]
   }
 }
