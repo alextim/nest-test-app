@@ -17,5 +17,5 @@ const dataSourceOptions = {
   autoLoadEntities: true,
   migrations: [SeedTimezone2617378125500, SeedSession2617378125501],
 };
-throw new Error(configService.get<string>('databaseUrl'))
+console.log(configService.get<string>('databaseUrl'))
 export default new DataSource(dataSourceOptions);
