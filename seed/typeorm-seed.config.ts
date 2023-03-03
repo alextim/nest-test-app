@@ -1,15 +1,11 @@
 import { DataSource } from 'typeorm';
-
-import { getEnvPath } from '../src/shared/getEnvPath';
-
-import { CustomNamingStrategy } from '../src/lib/orm/CustomNamingStrategy';
-import { SeedTimezone2617378125500 } from './timezone/SeedTimezone2617378125500';
-import { SeedSession2617378125501 } from './session/SeedSession2617378125501';
-
 import 'dotenv/config';
 
-console.log('process.env.DATABASE_URL', process.env.DATABASE_URL)
-console.log(process.env)
+import { CustomNamingStrategy } from '../src/lib/orm/CustomNamingStrategy';
+
+import { CreateTimezone2617378125500 } from './timezone/CreateTimezone2617378125500';
+import { SeedTimezone2617378125502 } from './timezone/SeedTimezone2617378125502';
+import { CreateSession2617378125501 } from './session/CreateSession2617378125501';
 
 export default new DataSource({
   type: 'postgres',
@@ -18,5 +14,9 @@ export default new DataSource({
   namingStrategy: new CustomNamingStrategy(),
 
   entities: ['src/**/*.entity.ts'],
-  migrations: [SeedTimezone2617378125500, SeedSession2617378125501],
+  migrations: [
+    CreateTimezone2617378125500,
+    SeedTimezone2617378125502,
+    CreateSession2617378125501,
+  ],
 });

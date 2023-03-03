@@ -1,13 +1,10 @@
-import { ConfigService } from '@nestjs/config';
 import type { DataSourceOptions } from 'typeorm';
 
 import { CustomNamingStrategy } from './CustomNamingStrategy';
 
-export const getDataSourceOptions = (
-  configService: ConfigService,
-): DataSourceOptions => ({
+export const getDataSourceOptions = (): DataSourceOptions => ({
   type: 'postgres',
   schema: 'public',
-  url: configService.get<string>('databaseUrl'),
+  url: process.env.DATABASE_URL,
   namingStrategy: new CustomNamingStrategy(),
 });

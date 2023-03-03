@@ -9,7 +9,7 @@ import { getDataSourceOptions } from './datasource.options';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        ...getDataSourceOptions(configService),
+        ...getDataSourceOptions(),
 
         // entities: ['dist/**/*.entity.{ts,js}'],
         entities: [],

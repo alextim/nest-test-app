@@ -3,8 +3,8 @@
 
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SeedSession2617378125501 implements MigrationInterface {
-  name = 'SeedSession2617378125501';
+export class CreateSession2617378125501 implements MigrationInterface {
+  name = 'CreateSession2617378125501';
 
   public async up(queryRunner: QueryRunner) {
     //** Note this session table script follow the format as defined at https://github.com/voxpelli/node-connect-pg-simple/blob/master/table.sql

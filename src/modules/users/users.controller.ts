@@ -37,7 +37,7 @@ import {
   ParsedRequest,
 } from '@rewiko/crud';
 import { Response, Request } from 'express';
-import { Express } from "express";
+import { Express } from 'express';
 import 'multer';
 import etag from 'etag';
 

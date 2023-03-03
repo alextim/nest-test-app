@@ -12,25 +12,21 @@
  * npm run typeorm:revert-migration
  */
 import { DataSource } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
-import { config } from 'dotenv';
+import 'dotenv/config';
+
 import { getDataSourceOptions } from './src/lib/orm/datasource.options';
 
-import { SeedTimezone2617378125500 } from './seed/timezone/SeedTimezone2617378125500';
+import { SeedTimezone2617378125502 } from './seed/timezone/SeedTimezone2617378125502';
 // import { SeedSession2617378125501 } from './seed/SeedSession2617378125501';
 
-config();
- 
-const configService = new ConfigService();
-
 const dataSourceOptions = {
-  ...getDataSourceOptions(configService) as any,
+  ...getDataSourceOptions(),
 
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
   /** 2) add reference to generated class here */
   migrations: [
-    SeedTimezone2617378125500
+    SeedTimezone2617378125502
     // SeedSession2617378125501
   ],
 };
