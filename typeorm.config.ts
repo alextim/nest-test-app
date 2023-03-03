@@ -26,8 +26,6 @@ const configService = new ConfigService();
 const dataSourceOptions = {
   ...getDataSourceOptions(configService) as any,
 
-  url: configService.get<string>('databaseUrl'),  
-
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
   /** 2) add reference to generated class here */

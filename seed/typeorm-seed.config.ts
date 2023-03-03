@@ -13,10 +13,9 @@ const configService = new ConfigService();
 const dataSourceOptions = {
   ...(getDataSourceOptions(configService) as any),
 
-  url: configService.get<string>('databaseUrl'),
-
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
   migrations: [SeedTimezone2617378125500, SeedSession2617378125501],
 };
+throw new Error(configService.get<string>('databaseUrl'))
 export default new DataSource(dataSourceOptions);
