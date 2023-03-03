@@ -2,7 +2,7 @@ import path from 'node:path';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { Logger as NestLogger } from '@nestjs/common';
-
+// https://github.com/dongyuanxin/cloudpress/blob/4e21d38f8ed86d98c166bca6cee30fa9d68166ac/service/src/env.ts
 import { EnvironmentVariables } from './EnvironmentVariables';
 
 const getTypeormLogging = (s: string | undefined) => {
@@ -18,6 +18,17 @@ const getTypeormLogging = (s: string | undefined) => {
   return s;
 };
 
+const o2s = (o: Record<string, unknown>) => {
+  let s = '';
+  Object.entries(o).forEach(([key, value]) => {
+    if (s) {
+      s += '\n';
+    }
+    s += `${key}: ${value.toString()}`
+  });
+  return s;
+};
+
 export function validate(config: Record<string, unknown>) {
   const env = plainToInstance(EnvironmentVariables, config, {
     enableImplicitConversion: true,
@@ -27,7 +38,7 @@ export function validate(config: Record<string, unknown>) {
   const errors = validateSync(env, { skipMissingProperties: false });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString() + '\n  config:' + config.toString() + '\n env:' + env.toString() + '\n ' + (process.env.APP_NAME || 'undef'));
+    throw new Error(errors.toString() + '\n  config:' + o2s(config) + '\n ' + (process.env.APP_NAME || 'undef'));
   }
 
   const isSSL = env.SSL === 'true';
