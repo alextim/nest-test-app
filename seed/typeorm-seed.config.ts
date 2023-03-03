@@ -1,21 +1,20 @@
 import { DataSource } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 
-import { getDataSourceOptions } from '../src/lib/orm/datasource.options';
+import { CustomNamingStrategy } from '../src/lib/orm/CustomNamingStrategy';
 import { SeedTimezone2617378125500 } from './timezone/SeedTimezone2617378125500';
 import { SeedSession2617378125501 } from './session/SeedSession2617378125501';
 
 config();
 
-const configService = new ConfigService();
+console.log('process.env.DATABASE_URL', process.env.DATABASE_URL)
 
-const dataSourceOptions = {
-  ...(getDataSourceOptions(configService) as any),
+export default new DataSource({
+  type: 'postgres',
+  schema: 'public',
+  url: process.env.DATABASE_URL,
+  namingStrategy: new CustomNamingStrategy(),
 
   entities: ['src/**/*.entity.ts'],
-  autoLoadEntities: true,
   migrations: [SeedTimezone2617378125500, SeedSession2617378125501],
-};
-console.log(configService.get<string>('databaseUrl'))
-export default new DataSource(dataSourceOptions);
+});
