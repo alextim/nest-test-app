@@ -19,6 +19,8 @@ const getTypeormLogging = (s: string | undefined) => {
 };
 
 export function validate(config: Record<string, unknown>) {
+  console.log('process.env:', process.env)
+  console.log('config:', config)
   const env = plainToInstance(EnvironmentVariables, config, {
     enableImplicitConversion: true,
     exposeDefaultValues: true,
