@@ -2,8 +2,12 @@ import path from 'node:path';
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
 import { Logger as NestLogger } from '@nestjs/common';
+import * as dotenv from 'dotenv' 
+
 // https://github.com/dongyuanxin/cloudpress/blob/4e21d38f8ed86d98c166bca6cee30fa9d68166ac/service/src/env.ts
 import { EnvironmentVariables } from './EnvironmentVariables';
+
+dotenv.config();
 
 const getTypeormLogging = (s: string | undefined) => {
   if (!s) {
@@ -38,7 +42,7 @@ export function validate(config: Record<string, unknown>) {
   const errors = validateSync(env, { skipMissingProperties: false });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString() + '\n  config:' + o2s(config) + '\n ' + o2s(process.env) + (process.env.APP_NAME || 'undef'));
+    throw new Error(errors.toString() + '\n  config:' + o2s(config) + '\n ' + o2s(process.env) + ("appName:" + process.env.APP_NAME || 'undef') + ("host:" + process.env.HOST || 'undef'));
   }
 
   const isSSL = env.SSL === 'true';

@@ -22,181 +22,181 @@ export enum Environment {
 
 export class EnvironmentVariables {
   @IsEnum(Environment)
-  NODE_ENV: Environment = process.env.NODE_ENV as Environment;
+  NODE_ENV: Environment;
 
   @IsString()
   @IsNotEmpty()
-  APP_NAME: string = process.env.APP_NAME;
+  APP_NAME: string;
 
   @IsString()
   @IsOptional()
-  APP_PATH_BASE?: string = process.env.APP_PATH_BASE;
+  APP_PATH_BASE?: string;
 
   @IsString()
   @IsOptional()
-  URL_PREFIX?: string = process.env.URL_PREFIX;
+  URL_PREFIX?: string;
 
   @IsString()
   @IsOptional()
-  FRONTEND_APP_URL?: string = process.env.FRONTEND_APP_URL;
+  FRONTEND_APP_URL?: string;
 
   @IsIn(['true', 'false'])
   @IsOptional()
-  REDIRECT_AFTER_VERIFICATION?: string = process.env.REDIRECT_AFTER_VERIFICATION;
+  REDIRECT_AFTER_VERIFICATION?: string;
 
   @IsString()
   @IsOptional()
-  REDIRECT_URL_AFTER_VERIFICATION?: string = process.env.REDIRECT_URL_AFTER_VERIFICATION;
+  REDIRECT_URL_AFTER_VERIFICATION?: string;
 
   // Server
   @IsFQDN({ require_tld: false, allow_numeric_tld: true })
   @IsNotEmpty()
-  HOST: string = process.env.HOST;
+  HOST: string;
 
   @IsInt()
   @IsNotEmpty()
-  PORT: number = +process.env.PORT;
+  PORT: number;
 
   @IsString()
   @IsNotEmpty()
-  PUBLIC_DIR: string = process.env.PUBLIC_DIR;
+  PUBLIC_DIR: string;
 
   @IsString()
   @IsNotEmpty()
-  UPLOADS_DIR: string = process.env.UPLOADS_DIR;
+  UPLOADS_DIR: string;
 
   @IsPositive()
   @IsInt()
   @Type(() => Number)
   @IsOptional()
-  UPLOADS_MAX_FILE_SIZE = +process.env.UPLOADS_MAX_FILE_SIZE || 1024 * 1024;
+  UPLOADS_MAX_FILE_SIZE = 1024 * 1024;
 
   // log
   @IsString()
   @IsNotEmpty()
-  LOG_LEVEL: string = process.env.LOG_LEVEL;
+  LOG_LEVEL: string;
 
   @IsIn(['true', 'false'])
   @ValidateIf(({ LOG_TO_FILE }) => LOG_TO_FILE)
   @IsOptional()
-  LOG_TO_FILE?: string = process.env.LOG_TO_FILE;
+  LOG_TO_FILE?: string;
 
   @IsString()
   @IsNotEmpty()
   @ValidateIf(({ LOG_TO_FILE }) => LOG_TO_FILE === 'true')
-  LOG_DIR: string = process.env.LOG_DIR;
+  LOG_DIR: string;
 
   @Matches(/^([a-zA-Z0-9\s\._-]+)$/)
   @IsNotEmpty()
   @ValidateIf(({ LOG_TO_FILE }) => LOG_TO_FILE === 'true')
-  LOG_FILENAME: string = process.env.LOG_FILENAME;
+  LOG_FILENAME: string;
 
   // Session
   @IsString()
   @IsNotEmpty()
-  SESSION_SECRET: string = process.env.SESSION_SECRET;
+  SESSION_SECRET: string;
 
   @IsString()
   @IsOptional()
-  SESSION_COOKIE_NAME?: string = process.env.SESSION_COOKIE_DOMAIN;
+  SESSION_COOKIE_NAME?: string;
 
   @IsString()
   @IsOptional()
-  SESSION_COOKIE_DOMAIN?: string = process.env.SESSION_COOKIE_NAME;
+  SESSION_COOKIE_DOMAIN?: string;
 
   // Cors
   @IsString()
   @IsOptional()
-  CORS_ALLOWED_ORIGINS?: string = process.env.CORS_ALLOWED_ORIGINS;
+  CORS_ALLOWED_ORIGINS?: string;
 
   // DB
   @IsString()
   @IsNotEmpty()
-  DATABASE_URL: string = process.env.DATABASE_URL;
+  DATABASE_URL: string;
 
   /* typeorm */
   @IsOptional()
   @IsIn(['advanced-console', 'simple-console', 'file', 'debug'])
   @ValidateIf(({ TYPEORM_LOGGER }) => TYPEORM_LOGGER)
-  TYPEORM_LOGGER?: string = process.env.TYPEORM_LOGGER;
+  TYPEORM_LOGGER?: string;
 
   // true, all, query, error, schema, warn, info, log
   @IsOptional()
-  TYPEORM_LOGGING?: string = process.env.TYPEORM_LOGGING;
+  TYPEORM_LOGGING?: string;
 
   // log all queries which run more then `maxQueryExecutionTime`
   @IsPositive()
   @IsInt()
   @IsOptional()
-  TYPEORM_MAX_QUERY_EXECUTION_TIME?: number = +process.env.TYPEORM_MAX_QUERY_EXECUTION_TIME;
+  TYPEORM_MAX_QUERY_EXECUTION_TIME?: number;
 
   /* mail */
   @IsFQDN()
   @IsNotEmpty()
-  MAIL_HOST: string = process.env.MAIL_HOST;
+  MAIL_HOST: string;
 
   @IsInt()
   @IsPositive()
   @IsNotEmpty()
-  MAIL_PORT: number = +process.env.MAIL_PORT;
+  MAIL_PORT: number;
 
   @IsEmail()
   @IsNotEmpty()
-  MAIL_USERNAME: string = process.env.MAIL_USERNAME;
+  MAIL_USERNAME: string;
 
   @IsString()
   @IsNotEmpty()
-  MAIL_PASSWORD: string = process.env.MAIL_PASSWORD;
+  MAIL_PASSWORD: string;
 
   @IsString()
   @IsNotEmpty()
-  MAIL_FROM_NAME: string = process.env.MAIL_FROM_NAME;
+  MAIL_FROM_NAME: string;
 
   @IsEmail()
   @IsNotEmpty()
-  MAIL_FROM_EMAIL: string = process.env.MAIL_FROM_EMAIL;
+  MAIL_FROM_EMAIL: string;
 
   @IsPositive()
   @IsInt()
   @IsNotEmpty()
-  PASSWORD_RESET_TOKEN_TTL: number = +process.env.PASSWORD_RESET_TOKEN_TTL;
+  PASSWORD_RESET_TOKEN_TTL: number;
 
   @IsPositive()
   @IsInt()
   @IsNotEmpty()
-  EMAIL_VERIFICATION_TOKEN_TTL: number = +process.env.EMAIL_VERIFICATION_TOKEN_TTL;
+  EMAIL_VERIFICATION_TOKEN_TTL: number;
 
   // Google OAuth 2.0
   @IsString()
   @IsNotEmpty()
-  GOOGLE_AUTH_CLIENT_ID: string = process.env.GOOGLE_AUTH_CLIENT_ID;
+  GOOGLE_AUTH_CLIENT_ID: string;
 
   @IsString()
   @IsNotEmpty()
-  GOOGLE_AUTH_CLIENT_SECRET: string = process.env.GOOGLE_AUTH_CLIENT_SECRET;
+  GOOGLE_AUTH_CLIENT_SECRET: string;
 
   // FaceBook
   @IsString()
   @IsNotEmpty()
-  FACEBOOK_APP_ID: string = process.env.FACEBOOK_APP_ID;
+  FACEBOOK_APP_ID: string;
 
   @IsString()
   @IsNotEmpty()
-  FACEBOOK_APP_SECRET: string = process.env.FACEBOOK_APP_SECRET;
+  FACEBOOK_APP_SECRET: string;
 
   // SSL
   @IsIn(['true', 'false'])
   @ValidateIf(({ SSL }) => SSL)
   @IsOptional()
-  SSL?: string = process.env.SSL;
+  SSL?: string;
 
   @IsString()
   @ValidateIf(({ SSL }) => SSL === 'true')
   @IsNotEmpty()
-  SSL_KEY_PATH?: string = process.env.SSL_KEY_PATH;
+  SSL_KEY_PATH?: string;
 
   @IsString()
   @ValidateIf((o) => o.SSL === 'true')
   @IsNotEmpty()
-  SSL_CERT_PATH?: string = process.env.SSL_CERT_PATH;
+  SSL_CERT_PATH?: string;
 }
