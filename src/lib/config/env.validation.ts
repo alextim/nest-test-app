@@ -38,7 +38,7 @@ export function validate(config: Record<string, unknown>) {
   const errors = validateSync(env, { skipMissingProperties: false });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString() + '\n  config:' + o2s(config) + '\n ' + (process.env.APP_NAME || 'undef'));
+    throw new Error(errors.toString() + '\n  config:' + o2s(config) + '\n ' + o2s(process.env) + (process.env.APP_NAME || 'undef'));
   }
 
   const isSSL = env.SSL === 'true';
