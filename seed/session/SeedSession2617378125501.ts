@@ -14,13 +14,18 @@ export class SeedSession2617378125501 implements MigrationInterface {
     //      and fast option for session storage
     //   Other options such as Redis may present faster alternatives...
     await queryRunner.query(`
-    CREATE TABLE "session" (
-      "sid" varchar NOT NULL COLLATE "default",
-	    "sess" json NOT NULL,
-	    "expire" timestamp(6) NOT NULL
-    )
-    WITH (OIDS=FALSE);
-    ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+      DO $$ BEGIN
+        IF NOT EXISTS(SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'session') 
+        THEN
+          CREATE TABLE session (
+            sid varchar NOT NULL COLLATE "default",
+            sess json NOT NULL,
+            expire timestamp(6) NOT NULL
+          )
+          WITH (OIDS=FALSE);
+          ALTER TABLE session ADD CONSTRAINT session_pkey PRIMARY KEY(sid) NOT DEFERRABLE INITIALLY IMMEDIATE;
+        END IF;
+      END $$;
     `);
   }
 
