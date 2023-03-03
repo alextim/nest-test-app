@@ -1,19 +1,19 @@
+import path from 'node:path';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-
-import { Timezone } from '../../src/modules/timezones/entities/timezone.entity';
-import { timezones } from './timezones.data';
 
 export class SeedTimezone2617378125500 implements MigrationInterface {
   name = 'SeedTimezone2617378125500';
 
   public async up(queryRunner: QueryRunner) {
-    await Promise.all(
-      timezones.map(async (tz) =>
-        queryRunner.manager.save(
-          queryRunner.manager.create<Timezone>(Timezone, tz),
-        ),
-      ),
-    );
+    const file = path.resolve(process.cwd(), 'timezones.csv');
+    await queryRunner.query(`
+      DO $$ BEGIN
+        IF NOT EXISTS(SELECT 1 FROM timezone LIMIT 1) 
+        THEN
+          COPY timezone(code,name) FROM '${file}' DELIMITER ',' CSV;
+        END IF;
+      END $$;
+    `);
   }
 
   public async down(queryRunner: QueryRunner) {
