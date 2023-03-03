@@ -13,7 +13,7 @@ const configService = new ConfigService();
 const dataSourceOptions = {
   ...(getDataSourceOptions(configService) as any),
 
-  url: configService.get<string>('DATABASE_URL'),
+  url: configService.get<string>('databaseUrl'),
 
   entities: ['src/**/*.entity.ts'],
   autoLoadEntities: true,
