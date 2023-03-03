@@ -19,8 +19,6 @@ const getTypeormLogging = (s: string | undefined) => {
 };
 
 export function validate(config: Record<string, unknown>) {
-  console.log('process.env:', process.env)
-  console.log('config:', config)
   const env = plainToInstance(EnvironmentVariables, config, {
     enableImplicitConversion: true,
     exposeDefaultValues: true,
@@ -29,7 +27,7 @@ export function validate(config: Record<string, unknown>) {
   const errors = validateSync(env, { skipMissingProperties: false });
 
   if (errors.length > 0) {
-    throw new Error(errors.toString());
+    throw new Error(errors.toString() + '\n  config:' + config.toString() + '\n env:' + env.toString() + '\n ' + (process.env.APP_NAME || 'undef'));
   }
 
   const isSSL = env.SSL === 'true';
