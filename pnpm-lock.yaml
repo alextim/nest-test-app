@@ -64,7 +64,7 @@ specifiers:
   puppeteer: ^19.7.2
   rand-token: ^1.0.1
   reflect-metadata: ^0.1.13
-  rimraf: ^4.2.0
+  rimraf: ^4.3.0
   rxjs: ^7.8.0
   sonic-boom: ^3.2.1
   source-map-support: ^0.5.21
@@ -115,7 +115,7 @@ dependencies:
   pino-http: 8.3.3
   rand-token: 1.0.1
   reflect-metadata: 0.1.13
-  rimraf: 4.2.0
+  rimraf: 4.3.0
   rxjs: 7.8.0
   typeorm: 0.3.12_pg@8.9.0+ts-node@10.9.1
   typeorm-extension: 2.5.2_typeorm@0.3.12
@@ -6285,8 +6285,8 @@ packages:
     hasBin: true
     dev: true
 
-  /rimraf/4.2.0:
-    resolution: {integrity: sha512-tPt+gLORNVqRCk0NwuJ5SlMEcOGvt4CCU8sUPqgCFtCbnoNCTd9Q6vq7JlBbxQlACiH14OR28y7piA2Bak9Sxw==}
+  /rimraf/4.3.0:
+    resolution: {integrity: sha512-5qVDXPbByA1qSJEWMv1qAwKsoS22vVpsL2QyxCKBw4gf6XiFo1K3uRLY6uSOOBFDwnqAZtnbILqWKKlzh8bkGg==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
