@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist && npm i && npm i -g @nestjs/cli && npm i -g cross-env && npm i -g typeorm && npm i -g dotenv",
-    "build": "npm run typeorm:sync && nest build && npm run typeorm:seed",
+    "build": "nest build",
+    "postbuild": "npm run typeorm:sync && npm run typeorm:seed",
     "mongo-start": "docker run -d -p 27017:27017 --name mongo-dev mongo:5",
     "mongo-stop": "docker rm -f mongo-dev",
     "start": "node dist/src/main",
