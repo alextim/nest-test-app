@@ -58,11 +58,11 @@ export function validate(config: Record<string, unknown>) {
   const host = env.HOST;
   const port = env.PORT;
 
-  let baseUrl = `http${isSSL ? 's' : ''}://`;
-  if (env.APP_PATH_BASE) {
-    baseUrl += env.APP_PATH_BASE;
+  let baseUrl: string;
+  if (env.APP_URL) {
+    baseUrl = env.APP_URL;
   } else {
-    baseUrl += host + (port ? `:${port}` : '');
+    baseUrl += `http${isSSL ? 's' : ''}://` + host + (port ? `:${port}` : '');
   }
 
   const n = env.UPLOADS_DIR.indexOf(env.PUBLIC_DIR);

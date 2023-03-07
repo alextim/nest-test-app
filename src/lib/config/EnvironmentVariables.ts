@@ -30,7 +30,7 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  APP_PATH_BASE?: string;
+  APP_URL?: string;
 
   @IsString()
   @IsOptional()

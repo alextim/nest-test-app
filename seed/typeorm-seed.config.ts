@@ -10,8 +10,5 @@ export default new DataSource({
   ...getDataSourceOptions(),
 
   entities: ['src/**/*.entity.ts'],
-  migrations: [
-    SeedTimezone2617378125502,
-    CreateSession2617378125501,
-  ],
+  migrations: [SeedTimezone2617378125502, CreateSession2617378125501],
 });
