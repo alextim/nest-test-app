@@ -85,8 +85,8 @@ export function validate(config: Record<string, unknown>) {
     frontendAppUrl,
 
     redirectAfterVerification: env.REDIRECT_AFTER_VERIFICATION,
-    redirectUrlAfterVerification: env.REDIRECT_URL_AFTER_VERIFICATION
-      ? `${frontendAppUrl}${env.REDIRECT_URL_AFTER_VERIFICATION}`
+    redirectUrlAfterVerification: env.REDIRECT_PATH_AFTER_VERIFICATION
+      ? `${frontendAppUrl}${env.REDIRECT_PATH_AFTER_VERIFICATION}`
       : frontendAppUrl,
 
     server: {

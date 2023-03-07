@@ -46,7 +46,7 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  REDIRECT_URL_AFTER_VERIFICATION?: string;
+  REDIRECT_PATH_AFTER_VERIFICATION?: string;
 
   // Server
   @IsFQDN({ require_tld: false, allow_numeric_tld: true })
