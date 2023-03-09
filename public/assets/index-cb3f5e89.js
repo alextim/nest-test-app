@@ -3,7 +3,7 @@ var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var require_index_001 = __commonJS({
-  "assets/index-671aaf37.js"(exports, module) {
+  "assets/index-cb3f5e89.js"(exports, module) {
     function _mergeNamespaces(n2, m2) {
       for (var i2 = 0; i2 < m2.length; i2++) {
         const e2 = m2[i2];
@@ -102164,20 +102164,17 @@ For more information, see https://refine.dev/docs/advanced-tutorials/data-provid
         ] }) })
       ] });
     };
-    const weekdays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-    const dailyWeekdaysOptions = weekdays.map((label, value) => ({
+    const dailyWeekdaysOptions = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map((label, value) => ({
       label,
       value
     }));
-    const acceptedHours = [1, 2, 3, 4, 6, 12];
-    const acceptedMinutes = [1, 2, 3, 4, 5, 10, 15, 20, 30];
-    const acceptedHoursOptions = Object.values(acceptedHours).map(
+    const acceptedHoursOptions = [1, 2, 3, 4, 6, 12].map(
       (value) => ({
         label: value,
         value
       })
     );
-    const acceptedMinutesOptions = Object.values(acceptedMinutes).map(
+    const acceptedMinutesOptions = [1, 2, 3, 4, 5, 10, 15, 20, 30].map(
       (value) => ({
         label: value,
         value
