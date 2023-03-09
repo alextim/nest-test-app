@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
-import { Table, NamingStrategyInterface } from 'typeorm';
+import type { NamingStrategyInterface } from 'typeorm';
+import { Table } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export class CustomNamingStrategy
