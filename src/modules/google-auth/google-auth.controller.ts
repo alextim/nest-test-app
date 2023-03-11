@@ -8,9 +8,7 @@ import { GOOGLE_REDIRECT_PATH } from './google-auth.constants';
 
 @Controller()
 export class GoogleAuthController {
-  constructor(private readonly configService: ConfigService) {
-    
-  }
+  constructor(private readonly configService: ConfigService) {}
   @Get('auth/login/google')
   @UseGuards(LoginGuard)
   async signInWithGoogle() {
